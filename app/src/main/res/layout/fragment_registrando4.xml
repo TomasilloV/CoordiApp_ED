@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/dark_blue">
 
     <ScrollView
@@ -13,24 +12,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dark_blue"
-            android:padding="16dp">
+            android:background="@color/dark_blue">
 
             <TextView
                 android:id="@+id/textPaso"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
                 android:text="@string/paso_4"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:gravity="center"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBaseline_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.2"/>
+                app:layout_constraintWidth_percent="0.9"/>
 
             <TextView
                 android:id="@+id/textTitular"
@@ -46,16 +42,17 @@
             <EditText
                 android:id="@+id/editTitular"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="@color/light_gray"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/textTitular"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Ingresa nombre de titular"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTitular"
+                app:layout_constraintWidth_percent="0.85" />
+
 
             <TextView
                 android:id="@+id/textPaterno"
@@ -72,16 +69,15 @@
             <EditText
                 android:id="@+id/editApPaterno"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:hint="Ingresa apellido paterno de titular"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="@color/light_gray"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/textPaterno"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textPaterno"/>
 
             <TextView
                 android:id="@+id/textMaterno"
@@ -98,16 +94,15 @@
             <EditText
                 android:id="@+id/editMaterno"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:hint="Ingresa apellido materno de titular"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="@color/light_gray"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/textMaterno"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textMaterno"/>
 
             <TextView
                 android:id="@+id/textRecibe"
@@ -124,16 +119,15 @@
             <EditText
                 android:id="@+id/editRecibe"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:hint="Ingresa la persona que recibe"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="@color/light_gray"
-                android:inputType="text"
-                app:layout_constraintTop_toBottomOf="@id/textRecibe"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textRecibe"/>
 
             <TextView
                 android:id="@+id/textContactoCliente"
@@ -150,17 +144,17 @@
             <EditText
                 android:id="@+id/editCliente"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:textSize="18sp"
                 android:background="@color/light_gray"
+                android:hint="Ingresa teléfono del cliente"
                 android:inputType="phone"
                 android:maxLength="10"
-                app:layout_constraintTop_toBottomOf="@id/textContactoCliente"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                android:padding="8dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textContactoCliente"/>
 
             <TextView
                 android:id="@+id/textPuerto"
@@ -177,31 +171,28 @@
             <Button
                 android:id="@+id/btnFotoPuerto"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:text="Subir Foto Puerto"
                 android:background="@color/dark_gray"
-                app:layout_constraintTop_toBottomOf="@id/textPuerto"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                android:text="Subir Foto Puerto"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textPuerto" />
 
             <Button
                 android:id="@+id/next"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/siguiente"
                 android:textColor="@color/white"
                 android:background="@color/green"
-                android:padding="12dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="40dp"
                 app:layout_constraintTop_toBottomOf="@+id/btnFotoPuerto"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintWidth_percent="0.5"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

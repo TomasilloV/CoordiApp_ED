@@ -44,7 +44,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_registrando)
-        val version: Button = findViewById(R.id.version)
+        val version: TextView = findViewById(R.id.version)
         version.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
 
         checkPermissions()

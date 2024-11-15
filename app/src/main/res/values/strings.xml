@@ -51,6 +51,7 @@
     <string name="paso_6">Paso 6</string>
     <string name="selecciona_ont">SELECCIONA ONT</string>
     <string name="terminar">TERMINAR</string>
+    <string name="paso_5">Paso 5</string>
 
     <!-- Arrays -->
     <string-array name="instalacion_options">

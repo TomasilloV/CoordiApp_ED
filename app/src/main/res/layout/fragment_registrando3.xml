@@ -3,14 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_blue"
-    android:padding="16dp">
+    android:background="@color/dark_blue">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -19,19 +16,18 @@
 
             <TextView
                 android:id="@+id/textPaso"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
                 android:text="@string/paso_3"
                 android:textColor="@color/white"
+                android:maxLength="10"
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:gravity="center"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBaseline_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.2"/>
+                app:layout_constraintWidth_percent="0.9"/>
 
             <TextView
                 android:id="@+id/textTipoTarea"
@@ -47,17 +43,16 @@
             <EditText
                 android:id="@+id/editTarea"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:background="@color/light_gray"
-                android:inputType="text"
-                android:maxLength="10"
-                app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
-                app:layout_constraintStart_toStartOf="parent"
+                android:hint="Ingresa el tipo de tarea"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
+                app:layout_constraintWidth_percent="0.85" />
 
             <TextView
                 android:id="@+id/textInstalación"
@@ -74,16 +69,13 @@
             <Spinner
                 android:id="@+id/spinnerInstalacion"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:inputType="text"
                 android:background="@color/light_gray"
-                app:layout_constraintTop_toBottomOf="@id/textInstalación"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/editTarea"
+                app:layout_constraintStart_toStartOf="@+id/editTarea"
+                app:layout_constraintTop_toBottomOf="@id/textInstalación" />
 
             <TextView
                 android:id="@+id/textFachada"
@@ -100,15 +92,13 @@
             <Button
                 android:id="@+id/btnFachada"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:text="Subir fachada"
                 android:background="@color/dark_gray"
-                app:layout_constraintTop_toBottomOf="@id/textFachada"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                android:text="Subir Fachada"
+                app:layout_constraintEnd_toEndOf="@+id/editTarea"
+                app:layout_constraintStart_toStartOf="@+id/editTarea"
+                app:layout_constraintTop_toBottomOf="@id/textFachada" />
 
             <TextView
                 android:id="@+id/textFotoOS"
@@ -125,31 +115,28 @@
             <Button
                 android:id="@+id/btnFotoOs"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
-                android:text="Subir Foto OS"
                 android:background="@color/dark_gray"
-                app:layout_constraintTop_toBottomOf="@id/textFotoOS"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                android:text="Subir Foto OS"
+                app:layout_constraintEnd_toEndOf="@+id/editTarea"
+                app:layout_constraintStart_toStartOf="@+id/editTarea"
+                app:layout_constraintTop_toBottomOf="@id/textFotoOS" />
 
             <Button
                 android:id="@+id/next"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/siguiente"
                 android:textColor="@color/white"
                 android:background="@color/green"
-                android:padding="12dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
                 app:layout_constraintTop_toBottomOf="@+id/btnFotoOs"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintWidth_percent="0.5"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
