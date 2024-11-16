@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.jetbrains.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.app.update.ktx)
@@ -81,7 +82,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation(libs.androidx.core.splashscreen)
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    //reconocimiento de texto
+    implementation(libs.text.recognition)
 }

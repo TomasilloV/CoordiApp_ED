@@ -31,6 +31,7 @@ openjsse = "1.1.7"
 playServicesLocation = "21.3.0"
 retrofit = "2.9.0"
 coreKtxVersion = "1.10.3"
+textRecognition = "16.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -74,6 +75,7 @@ openjsse = { module = "org.openjsse:openjsse", version.ref = "openjsse" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 core-ktx = { group = "com.google.android.play", name = "core-ktx", version.ref = "coreKtxVersion" }
+text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "textRecognition" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

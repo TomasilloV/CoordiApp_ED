@@ -1,7 +1,9 @@
 package com.enlacedigital.CoordiApp.Registrar
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,9 @@ import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -194,6 +199,7 @@ class RegistrandoFragment2 : Fragment() {
             null
         }
         file?.let {
+            extractTextFromImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
@@ -202,11 +208,33 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
+            extractTextFromImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
             requireContext().showToast("No se encontró la foto.")
         }
+    }
+
+    private fun extractTextFromImage(imageFile: File) {
+        val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+        val inputImage = InputImage.fromBitmap(bitmap, 0)
+
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+        recognizer.process(inputImage).addOnSuccessListener { visionText ->
+                val extractedText = visionText.text
+                val regex = Regex("Telmex S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+                val matchResult = regex.find(extractedText)
+                val telmexSN = matchResult?.groups?.get(1)?.value
+
+                Log.d("extraido", extractedText)
+                Log.d("Serie", telmexSN ?: "No se encontró TELMEX S/N")
+            }
+            .addOnFailureListener { e ->
+                requireContext().showToast("Error al reconocer texto: ${e.message}")
+                Log.e("MLKit", "Error al reconocer texto", e)
+            }
     }
 
     private fun updatePhoto(photoType: String, base64: String) {
