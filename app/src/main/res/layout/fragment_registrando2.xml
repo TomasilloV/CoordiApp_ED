@@ -107,7 +107,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
 
             <TextView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/textOnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,17 +120,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
 
             <Spinner
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/spinnerOnt"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:padding="8dp"
+                android:textSize="18sp"
                 android:background="@color/light_gray"
                 app:layout_constraintTop_toBottomOf="@id/textOnt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintStart_toStartOf="@+id/editMetraje"
+                app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
 
             <TextView
                 android:id="@+id/textFotoOnt"

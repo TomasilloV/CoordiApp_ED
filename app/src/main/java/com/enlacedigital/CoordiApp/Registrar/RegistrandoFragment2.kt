@@ -1,5 +1,6 @@
 package com.enlacedigital.CoordiApp.Registrar
 
+import android.app.AlertDialog
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -10,9 +11,17 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.enlacedigital.CoordiApp.Menu
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.Option
@@ -26,6 +35,7 @@ import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
+import com.enlacedigital.CoordiApp.utils.startNewActivity
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -52,7 +62,7 @@ class RegistrandoFragment2 : Fragment() {
     private var lastSelectedOnt: String? = null
     private var idOnt: Int? = null
 
-    private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+   private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) handleCameraPhoto()
     }
 
@@ -71,7 +81,7 @@ class RegistrandoFragment2 : Fragment() {
         initializeViews(view)
         setupListeners()
         updateSpinners()
-        //getOptions("6", idTecnico = preferencesManager.getString("id_tecnico")!!.toInt() )
+        getOptions("6", idTecnico = preferencesManager.getString("id_tecnico")!!.toInt() )
     }
 
     private fun getOptions(step: String, idEstado: Int? = null, idMunicipio: Int? = null, idTecnico: Int) {
@@ -143,7 +153,15 @@ class RegistrandoFragment2 : Fragment() {
     private fun setupListeners() {
         btnFotoOnt.setOnClickListener { showPhotoOptions("ont")
         currentPhotoType = "ont"}
-        btnFotoSerie.setOnClickListener { showPhotoOptions("serie")
+        btnFotoSerie.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Serie ONT")
+                .setMessage("Asegúrate de tomar una foto donde se muestre claramente el número de serie")
+                .setPositiveButton("Ok") { _, _ ->
+                    showPhotoOptions("serie")
+                }
+                .show()
+
         currentPhotoType = "serie"}
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
@@ -159,13 +177,13 @@ class RegistrandoFragment2 : Fragment() {
 
     private fun showPhotoOptions(photoType: String) {
         currentPhotoType = photoType
-        /*showPhotoOptions(
+        showPhotoOptions(
             requireContext(),
             photoType,
             ::takePhoto,
             ::choosePhotoFromGallery
-        )*/
-        takePhoto()
+        )
+        //takePhoto()
     }
 
     private fun choosePhotoFromGallery() {
@@ -223,9 +241,10 @@ class RegistrandoFragment2 : Fragment() {
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         recognizer.process(inputImage).addOnSuccessListener { visionText ->
-                val extractedText = visionText.text
-                val regex = Regex("Telmex S/N\\s*:?\\s*([A-Z0-9\\-]+)")
-                val matchResult = regex.find(extractedText)
+            val extractedText = visionText.text
+            //val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+            val regex = Regex("Telmex S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+            val matchResult = regex.find(extractedText)
                 val telmexSN = matchResult?.groups?.get(1)?.value
 
                 Log.d("extraido", extractedText)
