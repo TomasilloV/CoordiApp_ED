@@ -132,7 +132,7 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     private fun setupSpinnerAndListener(spinner: Spinner, data: List<String>, onItemSelected: (String?) -> Unit) {
-        val options = mutableListOf("Elige una opción", "ZTEG2423AE68").apply { addAll(data) }
+        val options = mutableListOf("Elige una opción", "ALCLFCE6295C").apply { addAll(data) }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -172,14 +172,14 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     private fun showPhotoOptions(photoType: String) {
-        currentPhotoType = photoType
+        /*currentPhotoType = photoType
         showPhotoOptions(
             requireContext(),
             photoType,
             ::takePhoto,
             ::choosePhotoFromGallery
-        )
-        //takePhoto()
+        )*/
+        takePhoto()
     }
 
     private fun choosePhotoFromGallery() {
@@ -213,7 +213,7 @@ class RegistrandoFragment2 : Fragment() {
             null
         }
         file?.let {
-            processImage(it)
+            if(currentPhotoType == "serie") processImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
@@ -222,7 +222,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            processImage(file)
+            if(currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -241,7 +241,7 @@ class RegistrandoFragment2 : Fragment() {
                 if (serieOntFoto != null) {
                     telmexSN.text = "Telmex S/N: $serieOntFoto"
                 } else {
-                    telmexSN.text = "No se reconoce el número de serie, intenta tomar una foto más clara"
+                    telmexSN.text = "No se reconoce el número de serie, intenta tomar una mejor foto"
                 }
             },
             onFailure = { errorMessage -> telmexSN.text = errorMessage }
@@ -269,29 +269,27 @@ class RegistrandoFragment2 : Fragment() {
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-       /* if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
             requireContext().showToast("Por favor, completa todas las opciones para continuar.")
             return
-        }*/
+        }
 
-        if(ont != serieOntFoto) {
-            requireContext().showToast("El número de serie seleccionado y de la foto son diferentes")
+        if (ont != serieOntFoto) {
+            requireContext().showToast("El serie ONT seleccionado y de la foto son diferentes")
             return
         }
-        requireContext().showToast("aaaa")
 
-        /*
-                val updateRequest = ActualizarBD(
-                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                    Metraje = metraje.toInt(),
-                    Terminal = terminal,
-                    Puerto = puerto,
-                    Foto_Ont = fotoONT,
-                    No_Serie_ONT = fotoSerie,
-                    /*Ont = lastSelectedOnt,
-                    idOnt = idOnt,*/
-                    Step_Registro = 2
-                )
-                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)*/
+        val updateRequest = ActualizarBD(
+            idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+            Metraje = metraje.toInt(),
+            Terminal = terminal,
+            Puerto = puerto,
+            Foto_Ont = fotoONT,
+            No_Serie_ONT = fotoSerie,
+            Ont = lastSelectedOnt,
+            idOnt = idOnt,
+            Step_Registro = 2
+        )
+        (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
     }
 }
