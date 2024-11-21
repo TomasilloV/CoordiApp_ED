@@ -11,13 +11,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -35,6 +28,7 @@ import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
+import com.enlacedigital.CoordiApp.utils.extractTextFromImage
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -43,12 +37,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class RegistrandoFragment2 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
+
     private lateinit var photoUri: Uri
     private lateinit var editMetraje: EditText
+    private lateinit var telmexSN: TextView
     private lateinit var editTerminal: EditText
     private lateinit var spinnerPuerto: Spinner
     private lateinit var btnFotoOnt: Button
@@ -61,8 +56,9 @@ class RegistrandoFragment2 : Fragment() {
     private lateinit var loadingLayout: FrameLayout
     private var lastSelectedOnt: String? = null
     private var idOnt: Int? = null
+    private var serieOntFoto: String? = null
 
-   private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+    private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) handleCameraPhoto()
     }
 
@@ -77,11 +73,28 @@ class RegistrandoFragment2 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
-
         initializeViews(view)
         setupListeners()
         updateSpinners()
         getOptions("6", idTecnico = preferencesManager.getString("id_tecnico")!!.toInt() )
+    }
+
+    private fun initializeViews(view: View) {
+        editMetraje = view.findViewById(R.id.editMetraje)
+        editTerminal = view.findViewById(R.id.editTerminal)
+        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
+        btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
+        btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
+        spinnerOnt = view.findViewById(R.id.spinnerOnt)
+        loadingLayout = view.findViewById(R.id.loadingOverlay)
+        telmexSN = view.findViewById(R.id.telmexSN)
+        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == View.VISIBLE }
+
+        with(view) {
+            findViewById<Button>(R.id.btnFotoOnt).setOnClickListener { showPhotoOptions("ont") }
+            findViewById<Button>(R.id.btnFotoSerie).setOnClickListener { showPhotoOptions("serie") }
+            findViewById<Button>(R.id.next).setOnClickListener { validateAndProceed() }
+        }
     }
 
     private fun getOptions(step: String, idEstado: Int? = null, idMunicipio: Int? = null, idTecnico: Int) {
@@ -119,7 +132,7 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     private fun setupSpinnerAndListener(spinner: Spinner, data: List<String>, onItemSelected: (String?) -> Unit) {
-        val options = mutableListOf("Elige una opción").apply { addAll(data) }
+        val options = mutableListOf("Elige una opción", "ZTEG2423AE68").apply { addAll(data) }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -139,30 +152,13 @@ class RegistrandoFragment2 : Fragment() {
         }
     }
 
-    private fun initializeViews(view: View) {
-        editMetraje = view.findViewById(R.id.editMetraje)
-        editTerminal = view.findViewById(R.id.editTerminal)
-        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
-        btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
-        btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
-        spinnerOnt = view.findViewById(R.id.spinnerOnt)
-        loadingLayout = view.findViewById(R.id.loadingOverlay)
-        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == View.VISIBLE }
-    }
-
     private fun setupListeners() {
-        btnFotoOnt.setOnClickListener { showPhotoOptions("ont")
-        currentPhotoType = "ont"}
+        btnFotoOnt.setOnClickListener {
+            showPhotoOptions("ont")
+            currentPhotoType = "ont"}
         btnFotoSerie.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Serie ONT")
-                .setMessage("Asegúrate de tomar una foto donde se muestre claramente el número de serie")
-                .setPositiveButton("Ok") { _, _ ->
-                    showPhotoOptions("serie")
-                }
-                .show()
-
-        currentPhotoType = "serie"}
+            showPhotoOptions("serie")
+            currentPhotoType = "serie" }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
@@ -217,7 +213,7 @@ class RegistrandoFragment2 : Fragment() {
             null
         }
         file?.let {
-            extractTextFromImage(it)
+            processImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
@@ -226,7 +222,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            extractTextFromImage(file)
+            processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -234,26 +230,22 @@ class RegistrandoFragment2 : Fragment() {
         }
     }
 
-    private fun extractTextFromImage(imageFile: File) {
-        val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-        val inputImage = InputImage.fromBitmap(bitmap, 0)
+    private fun processImage(file: File) {
+        extractTextFromImage(
+            imageFile = file,
+            onSuccess = { extractedText ->
+                val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+                val matchResult = regex.find(extractedText!!)
+                serieOntFoto = matchResult?.groups?.get(2)?.value
 
-        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
-        recognizer.process(inputImage).addOnSuccessListener { visionText ->
-            val extractedText = visionText.text
-            //val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
-            val regex = Regex("Telmex S/N\\s*:?\\s*([A-Z0-9\\-]+)")
-            val matchResult = regex.find(extractedText)
-                val telmexSN = matchResult?.groups?.get(1)?.value
-
-                Log.d("extraido", extractedText)
-                Log.d("Serie", telmexSN ?: "No se encontró TELMEX S/N")
-            }
-            .addOnFailureListener { e ->
-                requireContext().showToast("Error al reconocer texto: ${e.message}")
-                Log.e("MLKit", "Error al reconocer texto", e)
-            }
+                if (serieOntFoto != null) {
+                    telmexSN.text = "Telmex S/N: $serieOntFoto"
+                } else {
+                    telmexSN.text = "No se reconoce el número de serie, intenta tomar una foto más clara"
+                }
+            },
+            onFailure = { errorMessage -> telmexSN.text = errorMessage }
+        )
     }
 
     private fun updatePhoto(photoType: String, base64: String) {
@@ -275,24 +267,31 @@ class RegistrandoFragment2 : Fragment() {
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+       /* if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
             requireContext().showToast("Por favor, completa todas las opciones para continuar.")
             return
-        }
+        }*/
 
-            val updateRequest = ActualizarBD(
-                idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                Metraje = metraje.toInt(),
-                Terminal = terminal,
-                Puerto = puerto,
-                Foto_Ont = fotoONT,
-                No_Serie_ONT = fotoSerie,
-                /*Ont = lastSelectedOnt,
-                idOnt = idOnt,*/
-                Step_Registro = 2
+        if(ont != serieOntFoto) {
+            requireContext().showToast("El número de serie seleccionado y de la foto son diferentes")
+            return
+        }
+        requireContext().showToast("aaaa")
+
+        /*
+                val updateRequest = ActualizarBD(
+                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+                    Metraje = metraje.toInt(),
+                    Terminal = terminal,
+                    Puerto = puerto,
+                    Foto_Ont = fotoONT,
+                    No_Serie_ONT = fotoSerie,
+                    /*Ont = lastSelectedOnt,
+                    idOnt = idOnt,*/
+                    Step_Registro = 2
                 )
-            (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)*/
     }
 }

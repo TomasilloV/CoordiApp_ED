@@ -15,6 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -70,4 +73,21 @@ fun createImageFile(context: Context): Pair<File, String> {
     val file = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     val currentPhotoPath = file.absolutePath
     return Pair(file, currentPhotoPath)
+}
+
+fun extractTextFromImage(imageFile: File, onSuccess: (String?) -> Unit, onFailure: (String) -> Unit) {
+    val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+    val inputImage = InputImage.fromBitmap(bitmap, 0)
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+    recognizer.process(inputImage)
+        .addOnSuccessListener { visionText ->
+            val extractedText = visionText.text
+            onSuccess(extractedText)
+            Log.d("extraido", extractedText)
+        }
+        .addOnFailureListener { e ->
+            onFailure("Error al reconocer texto, intenta tomar una mejor foto")
+            Log.e("MLKit", "Error al reconocer texto", e)
+        }
 }
