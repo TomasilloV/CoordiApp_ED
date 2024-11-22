@@ -17,6 +17,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showToast
+import com.enlacedigital.CoordiApp.utils.startNewActivity
 
 class NoCompletas : AppCompatActivity() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
@@ -85,7 +86,8 @@ class NoCompletas : AppCompatActivity() {
                             updateAdapterData(items)
                         } else {
                             isLastPage = true
-                            showToast("No hay más datos disponibles")
+                            showToast("No hay datos disponibles")
+                            startNewActivity(Menu::class.java)
                         }
                     } ?: run {
                         isLastPage = true

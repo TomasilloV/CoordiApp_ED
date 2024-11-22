@@ -132,7 +132,7 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     private fun setupSpinnerAndListener(spinner: Spinner, data: List<String>, onItemSelected: (String?) -> Unit) {
-        val options = mutableListOf("Elige una opción", "ALCLFCE6295C").apply { addAll(data) }
+        val options = mutableListOf("Elige una opción").apply { addAll(data) }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
