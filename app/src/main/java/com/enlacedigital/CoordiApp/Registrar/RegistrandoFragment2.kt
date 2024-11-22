@@ -99,7 +99,7 @@ class RegistrandoFragment2 : Fragment() {
                     loadingLayout.setLoadingVisibility(false)
                     if (response.isSuccessful) {
                         val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
-                        val allOptions = listOf("Elige una opción", "HWTCC921DEAF") + options
+                        val allOptions = listOf("Elige una opción", "ZTEG2423A4FA") + options
                         spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
                             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         }
@@ -146,14 +146,14 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     private fun showPhotoOptions(photoType: String) {
-        /*currentPhotoType = photoType
+        currentPhotoType = photoType
         showPhotoOptions(
             requireContext(),
             photoType,
             ::takePhoto,
             ::choosePhotoFromGallery
-        )*/
-        takePhoto()
+        )
+        //takePhoto()
     }
 
     private fun choosePhotoFromGallery() {
@@ -243,7 +243,7 @@ class RegistrandoFragment2 : Fragment() {
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || ont == null) {
             requireContext().showToast("Por favor, completa todas las opciones para continuar.")
             return
         }
@@ -260,8 +260,8 @@ class RegistrandoFragment2 : Fragment() {
             Puerto = puerto,
             Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
-            Ont = lastSelectedOnt,
-            idOnt = idOnt,
+            /*Ont = lastSelectedOnt,
+            idOnt = idOnt,*/
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
