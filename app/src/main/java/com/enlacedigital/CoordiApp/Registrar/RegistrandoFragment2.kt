@@ -1,10 +1,7 @@
 package com.enlacedigital.CoordiApp.Registrar
 
-import android.app.AlertDialog
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.enlacedigital.CoordiApp.Menu
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.Option
@@ -27,12 +23,7 @@ import java.io.File
 import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
-import com.enlacedigital.CoordiApp.utils.showPhotoOptions
 import com.enlacedigital.CoordiApp.utils.extractTextFromImage
-import com.enlacedigital.CoordiApp.utils.startNewActivity
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
