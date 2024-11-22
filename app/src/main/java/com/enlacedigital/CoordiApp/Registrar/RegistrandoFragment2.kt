@@ -76,7 +76,7 @@ class RegistrandoFragment2 : Fragment() {
         initializeViews(view)
         setupListeners()
         updateSpinners()
-        getOptions("6", idTecnico = preferencesManager.getString("id_tecnico")!!.toInt() )
+        fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
@@ -89,26 +89,31 @@ class RegistrandoFragment2 : Fragment() {
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         telmexSN = view.findViewById(R.id.telmexSN)
         loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == View.VISIBLE }
-
-        with(view) {
-            findViewById<Button>(R.id.btnFotoOnt).setOnClickListener { showPhotoOptions("ont") }
-            findViewById<Button>(R.id.btnFotoSerie).setOnClickListener { showPhotoOptions("serie") }
-            findViewById<Button>(R.id.next).setOnClickListener { validateAndProceed() }
-        }
     }
 
-    private fun getOptions(step: String, idEstado: Int? = null, idMunicipio: Int? = null, idTecnico: Int) {
+    private fun fetchOptionsAndSetupSpinner(step: String, idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
         apiService.options(step, idEstado, idMunicipio, idTecnico)
             .enqueue(object : Callback<List<Option>> {
-                override fun onResponse(
-                    call: Call<List<Option>>,
-                    response: Response<List<Option>>
-                ) {
+                override fun onResponse(call: Call<List<Option>>, response: Response<List<Option>>) {
                     loadingLayout.setLoadingVisibility(false)
                     if (response.isSuccessful) {
-                        val options = response.body() ?: emptyList()
-                        updateOntSpinner(options)
+                        val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
+                        val allOptions = listOf("Elige una opción", "HWTCC921DEAF") + options
+                        spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
+                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        }
+                        spinnerOnt.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                                val selectedOnt = (parent.getItemAtPosition(position) as? String)?.takeIf { it != "Elige una opción" }
+                                if (selectedOnt != null && selectedOnt != lastSelectedOnt) {
+                                    lastSelectedOnt = selectedOnt
+                                    idOnt = response.body()?.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
+                                }
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>) {}
+                        }
                     } else {
                         requireContext().showToast("Error: ${response.message()}")
                     }
@@ -119,37 +124,6 @@ class RegistrandoFragment2 : Fragment() {
                     requireContext().showToast("Failed: ${t.message}")
                 }
             })
-    }
-
-    private fun updateOntSpinner(options: List<Option>) {
-        val ont = options.mapNotNull { it.Num_Serie_Salida_Det }.sorted()
-        setupSpinnerAndListener(spinnerOnt, ont) { selectedOnt ->
-            if (selectedOnt != lastSelectedOnt) {
-                lastSelectedOnt = selectedOnt
-                idOnt = options.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
-            }
-        }
-    }
-
-    private fun setupSpinnerAndListener(spinner: Spinner, data: List<String>, onItemSelected: (String?) -> Unit) {
-        val options = mutableListOf("Elige una opción").apply { addAll(data) }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selected = parent.getItemAtPosition(position) as? String
-                onItemSelected(selected.takeIf { it != "Elige una opción" })
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
     }
 
     private fun setupListeners() {
