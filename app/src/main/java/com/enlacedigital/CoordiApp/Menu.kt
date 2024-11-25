@@ -31,7 +31,7 @@ class Menu : AppCompatActivity() {
         setContentView(R.layout.activity_menu)
         setupListeners()
         val tecnico: TextView = findViewById(R.id.tecnico)
-        tecnico.text = "BIENVENIDO " + preferencesManager.getString("tecnico")
+        tecnico.text = preferencesManager.getString("tecnico")
         val version: TextView = findViewById(R.id.version)
         version.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
     }

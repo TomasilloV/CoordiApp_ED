@@ -35,6 +35,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@color/light_green"/>
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="BIENVENIDO"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintTop_toBottomOf="@id/botones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/tecnico"
@@ -45,7 +58,7 @@
                 android:textSize="20sp"
                 android:textAlignment="center"
                 app:layout_constraintWidth_percent="0.8"
-                app:layout_constraintTop_toBottomOf="@id/botones"
+                app:layout_constraintTop_toBottomOf="@id/welcome"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textColor="@color/white" />
