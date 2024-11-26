@@ -40,6 +40,7 @@
         <activity
             android:name=".Registrando"
             android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".NoCompletas"

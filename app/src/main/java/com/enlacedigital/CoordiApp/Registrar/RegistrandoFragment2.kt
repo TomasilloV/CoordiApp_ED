@@ -90,7 +90,7 @@ class RegistrandoFragment2 : Fragment() {
                     loadingLayout.setLoadingVisibility(false)
                     if (response.isSuccessful) {
                         val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
-                        val allOptions = listOf("Elige una opción", "ZTEG2423A4FA") + options
+                        val allOptions = listOf("Elige una opción", "ZTEG2429F9E2") + options
                         spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
                             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         }
