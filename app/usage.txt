@@ -18677,6 +18677,7 @@ com.enlacedigital.CoordiApp.R$id:
     public static int textTerminal
     public static int textTipoTarea
     public static int textTitular
+    public static int welcome
     private void <init>()
 com.enlacedigital.CoordiApp.R$layout:
     public static int fragment_registrando6
