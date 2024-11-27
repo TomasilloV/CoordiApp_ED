@@ -41,30 +41,13 @@ coreKtxVersion = "1.10.3"
 textRecognition = "16.0.1"
 
 [libraries]
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCameraCore" }
-androidx-camera-camera2-v150 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
-androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "androidxCameraCore" }
-androidx-camera-core-v150 = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
-androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "androidxCameraCore" }
-androidx-camera-lifecycle-v150 = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
-androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "androidxCameraCore" }
-androidx-camera-view-v150 = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterfaceVersion" }
-androidx-junit-v113 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
-androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
-anychart-android = { module = "com.anychart:anychart-android", version.ref = "anychartAndroid" }
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdateKtx" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdateKtx" }
-bcpkix-jdk15to18 = { module = "org.bouncycastle:bcpkix-jdk15to18", version.ref = "bcpkixJdk15to18" }
-bcprov-jdk15to18 = { module = "org.bouncycastle:bcprov-jdk15to18", version.ref = "bcpkixJdk15to18" }
-bctls-jdk15to18 = { module = "org.bouncycastle:bctls-jdk15to18", version.ref = "bcpkixJdk15to18" }
-conscrypt-android = { module = "org.conscrypt:conscrypt-android", version.ref = "conscryptAndroid" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-core = { module = "com.google.android.play:core", version.ref = "core" }
 jetbrains-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCoreVersion" }
-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -84,14 +67,9 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
-mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-openjsse = { module = "org.openjsse:openjsse", version.ref = "openjsse" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-core-ktx = { group = "com.google.android.play", name = "core-ktx", version.ref = "coreKtxVersion" }
 text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "textRecognition" }
 
 [plugins]
