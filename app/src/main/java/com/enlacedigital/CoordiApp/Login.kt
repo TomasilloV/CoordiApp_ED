@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
-import com.enlacedigital.CoordiApp.utils.checkLocationPermission
+import com.enlacedigital.CoordiApp.utils.checkPermission
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.hideKeyboardOnOutsideTouch
@@ -33,7 +33,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        checkLocationPermission(
+        checkPermission(
             listOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,

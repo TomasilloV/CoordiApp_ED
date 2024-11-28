@@ -54,7 +54,7 @@ fun getPreferencesManager(context: Context): PreferencesManager {
     }
 
     // Función para verificar permisos y solicitarlos si es necesario
-    fun Activity.checkLocationPermission(
+    fun Activity.checkPermission(
         permissions: List<String>,
         requestCode: Int
     ) {

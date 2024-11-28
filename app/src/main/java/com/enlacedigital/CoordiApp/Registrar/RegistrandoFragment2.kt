@@ -81,7 +81,8 @@ class RegistrandoFragment2 : Fragment() {
         spinnerOnt = view.findViewById(R.id.spinnerOnt)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         telmexSN = view.findViewById(R.id.telmexSN)
-        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == View.VISIBLE }
+        loadingLayout.setLoadingVisibility(false)
+
     }
 
     private fun fetchOptionsAndSetupSpinner(step: String, idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {

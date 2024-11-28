@@ -122,6 +122,7 @@
                 android:imeOptions="actionDone"
                 android:background="@color/light_gray"
                 android:inputType="text"
+                android:hint="Ingresa el distrito"
                 android:maxLength="7"
                 android:padding="8dp"
                 android:textSize="18sp"

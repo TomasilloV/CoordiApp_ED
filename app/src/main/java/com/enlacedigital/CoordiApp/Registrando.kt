@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -20,7 +19,7 @@ import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationSettingsRequest
-import com.enlacedigital.CoordiApp.utils.checkLocationPermission
+import com.enlacedigital.CoordiApp.utils.checkPermission
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,7 +79,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA
         )
-        checkLocationPermission(permissions, checkSettings)
+        checkPermission(permissions, checkSettings)
     }
 
     fun toasting(message: String){
