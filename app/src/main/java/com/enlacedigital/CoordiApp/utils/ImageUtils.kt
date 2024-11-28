@@ -39,8 +39,6 @@ fun compressImageToTargetSize(
 
 fun encodeImageToBase64(file: File): String {
     val base64 = try {
-        val rotationSuccess = rotateImageIfRequiredAndSave(file.absolutePath)
-        if (!rotationSuccess) return ""
         val bytes = file.readBytes()
         val compressedBytes = compressImageToTargetSize(bytes)
         "data:image/jpg;base64," + Base64.encodeToString(compressedBytes, Base64.NO_WRAP)
@@ -50,6 +48,7 @@ fun encodeImageToBase64(file: File): String {
     }
     return base64
 }
+
 
 fun showPhotoOptions(
     context: Context,
@@ -97,44 +96,4 @@ fun extractTextFromImage(
             onFailure("Error al reconocer texto, intenta tomar una mejor foto")
             Log.e("MLKit", "Error al reconocer texto", e)
         }
-}
-
-fun getPhotoOrientation(filePath: String): Int {
-    return try {
-        val exif = ExifInterface(filePath)
-        val orientation =
-            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-        orientation
-    } catch (e: IOException) {
-        e.printStackTrace()
-        ExifInterface.ORIENTATION_UNDEFINED
-    }
-}
-
-fun rotateImageIfRequiredAndSave(filePath: String): Boolean {
-    try {
-        val bitmap = BitmapFactory.decodeFile(filePath) ?: return false
-        val orientation = getPhotoOrientation(filePath)
-
-        val matrix = Matrix()
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
-            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
-            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
-            else -> return true
-        }
-
-        val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-
-        FileOutputStream(filePath).use { out ->
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        }
-
-        rotatedBitmap.recycle()
-        bitmap.recycle()
-        return true
-    } catch (e: Exception) {
-        Log.e("RotateImage", "Error al rotar y guardar la imagen.", e)
-        return false
-    }
 }
