@@ -15,12 +15,12 @@ import java.io.IOException
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
-import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 
 
@@ -71,10 +71,10 @@ class RegistrandoFragment4 : Fragment() {
             val cliente = editCliente.text.toString().trim()
 
             if (titular.isEmpty() || apPaterno.isEmpty() || materno.isEmpty() || recibe.isEmpty() || cliente.isEmpty() || fotoPuerto == "") {
-                requireContext().showToast("Por favor, completa todas las opciones para continuar.")
+                (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 return@setOnClickListener
             } else if (cliente.length <= 9) {
-                requireContext().showToast("Ingresa un teléfono válido")
+                (requireActivity() as? Registrando)?.toasting("Ingresa un teléfono válido")
                 return@setOnClickListener
             }
 
@@ -111,7 +111,7 @@ class RegistrandoFragment4 : Fragment() {
         val (photoFile, photoPath) = try {
             createImageFile(requireContext())
         } catch (ex: IOException) {
-            requireContext().showToast("Error al crear el archivo de imagen.")
+            (requireActivity() as? Registrando)?.toasting("Error al crear el archivo de imagen")
             null to ""
         }
 
@@ -137,7 +137,7 @@ class RegistrandoFragment4 : Fragment() {
         file?.let {
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
-        } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
+        } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
     }
 
     private fun handleCameraPhoto() {
@@ -146,7 +146,7 @@ class RegistrandoFragment4 : Fragment() {
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
-            requireContext().showToast("No se encontró la foto.")
+            (requireActivity() as? Registrando)?.toasting("No se encontró la foto")
         }
     }
 

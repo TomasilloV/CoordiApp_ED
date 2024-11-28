@@ -12,13 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.R
+import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
-import com.enlacedigital.CoordiApp.utils.showToast
 import java.io.File
 import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
@@ -69,7 +69,7 @@ class RegistrandoFragment2 : Fragment() {
         initializeViews(view)
         setupListeners()
         updateSpinners()
-        fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
+        //fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
@@ -108,13 +108,13 @@ class RegistrandoFragment2 : Fragment() {
                             override fun onNothingSelected(parent: AdapterView<*>) {}
                         }
                     } else {
-                        requireContext().showToast("Error: ${response.message()}")
+                        (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
                     }
                 }
 
                 override fun onFailure(call: Call<List<Option>>, t: Throwable) {
                     loadingLayout.setLoadingVisibility(false)
-                    requireContext().showToast("Failed: ${t.message}")
+                    (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
                 }
             })
     }
@@ -140,13 +140,13 @@ class RegistrandoFragment2 : Fragment() {
 
     private fun showPhotoOptions(photoType: String) {
         currentPhotoType = photoType
-        showPhotoOptions(
+        /*showPhotoOptions(
             requireContext(),
             photoType,
             ::takePhoto,
             ::choosePhotoFromGallery
-        )
-        //takePhoto()
+        )*/
+        takePhoto()
     }
 
     private fun choosePhotoFromGallery() {
@@ -157,7 +157,7 @@ class RegistrandoFragment2 : Fragment() {
         val (photoFile, photoPath) = try {
             createImageFile(requireContext())
         } catch (ex: IOException) {
-            requireContext().showToast("Error al crear el archivo de imagen.")
+            (requireActivity() as? Registrando)?.toasting("Error al crear la imagen")
             null to ""
         }
 
@@ -180,20 +180,20 @@ class RegistrandoFragment2 : Fragment() {
             null
         }
         file?.let {
-            if(currentPhotoType == "serie") processImage(it)
+            //if(currentPhotoType == "serie") processImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
-        } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
+        } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
     }
 
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            if(currentPhotoType == "serie") processImage(file)
+            //if(currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
-            requireContext().showToast("No se encontró la foto.")
+            (requireActivity() as? Registrando)?.toasting("No se encontró la foto")
         }
     }
 
@@ -234,21 +234,20 @@ class RegistrandoFragment2 : Fragment() {
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || ont == null) {
-            requireContext().showToast("Por favor, completa todas las opciones para continuar.")
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+            (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
-        if (ont != serieOntFoto) {
-            requireContext().showToast("El serie ONT seleccionado y de la foto son diferentes")
+        /*if (ont != serieOntFoto) {
+            (requireActivity() as? Registrando)?.toasting("Serie ONT y foto ONT son diferentes")
             return
         }
+        (requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")*/
 
-        requireContext().showToast("Existoso. Procede al siguiente paso")
-
-        /*val updateRequest = ActualizarBD(
+        val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Metraje = metraje.toInt(),
             Terminal = terminal,
@@ -259,6 +258,6 @@ class RegistrandoFragment2 : Fragment() {
             idOnt = idOnt,*/
             Step_Registro = 2
         )
-        (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)*/
+        (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
     }
 }

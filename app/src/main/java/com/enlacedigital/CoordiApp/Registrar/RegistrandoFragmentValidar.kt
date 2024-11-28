@@ -30,7 +30,6 @@ import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.startNewActivity
-import com.enlacedigital.CoordiApp.utils.showToast
 
 data class Checking(
     val mensaje: String,
@@ -54,7 +53,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             if (result.resultCode == Activity.RESULT_OK) {
                 locationHelper.obtenerUbicacion()
             } else {
-                requireContext().showToast("No se puede continuar sin habilitar la ubicación")
+                (requireActivity() as? Registrando)?.toasting("No se puede continuar sin habilitar la ubicación")
                 requireActivity().supportFragmentManager.popBackStack()
                 (activity as? Registrando)?.goToNextStep(5)
             }
@@ -67,7 +66,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 view?.findViewById<EditText>(R.id.editLongitud)?.setText(location.longitude.toString())
             },
             onLocationFailed = { message ->
-                requireContext().showToast(message)
+                (requireActivity() as? Registrando)?.toasting(message)
                 requireActivity().supportFragmentManager.popBackStack()
                 (activity as? Registrando)?.goToNextStep(5)
             },
@@ -78,7 +77,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             if (isGranted) {
                 locationHelper.obtenerUbicacion()
             } else {
-                requireContext().showToast("No se puede continuar sin habilitar la ubicación.")
+                (requireActivity() as? Registrando)?.toasting("No se puede continuar sin habilitar la ubicación.")
                 requireActivity().supportFragmentManager.popBackStack()
                 (activity as? Registrando)?.goToNextStep(5)
             }
@@ -110,9 +109,9 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             val longitud = editLongitud.text.toString()
 
             if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty()) {
-                requireContext().showToast("Por favor, completa todos los campos")
+                (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
             } else if (!telefono.matches(Regex("\\d{10}"))) {
-                requireContext().showToast("Por favor, inserta un número válido")
+                (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
             } else {
                 sendData(folio, telefono, latitud, longitud, preferencesManager.getString("id_tecnico"))
             }
@@ -128,12 +127,12 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 if (response.isSuccessful) {
                     response.body()?.let { processResponse(it, folio) }
                 } else {
-                    requireContext().showToast("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<Checking>, t: Throwable) {
-                requireContext().showToast("Error: ${t.message}")
+                (requireActivity() as? Registrando)?.toasting("Error: ${t.message}")
             }
         })
     }
@@ -170,18 +169,18 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     existing(registro?.Step_Registro)
                 }
             }
-            else -> requireContext().showToast("Otro caso")
+            else -> (requireActivity() as? Registrando)?.toasting("Otro caso")
         }
     }
 
     private fun existing(stepRegistro: Int?) {
         stepRegistro?.let {
             if (it in 0..5) {
-                if (stepRegistro == 5) requireContext().showToast("Ya fue registrado anteriormente")
+                if (stepRegistro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")
                 (activity as? Registrando)?.goToNextStep(it)
             } else {
-                requireContext().showToast("Ocurrió un error, revisa los datos nuevamente")
+                (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
             }
-        } ?: requireContext().showToast("Ocurrió un error, revisa los datos nuevamente")
+        } ?: (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
     }
 }

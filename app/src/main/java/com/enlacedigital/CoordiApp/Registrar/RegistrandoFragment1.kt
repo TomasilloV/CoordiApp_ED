@@ -8,11 +8,11 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
+import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
-import com.enlacedigital.CoordiApp.utils.showToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -147,7 +147,7 @@ class RegistrandoFragment1 : Fragment() {
                     Step_Registro = 1
                 )
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-            } ?: requireContext().showToast("ID not found")
+            } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
         }
     }
 
@@ -156,11 +156,11 @@ class RegistrandoFragment1 : Fragment() {
         return when {
             distritoText.isNullOrBlank() || selectedTecnologia == null || selectedEstatus == null ||
                     selectedCopeId == null || selectedDivisionId == null || selectedAreaId == null -> {
-                requireContext().showToast("Por favor, elija todas las opciones para continuar.")
+                (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 false
             }
             distritoText.length < 7 -> {
-                requireContext().showToast("El distrito debe tener al menos 7 caracteres.")
+                (requireActivity() as? Registrando)?.toasting("El distrito debe tener al menos 7 caracteres")
                 false
             }
             else -> true
@@ -210,12 +210,12 @@ class RegistrandoFragment1 : Fragment() {
                     divisionMap = options.groupBy { it.idDivision!! }
                     updateSpinners()
                 } else {
-                    requireContext().showToast("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<List<Option>>, t: Throwable) {
-                requireContext().showToast("Failed: ${t.message}")
+                (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }
         })
     }

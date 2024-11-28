@@ -12,13 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.R
+import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
-import com.enlacedigital.CoordiApp.utils.showToast
 import java.io.File
 import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
@@ -92,7 +92,7 @@ class RegistrandoFragment3 : Fragment() {
         val (photoFile, photoPath) = try {
             createImageFile(requireContext())
         } catch (ex: IOException) {
-            requireContext().showToast("Error al crear el archivo de imagen.")
+            (requireActivity() as? Registrando)?.toasting("Error al crear la imagen")
             null to ""
         }
 
@@ -118,7 +118,7 @@ class RegistrandoFragment3 : Fragment() {
         file?.let {
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
-        } ?: requireContext().showToast("Error al manejar la imagen seleccionada.")
+        } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
     }
 
     private fun handleCameraPhoto() {
@@ -127,7 +127,7 @@ class RegistrandoFragment3 : Fragment() {
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
-            requireContext().showToast("No se encontró la foto.")
+            (requireActivity() as? Registrando)?.toasting("No se encontró la foto")
         }
     }
 
@@ -151,7 +151,7 @@ class RegistrandoFragment3 : Fragment() {
         val instalacion = view?.findViewById<Spinner>(R.id.spinnerInstalacion)?.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
         if (tarea == null || instalacion == null || fachada == null || fotoOS == null) {
-            requireContext().showToast("Por favor, completa todas las opciones para continuar.")
+            (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 

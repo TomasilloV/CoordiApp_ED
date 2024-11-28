@@ -83,6 +83,10 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
         checkLocationPermission(permissions, checkSettings)
     }
 
+    fun toasting(message: String){
+        showToast(message)
+    }
+
     private fun checkLocationSettings() {
         val locationSettingsRequest = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)

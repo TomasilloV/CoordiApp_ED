@@ -11,11 +11,11 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
+import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
-import com.enlacedigital.CoordiApp.utils.showToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,7 +81,7 @@ class RegistrandoFragment5 : Fragment() {
         val numeroExterior = editNumeroExterior.text.toString().takeIf { it.isNotBlank() }
 
         if (estado == null || ciudad == null || colonia == null || calle == null || numeroExterior == null || selectedCodigoPostal == null) {
-            requireContext().showToast("Por favor, completa todas las opciones para continuar.")
+            (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
@@ -103,13 +103,13 @@ class RegistrandoFragment5 : Fragment() {
                     val options = response.body() ?: emptyList()
                     handleOptionsResponse(step, options, idEstado, idMunicipio)
                 } else {
-                    requireContext().showToast("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<List<Option>>, t: Throwable) {
                 loadingLayout.setLoadingVisibility(false)
-                requireContext().showToast("Failed: ${t.message}")
+                (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }
         })
     }
