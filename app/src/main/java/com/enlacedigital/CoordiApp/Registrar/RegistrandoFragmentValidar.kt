@@ -148,14 +148,14 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 (activity as? Registrando)?.goToNextStep(0)
             }
             "Registro existente" -> {
-                val id = registro?.idtecnico_instalaciones_coordiapp.toString()
+                val registroId = registro?.idtecnico_instalaciones_coordiapp.toString()
                 val estado = registro?.Estatus_Orden.toString()
                 if (estado == "OBJETADA") {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Este folio ya ha sido objetado")
                         .setMessage("¿Deseas actualizar?")
                         .setPositiveButton("Sí") { _, _ ->
-                            preferencesManager.saveString("id", id)
+                            preferencesManager.saveString("id", registroId)
                             preferencesManager.saveString("folio", folio)
                             existing(0)
                         }
@@ -164,7 +164,8 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                         }
                         .show()
                 } else {
-                    preferencesManager.saveString("id", id)
+                    if(registro?.Step_Registro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")
+                    preferencesManager.saveString("id", registroId)
                     preferencesManager.saveString("folio", folio)
                     existing(registro?.Step_Registro)
                 }
@@ -176,7 +177,6 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
     private fun existing(stepRegistro: Int?) {
         stepRegistro?.let {
             if (it in 0..5) {
-                if (stepRegistro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")
                 (activity as? Registrando)?.goToNextStep(it)
             } else {
                 (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
