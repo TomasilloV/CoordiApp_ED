@@ -1,3 +1,5 @@
+package com.enlacedigital.CoordiApp.Adapter
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

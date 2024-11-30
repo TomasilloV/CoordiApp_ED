@@ -1,6 +1,6 @@
 package com.enlacedigital.CoordiApp
 
-import CompletedAdapter
+import com.enlacedigital.CoordiApp.Adapter.CompletedAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle

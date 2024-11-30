@@ -82,9 +82,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.androidx.exifinterface)
 
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation("com.google.android.play:app-update:2.1.0")
-    implementation("com.google.android.play:app-update-ktx:2.1.0")
+    implementation(libs.mpandroidchart)
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
 
     //reconocimiento de texto
     implementation(libs.text.recognition)

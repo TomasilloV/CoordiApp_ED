@@ -1,20 +1,17 @@
 package com.enlacedigital.CoordiApp.utils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Base64
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import android.content.Context
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.os.Environment
+import android.util.Base64
 import android.util.Log
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import java.io.FileOutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 

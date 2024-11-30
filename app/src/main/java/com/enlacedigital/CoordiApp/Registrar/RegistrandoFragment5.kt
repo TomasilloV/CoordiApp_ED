@@ -64,7 +64,7 @@ class RegistrandoFragment5 : Fragment() {
         textCiudad = view.findViewById(R.id.textCiudad)
         textColonia = view.findViewById(R.id.textColonia)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
-        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == View.VISIBLE }
+        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == VISIBLE }
     }
 
     private fun setupListeners() {

@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -19,15 +25,14 @@ import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
-import java.io.File
-import java.io.IOException
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
-import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.extractTextFromImage
+import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.enlacedigital.CoordiApp.utils.showPhotoOptions
+import java.io.File
+import java.io.IOException
 
 
 class RegistrandoFragment2 : Fragment() {
