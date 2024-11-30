@@ -132,7 +132,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             }
 
             override fun onFailure(call: Call<Checking>, t: Throwable) {
-                (requireActivity() as? Registrando)?.toasting("Error: ${t.message}")
+                (activity as? Registrando)?.toasting("Error: ${t.message}")
             }
         })
     }
