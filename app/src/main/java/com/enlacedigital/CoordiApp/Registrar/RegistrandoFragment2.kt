@@ -74,7 +74,7 @@ class RegistrandoFragment2 : Fragment() {
         initializeViews(view)
         setupListeners()
         updateSpinners()
-        //fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
+        fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
@@ -195,7 +195,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            //if(currentPhotoType == "serie") processImage(file)
+            if(currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -240,18 +240,18 @@ class RegistrandoFragment2 : Fragment() {
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || ont == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
-        /*if (ont != serieOntFoto) {
+        if (ont != serieOntFoto) {
             (requireActivity() as? Registrando)?.toasting("Serie ONT y foto ONT son diferentes")
             return
         }
-        (requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")*/
+        //(requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
@@ -260,8 +260,8 @@ class RegistrandoFragment2 : Fragment() {
             Puerto = puerto,
             Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
-            /*Ont = lastSelectedOnt,
-            idOnt = idOnt,*/
+            Ont = lastSelectedOnt,
+            idOnt = idOnt,
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

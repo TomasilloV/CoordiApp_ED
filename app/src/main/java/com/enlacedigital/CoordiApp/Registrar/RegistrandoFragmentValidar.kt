@@ -167,20 +167,18 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     if(registro?.Step_Registro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")
                     preferencesManager.saveString("id", registroId)
                     preferencesManager.saveString("folio", folio)
-                    existing(registro?.Step_Registro)
+                    existing(registro?.Step_Registro!!)
                 }
             }
             else -> (requireActivity() as? Registrando)?.toasting("Otro caso")
         }
     }
 
-    private fun existing(stepRegistro: Int?) {
-        stepRegistro?.let {
-            if (it in 0..5) {
-                (activity as? Registrando)?.goToNextStep(it)
-            } else {
-                (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
-            }
-        } ?: (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
+    private fun existing(stepRegistro: Int) {
+        if (stepRegistro in 0..5) {
+            (activity as? Registrando)?.goToNextStep(stepRegistro)
+        } else {
+            (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
+        }
     }
 }
