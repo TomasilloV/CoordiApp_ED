@@ -30,7 +30,7 @@ class CompletedAdapter(val items: MutableList<FoliosDetalle>) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.tecnico.text = item.Tecnico.orDash()
-        holder.folioPisa.text = item.Folio_Pisa?.toString().orDash()
+        holder.folioPisa.text = item.Folio_Pisa?.orDash()
         holder.cope.text = item.COPE.orDash()
         holder.tipoTarea.text = item.Tipo_Tarea.orDash()
         holder.fecha.text = item.Fecha_Coordiapp.orDash()

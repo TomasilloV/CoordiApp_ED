@@ -49,7 +49,6 @@ fun encodeImageToBase64(file: File): String {
 
 fun showPhotoOptions(
     context: Context,
-    photoType: String,
     takePhotoAction: () -> Unit,
     chooseFromGalleryAction: () -> Unit
 ) {

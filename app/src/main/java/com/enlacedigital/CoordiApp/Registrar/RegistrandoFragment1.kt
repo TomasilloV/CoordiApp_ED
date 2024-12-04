@@ -204,7 +204,7 @@ class RegistrandoFragment1 : Fragment() {
 
     private fun getOptions() {
         apiService.options("1").enqueue(object : Callback<List<Option>> {
-            override fun onResponse(call: Call<List<Option>>, response: Response<List<Option>>) {
+            override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
                 if (response.isSuccessful) {
                     options = response.body() ?: emptyList()
                     divisionMap = options.groupBy { it.idDivision!! }
@@ -214,7 +214,7 @@ class RegistrandoFragment1 : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<Option>>, t: Throwable) {
+            override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
                 (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }
         })

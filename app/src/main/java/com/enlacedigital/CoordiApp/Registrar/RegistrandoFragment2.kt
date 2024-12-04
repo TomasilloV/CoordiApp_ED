@@ -74,7 +74,7 @@ class RegistrandoFragment2 : Fragment() {
         initializeViews(view)
         setupListeners()
         updateSpinners()
-        fetchOptionsAndSetupSpinner("6", preferencesManager.getString("id_tecnico")!!.toInt())
+        //fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
@@ -90,11 +90,12 @@ class RegistrandoFragment2 : Fragment() {
 
     }
 
-    private fun fetchOptionsAndSetupSpinner(step: String, idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
+    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
+        val step = "6"
         apiService.options(step, idEstado, idMunicipio, idTecnico)
             .enqueue(object : Callback<List<Option>> {
-                override fun onResponse(call: Call<List<Option>>, response: Response<List<Option>>) {
+                override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
                     loadingLayout.setLoadingVisibility(false)
                     if (response.isSuccessful) {
                         val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
@@ -118,7 +119,7 @@ class RegistrandoFragment2 : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<Option>>, t: Throwable) {
+                override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
                     loadingLayout.setLoadingVisibility(false)
                     (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
                 }
@@ -195,7 +196,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            if(currentPhotoType == "serie") processImage(file)
+            //if(currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -240,17 +241,17 @@ class RegistrandoFragment2 : Fragment() {
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || ont == null) {
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
-        if (ont != serieOntFoto) {
+        /*if (ont != serieOntFoto) {
             (requireActivity() as? Registrando)?.toasting("Serie ONT y foto ONT son diferentes")
             return
-        }
+        }*/
         //(requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")
 
         val updateRequest = ActualizarBD(
@@ -260,8 +261,8 @@ class RegistrandoFragment2 : Fragment() {
             Puerto = puerto,
             Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
-            Ont = lastSelectedOnt,
-            idOnt = idOnt,
+            /*Ont = lastSelectedOnt,
+            idOnt = idOnt,*/
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

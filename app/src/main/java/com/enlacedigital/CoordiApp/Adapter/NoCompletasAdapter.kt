@@ -35,7 +35,7 @@ class NoCompletasAdapter(val items: MutableList<FoliosDetalle>) : RecyclerView.A
         holder.tecnologia.text = item.Tecnologia.orDash()
         holder.telefono.text = item.Telefono.orDash()
         holder.contratista.text = item.Contratista.orDash()
-        holder.step.text = item.Step_Registro?.toString() ?: "-"
+        holder.step.text = item.Step_Registro ?: "-"
     }
 
     override fun getItemCount() = items.size

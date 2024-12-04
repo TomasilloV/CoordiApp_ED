@@ -61,7 +61,7 @@ class RegistrandoFragment4 : Fragment() {
         val editRecibe: EditText = view.findViewById(R.id.editRecibe)
         val editCliente: EditText = view.findViewById(R.id.editCliente)
 
-        btnFotoPuerto.setOnClickListener { showPhotoOptions("fotoPuerto") }
+        btnFotoPuerto.setOnClickListener { showPhotoOptions() }
 
         nextButton.setOnClickListener {
             val titular = editTitular.text.toString().trim()
@@ -93,11 +93,10 @@ class RegistrandoFragment4 : Fragment() {
         }
     }
 
-    private fun showPhotoOptions(photoType: String) {
-        currentPhotoType = photoType
+    private fun showPhotoOptions() {
+        currentPhotoType = "fotoPuerto"
         showPhotoOptions(
             requireContext(),
-            photoType,
             ::takePhoto,
             ::choosePhotoFromGallery
         )

@@ -97,7 +97,7 @@ class RegistrandoFragment5 : Fragment() {
     private fun getOptions(step: String, idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
         apiService.options(step, idEstado, idMunicipio).enqueue(object : Callback<List<Option>> {
-            override fun onResponse(call: Call<List<Option>>, response: Response<List<Option>>) {
+            override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
                 loadingLayout.setLoadingVisibility(false)
                 if (response.isSuccessful) {
                     val options = response.body() ?: emptyList()
@@ -107,7 +107,7 @@ class RegistrandoFragment5 : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<Option>>, t: Throwable) {
+            override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
                 loadingLayout.setLoadingVisibility(false)
                 (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }

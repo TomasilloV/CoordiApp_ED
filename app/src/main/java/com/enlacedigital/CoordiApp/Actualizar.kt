@@ -89,18 +89,15 @@ class Actualizar : AppCompatActivity() {
         }*/
         if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
             && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-            startUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+            startUpdate(appUpdateInfo)
         } else {
             checkSession(apiService, this, Menu::class.java)
         }
     }
 
     @Suppress("DEPRECATION")
-    private fun startUpdate(appUpdateInfo: AppUpdateInfo, updateType: Int) {
-        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateType, this, requestCodeUpdate)
-        /*if (updateType == AppUpdateType.FLEXIBLE) {
-            appUpdateManager.registerListener(installStateUpdatedListener)
-        }*/
+    private fun startUpdate(appUpdateInfo: AppUpdateInfo) {
+        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, requestCodeUpdate)
     }
 
     private fun showUpdateDialog() {
@@ -132,7 +129,7 @@ class Actualizar : AppCompatActivity() {
         super.onResume()
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                startUpdate(appUpdateInfo, AppUpdateType.IMMEDIATE)
+                startUpdate(appUpdateInfo)
             }
         }
     }

@@ -10,7 +10,7 @@ import com.enlacedigital.CoordiApp.models.SerializableCookie
 import java.io.*
 import java.util.*
 
-class MyCookieJar(private val context: Context) : CookieJar {
+class MyCookieJar(context: Context) : CookieJar {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("CookiePrefs", Context.MODE_PRIVATE)
     private val cookieStore = mutableMapOf<String, MutableList<SerializableCookie>>()
 

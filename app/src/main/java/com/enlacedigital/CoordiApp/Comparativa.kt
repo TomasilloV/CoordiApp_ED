@@ -112,13 +112,13 @@ class Comparativa : AppCompatActivity() {
 
 
                 apiService.getComparativa(ComparativaRequest(selectedYear, mesIndex, idTecnico, 1)).enqueue(object : Callback<List<ComparativaResponse>> {
-                    override fun onResponse(call: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
+                    override fun onResponse(ignoredCall: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
                         response.body()?.firstOrNull()?.let { comparativaResponse ->
                             updateBarChart(barChart, comparativaResponse.Registros_Telmex!!, comparativaResponse.Registros_ED!!)
                         }
                     }
 
-                    override fun onFailure(call: Call<List<ComparativaResponse>>, t: Throwable) {
+                    override fun onFailure(ignoredCall: Call<List<ComparativaResponse>>, t: Throwable) {
                         showToast(  "Error al obtener la comparativa: ${t.message}")
                         loadingLayout.setLoadingVisibility(false)
                         startNewActivity(Menu::class.java)
@@ -127,7 +127,7 @@ class Comparativa : AppCompatActivity() {
 
                 apiService.getComparativa(ComparativaRequest(selectedYear, mesIndex, idTecnico, 2))
                     .enqueue(object : Callback<List<ComparativaResponse>> {
-                        override fun onResponse(call: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
+                        override fun onResponse(ignoredCall: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
                             if (response.isSuccessful) {
                                 response.body()?.let { folios ->
                                     foliosList = folios
@@ -145,7 +145,7 @@ class Comparativa : AppCompatActivity() {
                             loadingLayout.setLoadingVisibility(false)
                         }
 
-                        override fun onFailure(call: Call<List<ComparativaResponse>>, t: Throwable) {
+                        override fun onFailure(ignoredCall: Call<List<ComparativaResponse>>, t: Throwable) {
                             showToast("Error al obtener la comparativa: ${t.message}")
                             loadingLayout.setLoadingVisibility(false)
                             startNewActivity(Menu::class.java)
