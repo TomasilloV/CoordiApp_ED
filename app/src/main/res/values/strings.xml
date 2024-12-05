@@ -52,6 +52,16 @@
     <string name="selecciona_ont">SELECCIONA ONT</string>
     <string name="terminar">TERMINAR</string>
     <string name="paso_5">Paso 5</string>
+    <string name="ver_folios">VER FOLIOS</string>
+    <string name="nuevo">Nuevo</string>
+    <string name="logo">Logo</string>
+    <string name="enlace_digital">ENLACE DIGITAL</string>
+    <string name="usuario">Usuario</string>
+    <string name="bienvenido">BIENVENIDO</string>
+    <string name="ver">Ver</string>
+    <string name="agregar">Agregar</string>
+    <string name="reportar">Reportar</string>
+    <string name="subir_foto">"Subir Foto "</string>
 
     <!-- Arrays -->
     <string-array name="instalacion_options">

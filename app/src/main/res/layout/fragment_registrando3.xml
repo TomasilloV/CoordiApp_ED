@@ -45,6 +45,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
+                android:inputType="text"
                 android:padding="8dp"
                 android:imeOptions="actionDone"
                 android:textSize="18sp"
@@ -96,7 +97,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/dark_gray"
-                android:text="Subir Fachada"
+                android:text="@string/subir_foto"
                 app:layout_constraintEnd_toEndOf="@+id/editTarea"
                 app:layout_constraintStart_toStartOf="@+id/editTarea"
                 app:layout_constraintTop_toBottomOf="@id/textFachada" />
@@ -119,7 +120,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/dark_gray"
-                android:text="Subir Foto OS"
+                android:text="@string/subir_foto"
                 app:layout_constraintEnd_toEndOf="@+id/editTarea"
                 app:layout_constraintStart_toStartOf="@+id/editTarea"
                 app:layout_constraintTop_toBottomOf="@id/textFotoOS" />

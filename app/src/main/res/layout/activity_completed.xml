@@ -42,7 +42,7 @@
             android:id="@+id/nuevoRegistro"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:text="Nuevo"
+            android:text="@string/nuevo"
             android:layout_marginTop="10dp"
             android:background="@color/greeno"
             android:textStyle="bold"
