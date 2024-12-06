@@ -15,11 +15,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun compressImageToTargetSize(
-    imageBytes: ByteArray,
-    maxSize: Int = 1200000,
-    initialQuality: Int = 80
-): ByteArray {
+fun compressImageToTargetSize(imageBytes: ByteArray, maxSize: Int = 1200000, initialQuality: Int = 80): ByteArray {
     var quality = initialQuality
     var compressedBytes: ByteArray
     do {

@@ -2,9 +2,6 @@
     versionText.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
     <!-- General -->
     <string name="app_name">CoordiApp</string>
-    <string name="app_version_code">1.0</string>
-    <string name="versionText">v</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo">Logo</string>
     <string name="bienvenido">BIENVENIDO</string>
     <string name="usuario">Usuario</string>
@@ -13,7 +10,6 @@
     <!-- Authentication -->
     <string name="iniciar_sesion">Iniciar sesión</string>
     <string name="problemas">¿Tienes problemas? Repórtalo a quien corresponda</string>
-    <string name="select_option">Elige una opción</string>
 
     <!-- Steps -->
     <string name="step">Step_Paso</string>
@@ -22,10 +18,8 @@
     <string name="paso_3">Paso 3</string>
     <string name="paso_4">Paso 4</string>
     <string name="paso_5">Paso 5</string>
-    <string name="paso_6">Paso 6</string>
     <string name="siguiente">Siguiente</string>
     <string name="validemos">Validemos la orden</string>
-    <string name="terminar">TERMINAR</string>
 
     <!-- Task Details -->
     <string name="estatus">ESTATUS</string>
@@ -39,7 +33,6 @@
     <string name="tecnico">TÉCNICO</string>
     <string name="fechaCordiApp">FECHA COORDIAPP</string>
     <string name="telefono">TELÉFONO</string>
-    <string name="id">FOLIO</string>
     <string name="division">DIVISIÓN</string>
     <string name="area">ÁREA</string>
     <string name="distrito">DISTRITO</string>
@@ -55,7 +48,6 @@
     <string name="agregar">Agregar</string>
     <string name="reportar">Reportar</string>
     <string name="subir_foto">Subir Foto</string>
-    <string name="selecciona_ont">SELECCIONA ONT</string>
 
     <!-- Miscellaneous -->
     <string name="enlace_digital">ENLACE DIGITAL</string>

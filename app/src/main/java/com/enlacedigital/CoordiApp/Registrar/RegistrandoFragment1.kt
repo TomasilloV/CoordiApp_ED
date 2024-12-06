@@ -71,7 +71,7 @@ class RegistrandoFragment1 : Fragment() {
     }
 
     private fun setupSpinners(vararg spinners: Spinner) {
-        val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE", "MIGRACION", "PSR", "A4")
+        val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE")
         val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
         setupSpinner(spinners[0], tecnologiaOptions)
         setupSpinner(spinners[1], estatusOptions)
