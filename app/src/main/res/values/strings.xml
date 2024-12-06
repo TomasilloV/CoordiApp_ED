@@ -27,10 +27,6 @@
     <string name="validemos">Validemos la orden</string>
     <string name="terminar">TERMINAR</string>
 
-    <!-- User Information -->
-    <string name="telefono">TELÉFONO</string>
-    <string name="id">FOLIO</string>
-
     <!-- Task Details -->
     <string name="estatus">ESTATUS</string>
     <string name="tipo_tarea">TIPO_TAREA</string>
@@ -42,13 +38,11 @@
     <string name="longitud">LONGITUD</string>
     <string name="tecnico">TÉCNICO</string>
     <string name="fechaCordiApp">FECHA COORDIAPP</string>
-
-    <!-- Location Details -->
+    <string name="telefono">TELÉFONO</string>
+    <string name="id">FOLIO</string>
     <string name="division">DIVISIÓN</string>
     <string name="area">ÁREA</string>
     <string name="distrito">DISTRITO</string>
-
-    <!-- Installation Details -->
     <string name="metraje">METRAJE</string>
     <string name="terminal">TERMINAL</string>
     <string name="puerto">PUERTO</string>

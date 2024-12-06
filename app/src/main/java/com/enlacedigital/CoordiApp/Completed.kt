@@ -18,6 +18,7 @@ import retrofit2.Response
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.checkSession
+import com.enlacedigital.CoordiApp.utils.startNewActivity
 
 
 class Completed : AppCompatActivity() {
@@ -40,7 +41,13 @@ class Completed : AppCompatActivity() {
         initViews()
         checkSession(apiService, this@Completed, null as Class<Nothing>?)
 
-        val idTecnico = preferencesManager.getString("id_tecnico")!!.toInt()
+        val idTecnicoString = preferencesManager.getString("id_tecnico")
+        if (idTecnicoString.isNullOrEmpty()) {
+            showToast("Por favor, inicia sesión nuevamente.")
+            startNewActivity(Login::class.java)
+            return
+        }
+        val idTecnico = idTecnicoString.toInt()
         completed(idTecnico, page)
     }
 
