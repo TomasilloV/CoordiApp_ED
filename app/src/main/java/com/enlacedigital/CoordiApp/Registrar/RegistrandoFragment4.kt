@@ -77,7 +77,7 @@ class RegistrandoFragment4 : Fragment() {
                 (requireActivity() as? Registrando)?.toasting("Ingresa un teléfono válido")
                 return@setOnClickListener
             } else if (titular.length < 3 || apPaterno.length < 3 || materno.length < 3 || recibe.length < 3){
-                (requireActivity() as? Registrando)?.toasting("Ingresa un nombre válido")
+                (requireActivity() as? Registrando)?.toasting("Ingresa los nombres válidos")
                 return@setOnClickListener
             }
 

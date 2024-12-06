@@ -11,8 +11,8 @@ android {
         applicationId = "com.enlacedigital.CoordiApp"
         minSdk = 27
         targetSdk = 34
-        versionCode = 202411281
-        versionName = "2.0.5"
+        versionCode = 202412061
+        versionName = "2.0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
