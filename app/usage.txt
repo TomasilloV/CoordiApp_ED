@@ -18686,7 +18686,6 @@ com.enlacedigital.CoordiApp.R$id:
     public static int welcome
     private void <init>()
 com.enlacedigital.CoordiApp.R$layout:
-    public static int fragment_registrando6
     public static int item_completed_header
     public static int item_incompleted_header
     private void <init>()
@@ -18715,8 +18714,8 @@ com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment2:
     public static final synthetic void access$setLastSelectedOnt$p(com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment2,java.lang.String)
     public static final synthetic void access$setSerieOntFoto$p(com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment2,java.lang.String)
     private final void choosePhotoFromGallery()
-    private final void fetchOptionsAndSetupSpinner(java.lang.String,int,java.lang.Integer,java.lang.Integer)
-    static synthetic void fetchOptionsAndSetupSpinner$default(com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment2,java.lang.String,int,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
+    private final void fetchOptionsAndSetupSpinner(int,java.lang.Integer,java.lang.Integer)
+    static synthetic void fetchOptionsAndSetupSpinner$default(com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment2,int,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
     public final com.enlacedigital.CoordiApp.ApiService getApiService()
     public final com.enlacedigital.CoordiApp.PreferencesManager getPreferencesManager()
     private final void processImage(java.io.File)
@@ -18730,7 +18729,6 @@ com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment4:
 com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment5:
     public final com.enlacedigital.CoordiApp.ApiService getApiService()
     public final com.enlacedigital.CoordiApp.PreferencesManager getPreferencesManager()
-com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment6
 com.enlacedigital.CoordiApp.ui.theme.ColorKt
 com.enlacedigital.CoordiApp.ui.theme.ThemeKt$AppV2Theme$1
 com.enlacedigital.CoordiApp.ui.theme.ThemeKt
@@ -41607,24 +41605,6 @@ org.jetbrains.annotations.UnknownNullability
 org.jetbrains.annotations.Unmodifiable
 org.jetbrains.annotations.UnmodifiableView
 org.jetbrains.annotations.VisibleForTesting
-CompletedAdapter$ViewHolder:
-    public static final int $stable
-    static void <clinit>()
-    public final android.widget.TextView getContratista()
-    public static android.widget.TextView getCope()
-    public final android.widget.TextView getEstatusOrden()
-    public static android.widget.TextView getFecha()
-    public final android.widget.TextView getFolioPisa()
-    public static android.widget.TextView getTecnico()
-    public final android.widget.TextView getTecnologia()
-    public final android.widget.TextView getTelefono()
-    public final android.widget.TextView getTipoTarea()
-CompletedAdapter:
-    public static final int $stable
-    static void <clinit>()
-    public final java.util.List getItems()
-    public static void onBindViewHolder()
-    public static CompletedAdapter$ViewHolder onCreateViewHolder()
 _COROUTINE.ArtificialStackFrames
 _COROUTINE.CoroutineDebuggingKt
 _COROUTINE._BOUNDARY
@@ -46624,7 +46604,7 @@ androidx.recyclerview.widget.RecyclerView$Adapter:
     public abstract void notifyDataSetChanged()
     public final void notifyItemRangeInserted(int,int)
     public abstract void onAttachedToRecyclerView()
-    public abstract void onBindViewHolder$1()
+    public abstract void onBindViewHolder()
     public abstract void onDetachedFromRecyclerView()
     public abstract boolean onFailedToRecycleView()
     public abstract void onViewAttachedToWindow()
@@ -47350,6 +47330,24 @@ com.enlacedigital.CoordiApp.Actualizar:
     public static void handleUpdate()
     public static boolean isInstalledFromPlayStore()
     public static void updateAPK()
+com.enlacedigital.CoordiApp.Adapter.CompletedAdapter$ViewHolder:
+    public static final int $stable
+    static void <clinit>()
+    public final android.widget.TextView getContratista()
+    public static android.widget.TextView getCope()
+    public final android.widget.TextView getEstatusOrden()
+    public static android.widget.TextView getFecha()
+    public final android.widget.TextView getFolioPisa()
+    public static android.widget.TextView getTecnico()
+    public final android.widget.TextView getTecnologia()
+    public final android.widget.TextView getTelefono()
+    public final android.widget.TextView getTipoTarea()
+com.enlacedigital.CoordiApp.Adapter.CompletedAdapter:
+    public static final int $stable
+    static void <clinit>()
+    public final java.util.List getItems()
+    public static void onBindViewHolder$1()
+    public static com.enlacedigital.CoordiApp.Adapter.CompletedAdapter$ViewHolder onCreateViewHolder()
 com.enlacedigital.CoordiApp.Adapter.FoliosFaltantesAdapter$FolioViewHolder:
     public static final int $stable
     static void <clinit>()
@@ -47421,7 +47419,6 @@ com.enlacedigital.CoordiApp.Menu:
     public static void setupListeners()
 com.enlacedigital.CoordiApp.MyCookieJar:
     public static final int $stable
-    public final android.content.Context context
     static void <clinit>()
     public static com.enlacedigital.CoordiApp.models.SerializableCookie deserializeCookie()
     public static void loadCookiesFromPreferences()
@@ -47525,7 +47522,7 @@ com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment4:
     public static void choosePhotoFromGallery()
     public static void handleCameraPhoto$2()
     public static void handleGalleryPhoto$2()
-    public static void showPhotoOptions$2()
+    public static void showPhotoOptions()
     public static void takePhoto$2()
 com.enlacedigital.CoordiApp.Registrar.RegistrandoFragment5$updateCiudadSpinner$1:
     public final void invoke$5()
