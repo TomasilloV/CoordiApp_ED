@@ -162,6 +162,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                         .setNegativeButton("No") { _, _ ->
                             startNewActivity(Menu::class.java)
                         }
+                        .setCancelable(false)
                         .show()
                 } else {
                     if(registro?.Step_Registro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")

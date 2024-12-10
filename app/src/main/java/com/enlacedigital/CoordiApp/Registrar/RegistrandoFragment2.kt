@@ -1,5 +1,6 @@
 package com.enlacedigital.CoordiApp.Registrar
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.enlacedigital.CoordiApp.Menu
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
@@ -28,6 +30,7 @@ import com.enlacedigital.CoordiApp.utils.createImageFile
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.extractTextFromImage
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
+import com.enlacedigital.CoordiApp.utils.startNewActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +44,6 @@ class RegistrandoFragment2 : Fragment() {
 
     private lateinit var photoUri: Uri
     private lateinit var editMetraje: EditText
-    private lateinit var telmexSN: TextView
     private lateinit var editTerminal: EditText
     private lateinit var spinnerPuerto: Spinner
     private lateinit var btnFotoOnt: Button
@@ -85,7 +87,6 @@ class RegistrandoFragment2 : Fragment() {
         btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
         spinnerOnt = view.findViewById(R.id.spinnerOnt)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
-        telmexSN = view.findViewById(R.id.telmexSN)
         loadingLayout.setLoadingVisibility(false)
 
     }
@@ -196,7 +197,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            //if(currentPhotoType == "serie") processImage(file)
+            if(currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -213,12 +214,25 @@ class RegistrandoFragment2 : Fragment() {
                 serieOntFoto = matchResult?.groups?.get(2)?.value
 
                 if (serieOntFoto != null) {
-                    telmexSN.text = "Telmex S/N: $serieOntFoto"
+                    btnFotoSerie.text = "$serieOntFoto"
                 } else {
-                    telmexSN.text = "No se reconoce el número de serie, intenta tomar una mejor foto"
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Toma una mejor foto")
+                        .setMessage("No se reconoce el número de serie")
+                        .setPositiveButton("Ok") { _, _ ->
+                            showPhotoOptions("serie")
+                        }
+                        .setCancelable(false)
+                        .show()
                 }
             },
-            onFailure = { errorMessage -> telmexSN.text = errorMessage }
+            onFailure = { errorMessage -> AlertDialog.Builder(requireContext())
+                .setTitle("Ocurrió un error")
+                .setMessage(errorMessage)
+                .setPositiveButton("Ok") { _, _ ->
+                }
+                .setCancelable(false)
+                .show()  }
         )
     }
 
@@ -249,10 +263,17 @@ class RegistrandoFragment2 : Fragment() {
         }
 
         /*if (ont != serieOntFoto) {
-            (requireActivity() as? Registrando)?.toasting("Serie ONT y foto ONT son diferentes")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Número de serie diferentes")
+                .setMessage("El número de serie de la foto es diferente al seleccionado. Elige el correcto o toma otra foto")
+                .setPositiveButton("Ok") { _, _ ->
+
+                }
+                .setCancelable(false)
+                .show()
             return
-        }*/
-        //(requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")
+        }
+        (requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")*/
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
