@@ -256,9 +256,13 @@ class RegistrandoFragment2 : Fragment() {
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
         val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
         //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val ont = serieOntFoto
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null /*|| ont == null*/) {
+        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
+            return
+        } else if(ont == null){
+            (requireActivity() as? Registrando)?.toasting("No. serie ONT no detectado, por favor, toma una mejor foto")
             return
         }
 
@@ -282,8 +286,8 @@ class RegistrandoFragment2 : Fragment() {
             Puerto = puerto,
             Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
-            /*Ont = lastSelectedOnt,
-            idOnt = idOnt,*/
+            Ont = ont,
+            /*idOnt = idOnt,*/
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

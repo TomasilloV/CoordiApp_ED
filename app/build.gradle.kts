@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.enlacedigital.CoordiApp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.enlacedigital.CoordiApp"
         minSdk = 27
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 202412061
         versionName = "2.0.6"
 

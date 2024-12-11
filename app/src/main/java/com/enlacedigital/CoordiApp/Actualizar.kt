@@ -58,19 +58,19 @@ class Actualizar : AppCompatActivity() {
     }
 
     private fun updateAPK() {
-        apiService.checkVersion()!!.enqueue(object : Callback<JsonObject?> {
+        /*apiService.checkVersion()!!.enqueue(object : Callback<JsonObject?> {
             override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
                 response.body()?.let {
                     val minVersion = it.get("min_version_CordiApp").asString.toFloatOrNull() ?: 0f
                     val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName.toFloatOrNull()
-                    if (currentVersion != null && currentVersion < minVersion) showUpdateDialog() else checkSession(apiService, this@Actualizar, Menu::class.java)
-                }
+                    if (currentVersion != null && currentVersion < minVersion) showUpdateDialog() else */checkSession(apiService, this@Actualizar, Menu::class.java)
+                /*}
             }
 
             override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
                 Log.e("VersionCheck", "Error: $t")
             }
-        })
+        })*/
     }
 
     private fun checkForAppUpdate() {
