@@ -47225,6 +47225,7 @@ com.enlacedigital.CoordiApp.Registrando:
     public static void checkLocationSettings()
     public static void checkPermissions()
     public final com.enlacedigital.CoordiApp.ApiService getApiService()
+    public final void toasting(java.lang.String)
 com.enlacedigital.CoordiApp.Registrar.ActualizadBDListener:
     public abstract void updateTechnicianData(com.enlacedigital.CoordiApp.models.ActualizarBD)
 com.enlacedigital.CoordiApp.Registrar.Checking:

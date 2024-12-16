@@ -20,104 +20,148 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * Obtiene una instancia de [PreferencesManager].
+ *
+ * @param context Contexto de la aplicación.
+ * @return Una instancia de PreferencesManager.
+ */
 fun getPreferencesManager(context: Context): PreferencesManager {
     return PreferencesManager(context.applicationContext)
 }
 
-    // Función para cambiar la visibilidad de una vista
-    fun FrameLayout.setLoadingVisibility(visible: Boolean) {
-        this.visibility = if (visible) View.VISIBLE else View.GONE
-    }
+/**
+ * Cambia la visibilidad de un [FrameLayout].
+ *
+ * @param visible `true` para hacer visible, `false` para ocultar.
+ */
+fun FrameLayout.setLoadingVisibility(visible: Boolean) {
+    this.visibility = if (visible) View.VISIBLE else View.GONE
+}
 
-    // Función para mostrar un mensaje toast
-    fun Context.showToast(message: String) {
-        Toast.makeText(this.applicationContext, message, Toast.LENGTH_SHORT).show()
-    }
+/**
+ * Muestra un mensaje tipo Toast.
+ *
+ * @param message El mensaje a mostrar.
+ */
+fun Context.showToast(message: String) {
+    Toast.makeText(this.applicationContext, message, Toast.LENGTH_SHORT).show()
+}
 
-    // Extensión para ocultar el teclado
-    fun Context.hideKeyboard(view: View) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
+/**
+ * Oculta el teclado en pantalla.
+ *
+ * @param view La vista actual.
+ */
+fun Context.hideKeyboard(view: View) {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
 
-    // Función para ocultar el teclado al tocar fuera de un EditText
-    fun Activity.hideKeyboardOnOutsideTouch(event: MotionEvent) {
-        val view = currentFocus
-        if (view is View) {
-            val outRect = android.graphics.Rect()
-            view.getGlobalVisibleRect(outRect)
-            if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                view.clearFocus()
-                hideKeyboard(view)
-            }
+/**
+ * Oculta el teclado al tocar fuera de un EditText.
+ *
+ * @param event El evento de toque en pantalla.
+ */
+fun Activity.hideKeyboardOnOutsideTouch(event: MotionEvent) {
+    val view = currentFocus
+    if (view is View) {
+        val outRect = android.graphics.Rect()
+        view.getGlobalVisibleRect(outRect)
+        if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+            view.clearFocus()
+            hideKeyboard(view)
         }
     }
+}
 
-    // Función para verificar permisos y solicitarlos si es necesario
-    fun Activity.checkPermission(
-        permissions: List<String>,
-        requestCode: Int
-    ) {
-        val permissionsToRequest = permissions.filter {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-        }
-
-        if (permissionsToRequest.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toTypedArray(),
-                requestCode
-            )
-        }
+/**
+ * Verifica si los permisos especificados están otorgados y, de no estarlo, los solicita.
+ *
+ * @param permissions Lista de permisos a verificar.
+ * @param requestCode Código de solicitud para los permisos.
+ */
+fun Activity.checkPermission(
+    permissions: List<String>,
+    requestCode: Int
+) {
+    val permissionsToRequest = permissions.filter {
+        ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
     }
 
-    // Función para iniciar una nueva actividad y finalizar la actual
-    fun <T> Context.startNewActivity(target: Class<T>) {
-        val intent = Intent(this, target).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-        if (this is Activity) {
-            (this).finish()
-        }
+    if (permissionsToRequest.isNotEmpty()) {
+        ActivityCompat.requestPermissions(
+            this,
+            permissionsToRequest.toTypedArray(),
+            requestCode
+        )
     }
+}
 
-    // Función para iniciar una nueva actividad y finalizar la actual
-    fun <T> Fragment.startNewActivity(target: Class<T>) {
-        val intent = Intent(requireContext(), target).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-        activity?.finish()
+/**
+ * Inicia una nueva actividad y finaliza la actividad actual.
+ *
+ * @param T Tipo de actividad de destino.
+ * @param target Clase de la actividad a iniciar.
+ */
+fun <T> Context.startNewActivity(target: Class<T>) {
+    val intent = Intent(this, target).apply {
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
+    startActivity(intent)
+    if (this is Activity) {
+        this.finish()
+    }
+}
 
-    //revisar sesión válida
-    fun <T> checkSession(apiService: ApiService, context: Context, successActivity: Class<T>?) {
-        val call = apiService.sessionCheck()
-        call.enqueue(object : Callback<SessionResponse> {
-            override fun onResponse(
-                call: Call<SessionResponse>,
-                response: Response<SessionResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val respuesta = response.body()
+/**
+ * Inicia una nueva actividad desde un fragmento y finaliza la actividad actual.
+ *
+ * @param T Tipo de actividad de destino.
+ * @param target Clase de la actividad a iniciar.
+ */
+fun <T> Fragment.startNewActivity(target: Class<T>) {
+    val intent = Intent(requireContext(), target).apply {
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+    startActivity(intent)
+    activity?.finish()
+}
 
-                    if (respuesta != null && respuesta.mensaje == "Sesión válida") {
-                        if (successActivity != null) {
-                            context.startNewActivity(successActivity)
-                        }
-                    } else {
-                        context.startNewActivity(Login::class.java)
-                        context.showToast("Inicia sesión para continuar")
+/**
+ * Revisa si la sesión del usuario es válida usando el [ApiService].
+ *
+ * @param T Clase de la actividad a iniciar en caso de éxito.
+ * @param apiService Instancia de ApiService para verificar la sesión.
+ * @param context Contexto actual.
+ * @param successActivity Clase de la actividad a iniciar si la sesión es válida.
+ */
+fun <T> checkSession(apiService: ApiService, context: Context, successActivity: Class<T>?) {
+    val call = apiService.sessionCheck()
+    call.enqueue(object : Callback<SessionResponse> {
+        override fun onResponse(
+            call: Call<SessionResponse>,
+            response: Response<SessionResponse>
+        ) {
+            if (response.isSuccessful) {
+                val respuesta = response.body()
+
+                if (respuesta != null && respuesta.mensaje == "Sesión válida") {
+                    if (successActivity != null) {
+                        context.startNewActivity(successActivity)
                     }
                 } else {
                     context.startNewActivity(Login::class.java)
+                    context.showToast("Inicia sesión para continuar")
                 }
-            }
-
-            override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
+            } else {
                 context.startNewActivity(Login::class.java)
-                context.showToast("Error, intenta de nuevo en unos momentos")
             }
-        })
-    }
+        }
+
+        override fun onFailure(call: Call<SessionResponse>, t: Throwable) {
+            context.startNewActivity(Login::class.java)
+            context.showToast("Error, intenta de nuevo en unos momentos")
+        }
+    })
+}
