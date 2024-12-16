@@ -127,12 +127,12 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 if (response.isSuccessful) {
                     response.body()?.let { processResponse(it, folio) }
                 } else {
-                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Error: verifica tu conexión")
                 }
             }
 
             override fun onFailure(call: Call<Checking>, t: Throwable) {
-                (activity as? Registrando)?.toasting("Error: ${t.message}")
+                (activity as? Registrando)?.toasting("Error: verifica tu conexión")
             }
         })
     }

@@ -214,13 +214,15 @@ class RegistrandoFragment2 : Fragment() {
                 serieOntFoto = matchResult?.groups?.get(2)?.value
 
                 if (serieOntFoto != null) {
-                    btnFotoSerie.text = "$serieOntFoto"
+                    btnFotoSerie.text = serieOntFoto
                 } else {
                     AlertDialog.Builder(requireContext())
-                        .setTitle("Toma una mejor foto")
-                        .setMessage("No se reconoce el número de serie")
-                        .setPositiveButton("Ok") { _, _ ->
+                        .setTitle("No se reconoce el número de serie")
+                        .setMessage("Puedes tomar una foto más legible para obtener el número de serie o continuar sin proporcionarlo")
+                        .setPositiveButton("Tomar de nuevo") { _, _ ->
                             showPhotoOptions("serie")
+                        }
+                        .setNegativeButton("Continuar") { _, _ ->
                         }
                         .setCancelable(false)
                         .show()
@@ -261,23 +263,7 @@ class RegistrandoFragment2 : Fragment() {
         if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
-        } else if(ont == null){
-            (requireActivity() as? Registrando)?.toasting("No. serie ONT no detectado, por favor, toma una mejor foto")
-            return
         }
-
-        /*if (ont != serieOntFoto) {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Número de serie diferentes")
-                .setMessage("El número de serie de la foto es diferente al seleccionado. Elige el correcto o toma otra foto")
-                .setPositiveButton("Ok") { _, _ ->
-
-                }
-                .setCancelable(false)
-                .show()
-            return
-        }
-        (requireActivity() as? Registrando)?.toasting("Existoso. Procede al siguiente paso")*/
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
