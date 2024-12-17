@@ -10,18 +10,37 @@ import com.enlacedigital.CoordiApp.models.SerializableCookie
 import java.io.*
 import java.util.*
 
+/**
+ * Clase personalizada para manejar cookies con OkHttp y almacenarlas de forma persistente
+ * en SharedPreferences.
+ *
+ * @param context Contexto de la aplicación para acceder a SharedPreferences.
+ */
 class MyCookieJar(context: Context) : CookieJar {
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("CookiePrefs", Context.MODE_PRIVATE)
+
+    // SharedPreferences para persistencia
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("CookiePrefs", Context.MODE_PRIVATE)
+
+    // Almacén en memoria de cookies
     private val cookieStore = mutableMapOf<String, MutableList<SerializableCookie>>()
 
+    // Inicializa cargando las cookies desde SharedPreferences
     init {
         loadCookiesFromPreferences()
     }
 
+    /**
+     * Guarda las cookies de una respuesta HTTP en el almacén local y en SharedPreferences.
+     *
+     * @param url URL asociada a las cookies.
+     * @param cookies Lista de cookies recibidas.
+     */
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        val key = "https://erp.ed-intra.com/API/"
+        val key = "https://erp.ed-intra.com/API/" // Dominio estático para el almacenamiento
         Log.d("MyCookieJar", "Guardando cookies para $key: $cookies")
 
+        // Convierte las cookies en objetos serializables
         val serializableCookies = cookies.map { cookie ->
             SerializableCookie(
                 name = cookie.name,
@@ -34,16 +53,29 @@ class MyCookieJar(context: Context) : CookieJar {
             )
         }
 
-        cookieStore[key]?.addAll(serializableCookies) ?: cookieStore.put(key, serializableCookies.toMutableList())
+        // Guarda las cookies en el almacén local
+        cookieStore[key]?.addAll(serializableCookies) ?: cookieStore.put(
+            key,
+            serializableCookies.toMutableList()
+        )
+
+        // Persiste las cookies en SharedPreferences
         saveCookiesToPreferences()
     }
 
+    /**
+     * Carga cookies almacenadas para una solicitud HTTP.
+     *
+     * @param url URL para la cual se solicitan las cookies.
+     * @return Lista de cookies asociadas a la URL.
+     */
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val key = "https://erp.ed-intra.com/API/"
         val serializableCookies = cookieStore[key]?.toList() ?: emptyList()
 
         Log.d("MyCookieJar", "Cargando cookies para $key: $serializableCookies")
 
+        // Convierte las cookies serializables a objetos Cookie de OkHttp
         return serializableCookies.map {
             val cookieBuilder = Cookie.Builder()
                 .name(it.name)
@@ -64,7 +96,9 @@ class MyCookieJar(context: Context) : CookieJar {
         }
     }
 
-    // Guardar cookies en SharedPreferences
+    /**
+     * Guarda todas las cookies actuales del almacén en SharedPreferences.
+     */
     private fun saveCookiesToPreferences() {
         val editor = sharedPreferences.edit()
         for ((key, cookies) in cookieStore) {
@@ -74,7 +108,9 @@ class MyCookieJar(context: Context) : CookieJar {
         editor.apply()
     }
 
-    // Cargar cookies desde SharedPreferences
+    /**
+     * Carga cookies persistidas desde SharedPreferences al almacén local.
+     */
     private fun loadCookiesFromPreferences() {
         val allEntries = sharedPreferences.all
         for ((key, value) in allEntries) {
@@ -85,16 +121,31 @@ class MyCookieJar(context: Context) : CookieJar {
         }
     }
 
-    // Serializar una cookie a String para almacenarla
+    /**
+     * Serializa un objeto [SerializableCookie] a un String para almacenarlo.
+     *
+     * @param cookie Cookie serializable a convertir.
+     * @return String base64 representando el objeto serializado.
+     */
     private fun serializeCookie(cookie: SerializableCookie): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
-        objectOutputStream.writeObject(cookie)
-        objectOutputStream.close()
-        return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray())
+        return try {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            val objectOutputStream = ObjectOutputStream(byteArrayOutputStream)
+            objectOutputStream.writeObject(cookie)
+            objectOutputStream.close()
+            Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray())
+        } catch (e: IOException) {
+            Log.e("MyCookieJar", "Error serializando cookie", e)
+            ""
+        }
     }
 
-    // Deserializar una cookie desde un String almacenado
+    /**
+     * Deserializa un String almacenado a un objeto [SerializableCookie].
+     *
+     * @param cookieString String base64 con la representación serializada de una cookie.
+     * @return Objeto [SerializableCookie] o null si falla la deserialización.
+     */
     private fun deserializeCookie(cookieString: String): SerializableCookie? {
         return try {
             val bytes = Base64.getDecoder().decode(cookieString)
@@ -102,7 +153,7 @@ class MyCookieJar(context: Context) : CookieJar {
             val objectInputStream = ObjectInputStream(byteArrayInputStream)
             objectInputStream.readObject() as SerializableCookie
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MyCookieJar", "Error deserializando cookie", e)
             null
         }
     }

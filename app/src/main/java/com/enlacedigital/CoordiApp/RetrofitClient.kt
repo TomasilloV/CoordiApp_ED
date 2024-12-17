@@ -9,31 +9,50 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/**
+ * Crea e inicializa una instancia de Retrofit para la comunicación con una API.
+ *
+ * @param context Contexto necesario para gestionar cookies.
+ * @return Una implementación de la interfaz [ApiService] lista para usar.
+ */
 fun createRetrofitService(context: Context): ApiService {
     val client = createCustomOkHttpClient(context)
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://vps.ed-intra.com/API/")
-        .client(client)
-        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl("https://vps.ed-intra.com/API/") // URL base de la API
+        .client(client) // Cliente personalizado
+        .addConverterFactory(GsonConverterFactory.create()) // Conversor para JSON
         .build()
 
     return retrofit.create(ApiService::class.java)
 }
 
-// Configuración estándar de OkHttpClient
+/**
+ * Configura un cliente OkHttp personalizado con tiempos de espera,
+ * manejo de cookies y registro de tráfico HTTP.
+ *
+ * @param context Contexto necesario para inicializar el sistema de manejo de cookies.
+ * @return Una instancia configurada de [OkHttpClient].
+ */
 private fun createCustomOkHttpClient(context: Context): OkHttpClient {
     return OkHttpClient.Builder()
-        .connectTimeout(120, TimeUnit.SECONDS)
-        .readTimeout(120, TimeUnit.SECONDS)
-        .writeTimeout(120, TimeUnit.SECONDS)
-        .cookieJar(MyCookieJar(context))
-        .addInterceptor(loggingInterceptor())
+        .connectTimeout(120, TimeUnit.SECONDS) // Tiempo de espera para la conexión
+        .readTimeout(120, TimeUnit.SECONDS) // Tiempo de espera para lectura
+        .writeTimeout(120, TimeUnit.SECONDS) // Tiempo de espera para escritura
+        .cookieJar(MyCookieJar(context)) // Sistema personalizado de manejo de cookies
+        .addInterceptor(loggingInterceptor()) // Interceptor para logs HTTP
         .build()
 }
 
-// Configuración para registrar las peticiones y respuestas HTTP
+/**
+ * Configura un interceptor para registrar las solicitudes y respuestas HTTP.
+ *
+ * @return Una instancia de [HttpLoggingInterceptor] con el nivel de log configurado en BODY.
+ */
 private fun loggingInterceptor(): Interceptor {
-    return HttpLoggingInterceptor { message -> Log.d("HTTP", message) }
-        .apply { level = HttpLoggingInterceptor.Level.BODY }
+    return HttpLoggingInterceptor { message ->
+        Log.d("HTTP", message) // Log de cada mensaje HTTP
+    }.apply {
+        level = HttpLoggingInterceptor.Level.BODY // Nivel de log detallado
+    }
 }

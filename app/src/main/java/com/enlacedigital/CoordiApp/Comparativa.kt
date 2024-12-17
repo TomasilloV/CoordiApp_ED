@@ -29,17 +29,39 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
+/**
+ * Actividad que muestra comparativas de registros entre diferentes fuentes (Telmex y ED).
+ * Permite visualizar datos de folios en un gráfico de barras o en una lista, dependiendo de la selección del usuario.
+ */
 class Comparativa : AppCompatActivity() {
+
+    /** Gestor de preferencias compartidas */
     val preferencesManager = PreferencesHelper.getPreferencesManager()
+
+    /** Servicio API para realizar peticiones */
     val apiService = ApiServiceHelper.getApiService()
+
+    /** RecyclerView que contiene la lista de folios faltantes */
     private lateinit var recyclerView: RecyclerView
+
+    /** Botón para alternar entre la vista de gráfico y lista */
     private lateinit var foliosBTN: Button
+
+    /** Vista de carga para mostrar durante la obtención de datos */
     private lateinit var loadingLayout: FrameLayout
+
+    /** Lista de objetos de respuesta para los folios faltantes */
     private var foliosList: List<ComparativaResponse> = emptyList()
 
+    /**
+     * Inicializa la actividad, configura los spinners de año y mes, y maneja la lógica de cambio entre
+     * la vista de gráfico y la de lista.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comparativa)
+
+        // Inicializa las vistas y los controles
         loadingLayout = findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
 
@@ -51,9 +73,11 @@ class Comparativa : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Configura los spinners de año y mes
         setupYearSpinner(spinnerAnio, spinnerMes)
         setupMonthSpinner(spinnerAnio, spinnerMes, barChart)
 
+        // Configura el botón para alternar entre las vistas de gráfico y lista
         foliosBTN.setOnClickListener {
             if (foliosBTN.text == "VER FOLIOS" && foliosList.isNotEmpty()) {
                 foliosBTN.text = "VER GRÁFICA"
@@ -72,6 +96,13 @@ class Comparativa : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura el spinner de años, con el año actual como valor seleccionado por defecto.
+     * Además, actualiza el spinner de meses en función del año seleccionado.
+     *
+     * @param spinnerAnio Spinner del año.
+     * @param spinnerMes Spinner del mes.
+     */
     private fun setupYearSpinner(spinnerAnio: Spinner, spinnerMes: Spinner) {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val years = (2023..currentYear).toList().reversed()
@@ -81,6 +112,9 @@ class Comparativa : AppCompatActivity() {
         }
 
         spinnerAnio.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Maneja el evento de selección de un año en el spinner y ajusta los meses disponibles.
+             */
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedYear = parent.getItemAtPosition(position) as Int
                 val months = resources.getStringArray(R.array.meses_es)
@@ -99,10 +133,20 @@ class Comparativa : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura el spinner de meses y realiza la solicitud de comparativa al seleccionar un mes.
+     *
+     * @param spinnerAnio Spinner del año seleccionado.
+     * @param spinnerMes Spinner del mes seleccionado.
+     * @param barChart Gráfico de barras que muestra la comparativa de registros.
+     */
     private fun setupMonthSpinner(spinnerAnio: Spinner, spinnerMes: Spinner, barChart: BarChart) {
         val months = resources.getStringArray(R.array.meses_es)
 
         spinnerMes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Maneja la selección de un mes en el spinner, realiza las solicitudes y actualiza los gráficos y la lista de folios.
+             */
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedYear = spinnerAnio.selectedItem as Int
                 val selectedMonth = parent.getItemAtPosition(position).toString()
@@ -110,7 +154,7 @@ class Comparativa : AppCompatActivity() {
                 val idTecnico = preferencesManager.getString("id_tecnico")!!.toInt()
                 loadingLayout.setLoadingVisibility(true)
 
-
+                // Solicitud para obtener los registros para el gráfico
                 apiService.getComparativa(ComparativaRequest(selectedYear, mesIndex, idTecnico, 1)).enqueue(object : Callback<List<ComparativaResponse>> {
                     override fun onResponse(ignoredCall: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
                         response.body()?.firstOrNull()?.let { comparativaResponse ->
@@ -119,12 +163,13 @@ class Comparativa : AppCompatActivity() {
                     }
 
                     override fun onFailure(ignoredCall: Call<List<ComparativaResponse>>, t: Throwable) {
-                        showToast(  "Error al obtener la comparativa: ${t.message}")
+                        showToast("Error al obtener la comparativa: ${t.message}")
                         loadingLayout.setLoadingVisibility(false)
                         startNewActivity(Menu::class.java)
                     }
                 })
 
+                // Solicitud para obtener los folios faltantes y mostrarlos en la lista
                 apiService.getComparativa(ComparativaRequest(selectedYear, mesIndex, idTecnico, 2))
                     .enqueue(object : Callback<List<ComparativaResponse>> {
                         override fun onResponse(ignoredCall: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
@@ -132,6 +177,7 @@ class Comparativa : AppCompatActivity() {
                                 response.body()?.let { folios ->
                                     foliosList = folios
 
+                                    // Si hay folios, los muestra en el RecyclerView
                                     if (foliosList.isNotEmpty()) {
                                         val adapter = FoliosFaltantesAdapter(foliosList)
                                         recyclerView.adapter = adapter
@@ -151,13 +197,19 @@ class Comparativa : AppCompatActivity() {
                             startNewActivity(Menu::class.java)
                         }
                     })
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
 
+    /**
+     * Actualiza el gráfico de barras con los datos de comparativa de registros.
+     *
+     * @param barChart El gráfico de barras a actualizar.
+     * @param registrosTelmex El número de registros de Telmex.
+     * @param registrosED El número de registros de ED.
+     */
     private fun updateBarChart(barChart: BarChart, registrosTelmex: Int, registrosED: Int) {
         val entries = listOf(
             BarEntry(0f, registrosTelmex.toFloat()), // Telmex
