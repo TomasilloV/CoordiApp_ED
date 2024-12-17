@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -39,6 +40,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
     private lateinit var loadingOverlay: FrameLayout
     private var updateJob: Job? = null
     private lateinit var settingsClient: SettingsClient
+    private lateinit var cancelButton: Button
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
     private val checkSettings = 1001
@@ -54,7 +56,8 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
         checkPermissions()
 
-        val cancelButton = findViewById<Button>(R.id.cancelButton)
+        cancelButton = findViewById(R.id.cancelButton)
+        cancelButton.visibility = View.INVISIBLE
         loadingOverlay = findViewById(R.id.loadingOverlay)
         loadingOverlay.setLoadingVisibility(false)
 
@@ -123,6 +126,15 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
         // Inicia una nueva corrutina y asigna el Job
         updateJob = CoroutineScope(Dispatchers.Main).launch {
             loadingOverlay.setLoadingVisibility(true)
+            cancelButton.visibility = View.INVISIBLE
+
+            launch {
+                delay(8000)
+                if (updateJob?.isActive == true) {
+                    cancelButton.visibility = View.VISIBLE
+                }
+            }
+
             try {
                 val response = withContext(Dispatchers.IO) {
                     delay(15000)
@@ -138,9 +150,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
                 } else showToast("Error: ${response.code()}")
             } catch (e: Exception) {
                 when (e) {
-                    is CancellationException -> {
-                        showToast("Operación cancelada por el usuario")
-                    }
+                    is CancellationException -> {}
                     is UnknownHostException -> {
                         showToast("Sin conexión a Internet. Verifica tu red e intenta de nuevo.")
                     }
@@ -155,6 +165,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
                     }
                 }
             } finally {
+                cancelButton.visibility = View.INVISIBLE
                 loadingOverlay.setLoadingVisibility(false)
             }
         }

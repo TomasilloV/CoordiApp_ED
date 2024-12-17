@@ -36,8 +36,10 @@
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#CB000000">
+        android:visibility="visible"
+        android:background="#CB000000"
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,9 +57,10 @@
             <Button
                 android:id="@+id/cancelButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:text="@string/cancelar"
-                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                android:layout_marginTop="30dp"
                 android:background="@color/red"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
