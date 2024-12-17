@@ -128,7 +128,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
             cancelButton.visibility = View.INVISIBLE
 
             launch {
-                delay(8000)
+                delay(6000)
                 if (updateJob?.isActive == true) {
                     cancelButton.visibility = View.VISIBLE
                 }
