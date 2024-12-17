@@ -46,7 +46,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
     private val checkSettings = 1001
 
     @Suppress("DEPRECATION")
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -123,7 +123,6 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
     override fun updateTechnicianData(requestData: ActualizarBD) {
         if (updateJob?.isActive == true) return
-        // Inicia una nueva corrutina y asigna el Job
         updateJob = CoroutineScope(Dispatchers.Main).launch {
             loadingOverlay.setLoadingVisibility(true)
             cancelButton.visibility = View.INVISIBLE
@@ -137,7 +136,6 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
             try {
                 val response = withContext(Dispatchers.IO) {
-                    delay(15000)
                     apiService.updateTechnicianData(requestData).execute()
                 }
                 val apiResponse = response.body()
