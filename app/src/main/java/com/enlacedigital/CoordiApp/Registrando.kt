@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -26,12 +27,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.enlacedigital.CoordiApp.utils.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import kotlin.coroutines.cancellation.CancellationException
 
 class Registrando : AppCompatActivity(), ActualizadBDListener {
     val apiService = ApiServiceHelper.getApiService()
     private lateinit var loadingOverlay: FrameLayout
+    private var updateJob: Job? = null
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
@@ -48,8 +54,16 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
         checkPermissions()
 
+        val cancelButton = findViewById<Button>(R.id.cancelButton)
         loadingOverlay = findViewById(R.id.loadingOverlay)
         loadingOverlay.setLoadingVisibility(false)
+
+        cancelButton.setOnClickListener {
+            updateJob?.cancel()
+            showToast("Actualización cancelada")
+            loadingOverlay.setLoadingVisibility(false)
+        }
+
 
         settingsClient = LocationServices.getSettingsClient(this)
         locationRequest = LocationRequest.create().apply {
@@ -105,10 +119,13 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
     }
 
     override fun updateTechnicianData(requestData: ActualizarBD) {
-        CoroutineScope(Dispatchers.Main).launch {
+        if (updateJob?.isActive == true) return
+        // Inicia una nueva corrutina y asigna el Job
+        updateJob = CoroutineScope(Dispatchers.Main).launch {
             loadingOverlay.setLoadingVisibility(true)
             try {
                 val response = withContext(Dispatchers.IO) {
+                    delay(15000)
                     apiService.updateTechnicianData(requestData).execute()
                 }
                 val apiResponse = response.body()
@@ -119,12 +136,24 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
                         else goToNextStep(requestData.Step_Registro!!)
                     } else showToast(apiResponse?.mensaje ?: "Intenta de nuevo")
                 } else showToast("Error: ${response.code()}")
-            } catch (e: SocketTimeoutException) {
-                showToast("Tiempo de espera excedido, por favor intenta de nuevo")
-            } catch (e: UnknownHostException) {
-                showToast("Verifica tu conexión y vuelve a intentarlo")
             } catch (e: Exception) {
-                showToast("Error: ${e.message}")
+                when (e) {
+                    is CancellationException -> {
+                        showToast("Operación cancelada por el usuario")
+                    }
+                    is UnknownHostException -> {
+                        showToast("Sin conexión a Internet. Verifica tu red e intenta de nuevo.")
+                    }
+                    is SocketTimeoutException -> {
+                        showToast("Tiempo de espera agotado. La red puede estar lenta o caída.")
+                    }
+                    is IOException -> {
+                        showToast("Error de red. Verifica tu conexión e intenta nuevamente.")
+                    }
+                    else -> {
+                        showToast("Error: ${e.message}")
+                    }
+                }
             } finally {
                 loadingOverlay.setLoadingVisibility(false)
             }

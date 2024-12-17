@@ -51,6 +51,7 @@
 
     <!-- Miscellaneous -->
     <string name="enlace_digital">ENLACE DIGITAL</string>
+    <string name="cancelar">Cancelar</string>
 
     <!-- Arrays -->
     <string-array name="instalacion_options">
