@@ -20,6 +20,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Interface que define un método para actualizar los datos de un técnico en el sistema.
+ */
 interface ActualizadBDListener {
     fun updateTechnicianData(requestData: ActualizarBD)
 }
@@ -70,6 +73,10 @@ class RegistrandoFragment1 : Fragment() {
         setupButtonClick(nextButton, editDistrito, spinnerTecnologia, spinnerEstatus, spinnerCope, spinnerDivision, spinnerArea)
     }
 
+    /**
+     * Configura los spinners con las opciones de tecnología y estatus.
+     * @param spinners los spinners a configurar.
+     */
     private fun setupSpinners(vararg spinners: Spinner) {
         val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE")
         val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
@@ -77,9 +84,20 @@ class RegistrandoFragment1 : Fragment() {
         setupSpinner(spinners[1], estatusOptions)
     }
 
+    /**
+     * Configura el spinner de divisiones y sus respectivas acciones.
+     * @param spinnerDivision el spinner para divisiones.
+     * @param spinnerArea el spinner para áreas.
+     * @param spinnerCope el spinner para copes.
+     * @param textArea el TextView asociado al spinner de área.
+     * @param textCope el TextView asociado al spinner de cope.
+     */
     private fun setupDivisionSpinner(spinnerDivision: Spinner, spinnerArea: Spinner, spinnerCope: Spinner,
                                      textArea: TextView, textCope: TextView) {
         spinnerDivision.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Evento cuando se selecciona un ítem en el spinner de división.
+             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position > 0) {
                     val selectedDivisionId = divisionMap.keys.elementAt(position - 1)
@@ -97,6 +115,9 @@ class RegistrandoFragment1 : Fragment() {
         }
 
         spinnerArea.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Evento cuando se selecciona un ítem en el spinner de área.
+             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position > 0) {
                     val selectedAreaId = (parent?.adapter as? ArrayAdapter<*>)?.getItem(position)?.let { name ->
@@ -115,6 +136,16 @@ class RegistrandoFragment1 : Fragment() {
         }
     }
 
+    /**
+     * Configura la acción del botón "Siguiente".
+     * @param nextButton el botón "Siguiente".
+     * @param editDistrito el campo de texto para el distrito.
+     * @param spinnerTecnologia el spinner para seleccionar tecnología.
+     * @param spinnerEstatus el spinner para seleccionar estatus.
+     * @param spinnerCope el spinner para seleccionar COPE.
+     * @param spinnerDivision el spinner para seleccionar división.
+     * @param spinnerArea el spinner para seleccionar área.
+     */
     private fun setupButtonClick(nextButton: Button, editDistrito: EditText, spinnerTecnologia: Spinner, spinnerEstatus: Spinner,
                                  spinnerCope: Spinner, spinnerDivision: Spinner, spinnerArea: Spinner) {
         nextButton.setOnClickListener {
@@ -151,6 +182,16 @@ class RegistrandoFragment1 : Fragment() {
         }
     }
 
+    /**
+     * Valida los campos del formulario antes de enviarlos.
+     * @param distritoText el texto del distrito.
+     * @param selectedTecnologia la tecnología seleccionada.
+     * @param selectedEstatus el estatus seleccionado.
+     * @param selectedCopeId el ID de COPE seleccionado.
+     * @param selectedDivisionId el ID de división seleccionado.
+     * @param selectedAreaId el ID de área seleccionado.
+     * @return verdadero si todos los campos son válidos, falso en caso contrario.
+     */
     private fun validateFields(distritoText: String?, selectedTecnologia: String?, selectedEstatus: String?,
                                selectedCopeId: Int?, selectedDivisionId: Int?, selectedAreaId: Int?): Boolean {
         return when {
@@ -167,11 +208,24 @@ class RegistrandoFragment1 : Fragment() {
         }
     }
 
+    /**
+     * Cambia la visibilidad de una vista y su TextView asociado.
+     * @param view la vista cuyo estado se debe cambiar.
+     * @param textView el TextView asociado.
+     * @param visibility el estado de visibilidad a establecer (View.VISIBLE o View.GONE).
+     */
     private fun toggleViewVisibility(view: View, textView: TextView, visibility: Int) {
         view.visibility = visibility
         textView.visibility = visibility
     }
 
+    /**
+     * Oculta las vistas de área y COPE.
+     * @param spinnerArea el spinner de área.
+     * @param spinnerCope el spinner de COPE.
+     * @param textArea el TextView de área.
+     * @param textCope el TextView de COPE.
+     */
     private fun hideAreaAndCopeViews(spinnerArea: Spinner, spinnerCope: Spinner, textArea: TextView, textCope: TextView) {
         spinnerArea.visibility = View.GONE
         spinnerCope.visibility = View.GONE
@@ -179,29 +233,52 @@ class RegistrandoFragment1 : Fragment() {
         textCope.visibility = View.GONE
     }
 
+    /**
+     * Oculta las vistas de COPE.
+     * @param spinnerCope el spinner de COPE.
+     * @param textCope el TextView de COPE.
+     */
     private fun hideCopeView(spinnerCope: Spinner, textCope: TextView) {
         spinnerCope.visibility = View.GONE
         textCope.visibility = View.GONE
     }
 
+    /**
+     * Configura un spinner con una lista de opciones.
+     * @param spinner el spinner a configurar.
+     * @param items las opciones que se mostrarán en el spinner.
+     */
     private fun setupSpinner(spinner: Spinner, items: List<String?>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
     }
 
+    /**
+     * Actualiza el spinner de áreas basado en la división seleccionada.
+     * @param divisionId el ID de la división seleccionada.
+     * @param spinnerArea el spinner de áreas.
+     */
     private fun updateAreasSpinner(divisionId: Int, spinnerArea: Spinner) {
         val areas = options.filter { it.idDivision == divisionId }
         val areaOptions = listOf("Elige una opción") + areas.map { it.nameArea }.distinct()
         setupSpinner(spinnerArea, areaOptions)
     }
 
+    /**
+     * Actualiza el spinner de COPE basado en el área seleccionada.
+     * @param areaId el ID del área seleccionada.
+     * @param spinnerCope el spinner de COPE.
+     */
     private fun updateCopesSpinner(areaId: Int, spinnerCope: Spinner) {
         val copes = options.filter { it.idAreas == areaId }
         val copeOptions = listOf("Elige una opción") + copes.map { it.COPE }
         setupSpinner(spinnerCope, copeOptions)
     }
 
+    /**
+     * Obtiene las opciones para llenar los spinners de división, área y COPE.
+     */
     private fun getOptions() {
         apiService.options("1").enqueue(object : Callback<List<Option>> {
             override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
@@ -220,6 +297,9 @@ class RegistrandoFragment1 : Fragment() {
         })
     }
 
+    /**
+     * Actualiza el spinner de divisiones con las opciones obtenidas.
+     */
     private fun updateSpinners() {
         val divisionOptions = listOf("Elige una opción") + divisionMap.values.flatten().map { it.nameDivision }.distinct()
         setupSpinner(view?.findViewById(R.id.spinnerDivision)!!, divisionOptions)

@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -37,7 +36,9 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
-
+/**
+ * Fragmento que representa la segunda etapa del proceso de registro.
+ */
 class RegistrandoFragment2 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
@@ -58,10 +59,16 @@ class RegistrandoFragment2 : Fragment() {
     private var idOnt: Int? = null
     private var serieOntFoto: String? = null
 
+    /**
+     * Launcher para tomar fotos con la cámara.
+     */
     private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) handleCameraPhoto()
     }
 
+    /**
+     * Launcher para seleccionar fotos desde la galería.
+     */
     private val pickPhotoLauncher: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { handleGalleryPhoto(it) }
     }
@@ -77,6 +84,7 @@ class RegistrandoFragment2 : Fragment() {
         setupListeners()
         updateSpinners()
         //fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
+
     }
 
     private fun initializeViews(view: View) {
@@ -88,9 +96,14 @@ class RegistrandoFragment2 : Fragment() {
         spinnerOnt = view.findViewById(R.id.spinnerOnt)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
-
     }
 
+    /**
+     * Obtiene opciones desde el servicio API y configura el spinner correspondiente.
+     * @param idTecnico ID del técnico.
+     * @param idEstado (Opcional) ID del estado.
+     * @param idMunicipio (Opcional) ID del municipio.
+     */
     private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
         val step = "6"
@@ -127,16 +140,24 @@ class RegistrandoFragment2 : Fragment() {
             })
     }
 
+    /**
+     * Configura los listeners de los eventos de la interfaz de usuario.
+     */
     private fun setupListeners() {
         btnFotoOnt.setOnClickListener {
             showPhotoOptions("ont")
-            currentPhotoType = "ont"}
+            currentPhotoType = "ont"
+        }
         btnFotoSerie.setOnClickListener {
             showPhotoOptions("serie")
-            currentPhotoType = "serie" }
+            currentPhotoType = "serie"
+        }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
+    /**
+     * Actualiza las opciones del spinner de puertos.
+     */
     private fun updateSpinners() {
         val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
         numbersArray.add(0, "Elige una opción")
@@ -146,6 +167,10 @@ class RegistrandoFragment2 : Fragment() {
         spinnerPuerto.adapter = adapter
     }
 
+    /**
+     * Muestra las opciones para tomar o elegir una foto.
+     * @param photoType Tipo de foto (ont o serie).
+     */
     private fun showPhotoOptions(photoType: String) {
         currentPhotoType = photoType
         /*showPhotoOptions(
@@ -157,10 +182,16 @@ class RegistrandoFragment2 : Fragment() {
         takePhoto()
     }
 
+    /**
+     * Inicia la selección de una foto desde la galería.
+     */
     private fun choosePhotoFromGallery() {
         pickPhotoLauncher.launch("image/*")
     }
 
+    /**
+     * Inicia la captura de una foto con la cámara.
+     */
     private fun takePhoto() {
         val (photoFile, photoPath) = try {
             createImageFile(requireContext())
@@ -176,6 +207,10 @@ class RegistrandoFragment2 : Fragment() {
         }
     }
 
+    /**
+     * Maneja la selección de una foto desde la galería.
+     * @param uri URI de la foto seleccionada.
+     */
     private fun handleGalleryPhoto(uri: Uri) {
         val file = try {
             requireActivity().contentResolver.openInputStream(uri)?.use { input ->
@@ -194,10 +229,13 @@ class RegistrandoFragment2 : Fragment() {
         } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
     }
 
+    /**
+     * Maneja la captura de una foto con la cámara.
+     */
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            if(currentPhotoType == "serie") processImage(file)
+            if (currentPhotoType == "serie") processImage(file)
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -205,6 +243,10 @@ class RegistrandoFragment2 : Fragment() {
         }
     }
 
+    /**
+     * Procesa la imagen para extraer el texto relevante.
+     * @param file Archivo de la imagen.
+     */
     private fun processImage(file: File) {
         extractTextFromImage(
             imageFile = file,
@@ -222,22 +264,27 @@ class RegistrandoFragment2 : Fragment() {
                         .setPositiveButton("Tomar de nuevo") { _, _ ->
                             showPhotoOptions("serie")
                         }
-                        .setNegativeButton("Continuar") { _, _ ->
-                        }
+                        .setNegativeButton("Continuar") { _, _ -> }
                         .setCancelable(false)
                         .show()
                 }
             },
-            onFailure = { errorMessage -> AlertDialog.Builder(requireContext())
-                .setTitle("Ocurrió un error")
-                .setMessage(errorMessage)
-                .setPositiveButton("Ok") { _, _ ->
-                }
-                .setCancelable(false)
-                .show()  }
+            onFailure = { errorMessage ->
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Ocurrió un error")
+                    .setMessage(errorMessage)
+                    .setPositiveButton("Ok") { _, _ -> }
+                    .setCancelable(false)
+                    .show()
+            }
         )
     }
 
+    /**
+     * Actualiza la foto actual almacenada con la nueva imagen capturada o seleccionada.
+     * @param photoType Tipo de foto (ont o serie).
+     * @param base64 Imagen codificada en formato Base64.
+     */
     private fun updatePhoto(photoType: String, base64: String) {
         when (photoType) {
             "ont" -> {
@@ -253,6 +300,9 @@ class RegistrandoFragment2 : Fragment() {
         }
     }
 
+    /**
+     * Valida los campos obligatorios y procede a guardar los datos.
+     */
     private fun validateAndProceed() {
         val tarea = view?.findViewById<EditText>(R.id.editTarea)?.text.toString().takeIf { it.isNotBlank() }
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }

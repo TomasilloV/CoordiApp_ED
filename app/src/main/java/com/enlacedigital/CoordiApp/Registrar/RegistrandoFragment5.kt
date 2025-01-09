@@ -23,9 +23,9 @@ import retrofit2.Response
 class RegistrandoFragment5 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
+
     private var selectedCodigoPostal: Int? = null
     private lateinit var loadingLayout: FrameLayout
-
     private lateinit var spinnerEstado: Spinner
     private lateinit var spinnerCiudad: Spinner
     private lateinit var spinnerColonia: Spinner
@@ -34,7 +34,6 @@ class RegistrandoFragment5 : Fragment() {
     private lateinit var nextButton: Button
     private lateinit var textCiudad: TextView
     private lateinit var textColonia: TextView
-
     private var lastSelectedEstado: String? = null
     private var lastSelectedCiudad: String? = null
 
@@ -60,12 +59,12 @@ class RegistrandoFragment5 : Fragment() {
         editCalle = view.findViewById(R.id.editCalle)
         editNumeroExterior = view.findViewById(R.id.editNumeroExterior)
         nextButton = view.findViewById(R.id.next)
-
         textCiudad = view.findViewById(R.id.textCiudad)
         textColonia = view.findViewById(R.id.textColonia)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == VISIBLE }
     }
+
 
     private fun setupListeners() {
         nextButton.setOnClickListener {
@@ -85,15 +84,21 @@ class RegistrandoFragment5 : Fragment() {
             return
         }
 
-
-            val updateRequest = ActualizarBD(
-                idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                Direccion_Cliente = "$calle $numeroExterior, $colonia, $selectedCodigoPostal, $ciudad, $estado",
-                Step_Registro = 5
-            )
-            (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+        val updateRequest = ActualizarBD(
+            idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+            Direccion_Cliente = "$calle $numeroExterior, $colonia, $selectedCodigoPostal, $ciudad, $estado",
+            Step_Registro = 5
+        )
+        (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
     }
 
+    /**
+     * Solicita opciones para llenar los spinners según el paso y los IDs proporcionados.
+     *
+     * @param step Identificador del paso actual.
+     * @param idEstado ID del estado seleccionado (opcional).
+     * @param idMunicipio ID del municipio seleccionado (opcional).
+     */
     private fun getOptions(step: String, idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
         apiService.options(step, idEstado, idMunicipio).enqueue(object : Callback<List<Option>> {
@@ -114,6 +119,14 @@ class RegistrandoFragment5 : Fragment() {
         })
     }
 
+    /**
+     * Procesa la respuesta de opciones para actualizar los spinners.
+     *
+     * @param step Identificador del paso actual.
+     * @param options Lista de opciones obtenidas del backend.
+     * @param idEstado ID del estado seleccionado (opcional).
+     * @param idMunicipio ID del municipio seleccionado (opcional).
+     */
     private fun handleOptionsResponse(step: String, options: List<Option>, idEstado: Int?, idMunicipio: Int?) {
         when (step) {
             "5e" -> updateEstadoSpinner(options)
@@ -130,6 +143,11 @@ class RegistrandoFragment5 : Fragment() {
         }
     }
 
+    /**
+     * Actualiza el spinner de estados con las opciones obtenidas.
+     *
+     * @param options Lista de opciones de estados.
+     */
     private fun updateEstadoSpinner(options: List<Option>) {
         val estados = options.mapNotNull { it.nameEstado }.distinct().sorted()
         setupSpinnerAndListener(spinnerEstado, estados) { selectedEstado ->
@@ -145,6 +163,12 @@ class RegistrandoFragment5 : Fragment() {
         }
     }
 
+    /**
+     * Actualiza el spinner de ciudades con las opciones obtenidas.
+     *
+     * @param options Lista de opciones de ciudades.
+     * @param idEstado ID del estado seleccionado.
+     */
     private fun updateCiudadSpinner(options: List<Option>, idEstado: Int?) {
         val ciudades = options.filter { it.estadoMunicipio == idEstado }
             .mapNotNull { it.nameMunicipio }
@@ -164,6 +188,12 @@ class RegistrandoFragment5 : Fragment() {
         }
     }
 
+    /**
+     * Actualiza el spinner de colonias con las opciones obtenidas.
+     *
+     * @param options Lista de opciones de colonias.
+     * @param idMunicipio ID del municipio seleccionado.
+     */
     private fun updateColoniaSpinner(options: List<Option>, idMunicipio: Int?) {
         val colonias = options.filter { it.idMunicipio == idMunicipio }
             .mapNotNull { it.nameColonia }
@@ -175,6 +205,13 @@ class RegistrandoFragment5 : Fragment() {
         }
     }
 
+    /**
+     * Configura un spinner con una lista de datos y un oyente para manejar selecciones.
+     *
+     * @param spinner Spinner a configurar.
+     * @param data Lista de opciones a mostrar.
+     * @param onItemSelected Callback para manejar selecciones.
+     */
     private fun setupSpinnerAndListener(
         spinner: Spinner,
         data: List<String>,
@@ -195,6 +232,9 @@ class RegistrandoFragment5 : Fragment() {
         }
     }
 
+    /**
+     * Oculta los spinners y etiquetas relacionadas con ciudad y colonia.
+     */
     private fun hideCiudadColonia() {
         textCiudad.visibility = GONE
         textColonia.visibility = GONE
@@ -202,6 +242,9 @@ class RegistrandoFragment5 : Fragment() {
         spinnerColonia.visibility = GONE
     }
 
+    /**
+     * Oculta el spinner y etiqueta relacionados con la colonia.
+     */
     private fun hideColonia() {
         textColonia.visibility = GONE
         spinnerColonia.visibility = GONE

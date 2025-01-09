@@ -31,24 +31,46 @@ import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 
+/**
+ * Data class para representar la respuesta del servidor.
+ *
+ * @property mensaje El mensaje devuelto por el servidor.
+ * @property item Información del registro, si existe.
+ * @property id El ID asociado al registro.
+ */
 data class Checking(
     val mensaje: String,
     val item: ActualizarBD?,
     val id: String?
 )
 
+/**
+ * Fragmento responsable de manejar el proceso de validación de registros.
+ */
 class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar) {
 
+    /**
+     * Lanzador para gestionar los permisos de ubicación.
+     */
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
+
+    /**
+     * Lanzador para gestionar los ajustes de ubicación.
+     */
     private lateinit var settingsLauncher: ActivityResultLauncher<IntentSenderRequest>
+
+    /**
+     * Helper para obtener la ubicación del usuario.
+     */
     private lateinit var locationHelper: LocationHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Configuración del lanzador de ajustes
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 locationHelper.obtenerUbicacion()
@@ -59,6 +81,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             }
         }
 
+        // Configuración del helper de ubicación
         locationHelper = LocationHelper(
             context = requireContext(),
             onLocationObtained = { location ->
@@ -73,6 +96,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             settingsLauncher = settingsLauncher
         )
 
+        // Configuración del lanzador de permisos
         locationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 locationHelper.obtenerUbicacion()
@@ -118,6 +142,15 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         }
     }
 
+    /**
+     * Envía los datos capturados al servidor.
+     *
+     * @param folio El folio de registro.
+     * @param telefono El teléfono del usuario.
+     * @param latitud La latitud obtenida.
+     * @param longitud La longitud obtenida.
+     * @param idTecnico El ID del técnico.
+     */
     private fun sendData(folio: String, telefono: String, latitud: String, longitud: String, idTecnico: String?) {
         val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val fechaActual = Date()
@@ -137,6 +170,12 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         })
     }
 
+    /**
+     * Procesa la respuesta del servidor y gestiona el flujo de trabajo según el estado.
+     *
+     * @param checking La respuesta del servidor.
+     * @param folio El folio de registro.
+     */
     private fun processResponse(checking: Checking, folio: String) {
         val mensaje = checking.mensaje
         val registro = checking.item
@@ -175,6 +214,11 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         }
     }
 
+    /**
+     * Realiza acciones según el paso de registro existente.
+     *
+     * @param stepRegistro El paso de registro actual.
+     */
     private fun existing(stepRegistro: Int) {
         if (stepRegistro in 0..5) {
             (activity as? Registrando)?.goToNextStep(stepRegistro)
