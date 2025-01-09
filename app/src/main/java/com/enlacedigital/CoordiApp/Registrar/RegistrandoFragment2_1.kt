@@ -37,26 +37,21 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
-
-class RegistrandoFragment2 : Fragment() {
+class RegistrandoFragment2_1 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
 
     private lateinit var photoUri: Uri
-    private lateinit var editMetraje: EditText
-    private lateinit var editTerminal: EditText
-    private lateinit var spinnerPuerto: Spinner
     private lateinit var btnFotoOnt: Button
     private lateinit var btnFotoSerie: Button
+    private lateinit var btnFotoHoja: Button
     private var currentPhotoType: String = ""
     private var fotoONT: String? = null
     private var fotoSerie: String? = null
+    private var fotoHoja: String? = null
     private var currentPhotoPath: String = ""
-    private lateinit var spinnerOnt: Spinner
-    private lateinit var loadingLayout: FrameLayout
-    private var lastSelectedOnt: String? = null
-    private var idOnt: Int? = null
     private var serieOntFoto: String? = null
+    private lateinit var loadingLayout: FrameLayout
 
     private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) handleCameraPhoto()
@@ -67,7 +62,7 @@ class RegistrandoFragment2 : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_registrando2, container, false)
+        return inflater.inflate(R.layout.fragment_registrando2_1, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,56 +70,15 @@ class RegistrandoFragment2 : Fragment() {
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         initializeViews(view)
         setupListeners()
-        updateSpinners()
-        //fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
-        editMetraje = view.findViewById(R.id.editMetraje)
-        editTerminal = view.findViewById(R.id.editTerminal)
-        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
         btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
         btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
-        spinnerOnt = view.findViewById(R.id.spinnerOnt)
+        btnFotoHoja = view.findViewById(R.id.btnFotoHoja)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
 
-    }
-
-    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
-        loadingLayout.setLoadingVisibility(true)
-        val step = "6"
-        apiService.options(step, idEstado, idMunicipio, idTecnico)
-            .enqueue(object : Callback<List<Option>> {
-                override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
-                    loadingLayout.setLoadingVisibility(false)
-                    if (response.isSuccessful) {
-                        val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
-                        val allOptions = listOf("Elige una opción", "ZTEG2429F9E2") + options
-                        spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        }
-                        spinnerOnt.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedOnt = (parent.getItemAtPosition(position) as? String)?.takeIf { it != "Elige una opción" }
-                                if (selectedOnt != null && selectedOnt != lastSelectedOnt) {
-                                    lastSelectedOnt = selectedOnt
-                                    idOnt = response.body()?.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
-                                }
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
-                    } else {
-                        (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
-                    }
-                }
-
-                override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
-                    loadingLayout.setLoadingVisibility(false)
-                    (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
-                }
-            })
     }
 
     private fun setupListeners() {
@@ -134,16 +88,10 @@ class RegistrandoFragment2 : Fragment() {
         btnFotoSerie.setOnClickListener {
             showPhotoOptions("serie")
             currentPhotoType = "serie" }
+        btnFotoHoja.setOnClickListener {
+            showPhotoOptions("hoja")
+            currentPhotoType = "hoja" }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
-    }
-
-    private fun updateSpinners() {
-        val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
-        numbersArray.add(0, "Elige una opción")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbersArray).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        spinnerPuerto.adapter = adapter
     }
 
     private fun showPhotoOptions(photoType: String) {
@@ -188,7 +136,7 @@ class RegistrandoFragment2 : Fragment() {
             null
         }
         file?.let {
-            //if(currentPhotoType == "serie") processImage(it)
+            if(currentPhotoType == "serie") processImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
@@ -250,18 +198,16 @@ class RegistrandoFragment2 : Fragment() {
                 btnFotoSerie.text = "Cambiar foto"
                 btnFotoSerie.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
             }
+            "hoja" -> {
+                fotoHoja = base64
+                btnFotoHoja.text = "Cambiar foto"
+                btnFotoHoja.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+            }
         }
     }
 
     private fun validateAndProceed() {
-        val tarea = view?.findViewById<EditText>(R.id.editTarea)?.text.toString().takeIf { it.isNotBlank() }
-        val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
-        val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
-        val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val ont = serieOntFoto
-
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || tarea == null) {
+        if (fotoONT == null || fotoSerie == null || fotoHoja == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
@@ -269,9 +215,6 @@ class RegistrandoFragment2 : Fragment() {
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Tipo_Tarea = tarea,
-            Metraje = metraje.toInt(),
-            Terminal = terminal,
-            Puerto = puerto,
             Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
             Ont = ont,

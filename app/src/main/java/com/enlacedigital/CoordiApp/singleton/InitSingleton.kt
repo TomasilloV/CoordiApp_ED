@@ -6,42 +6,72 @@ import com.enlacedigital.CoordiApp.ApiService
 import com.enlacedigital.CoordiApp.PreferencesManager
 import com.enlacedigital.CoordiApp.createRetrofitService
 
+/**
+ * Clase principal de la aplicación que se ejecuta al iniciar.
+ * Se utiliza para inicializar los objetos singleton [ApiServiceHelper] y [PreferencesHelper].
+ */
 class InitSingleton : Application() {
     override fun onCreate() {
         super.onCreate()
-        ApiServiceHelper.init(this)
-        PreferencesHelper.init(this)
+        ApiServiceHelper.init(this) // Inicializa el ApiServiceHelper
+        PreferencesHelper.init(this) // Inicializa el PreferencesHelper
     }
 }
 
+/**
+ * Objeto singleton para gestionar las preferencias de usuario.
+ */
 object PreferencesHelper {
 
     private lateinit var preferencesManager: PreferencesManager
 
+    /**
+     * Inicializa el [PreferencesManager] con el contexto de la aplicación.
+     *
+     * @param context Contexto de la aplicación.
+     */
     fun init(context: Context) {
-        preferencesManager = PreferencesManager(context.applicationContext)
+        preferencesManager = PreferencesManager(context.applicationContext) // Instancia PreferencesManager
     }
 
+    /**
+     * Obtiene la instancia de [PreferencesManager].
+     *
+     * @return Instancia de [PreferencesManager].
+     * @throws IllegalStateException Si no se ha inicializado [PreferencesHelper].
+     */
     fun getPreferencesManager(): PreferencesManager {
-        if (!PreferencesHelper::preferencesManager.isInitialized) {
+        if (!PreferencesHelper::preferencesManager.isInitialized) { // Verifica si está inicializado
             throw IllegalStateException("PreferencesHelper no ha sido inicializado. Llama a init() primero.")
         }
         return preferencesManager
     }
 }
 
+/**
+ * Objeto singleton para gestionar el acceso a la API mediante Retrofit.
+ */
 object ApiServiceHelper {
 
     private lateinit var apiService: ApiService
 
-    // Método para inicializar Retrofit y el ApiService
+    /**
+     * Inicializa el [ApiService] utilizando Retrofit.
+     *
+     * @param context Contexto de la aplicación.
+     */
     fun init(context: Context) {
-        apiService = createRetrofitService(context)
+        apiService = createRetrofitService(context) // Crea una instancia de ApiService usando Retrofit
     }
 
-    // Método para obtener la instancia del ApiService
+    /**
+     * Obtiene la instancia de [ApiService].
+     *
+     * @return Instancia de [ApiService].
+     * @throws IllegalStateException Si no se ha inicializado [ApiServiceHelper].
+     */
     fun getApiService(): ApiService {
-        if (!::apiService.isInitialized) {
+        if (!::apiService.isInitialized) { // Verifica si está inicializado
             throw IllegalStateException("ApiServiceHelper no ha sido inicializado. Llama a init() primero.")
         }
         return apiService

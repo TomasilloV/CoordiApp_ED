@@ -149,17 +149,15 @@ class RegistrandoFragment3 : Fragment() {
     }
 
     private fun validateAndProceed() {
-        val tarea = view?.findViewById<EditText>(R.id.editTarea)?.text.toString().takeIf { it.isNotBlank() }
         val instalacion = view?.findViewById<Spinner>(R.id.spinnerInstalacion)?.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (tarea == null || instalacion == null || fachada == null || fotoOS == null) {
+        if (instalacion == null || fachada == null || fotoOS == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
             val updateRequest = ActualizarBD(
                 idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                Tipo_Tarea = tarea,
                 Tipo_Instalacion = instalacion,
                 Foto_Casa_Cliente = fachada,
                 Foto_INE = fotoOS,

@@ -89,4 +89,7 @@
         <item>noviembre</item>
         <item>diciembre</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="paso_2_1">Paso 2.1</string>
 </resources>

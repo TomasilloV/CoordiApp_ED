@@ -29,6 +29,34 @@
                 app:layout_constraintWidth_percent="0.9"/>
 
             <TextView
+                android:id="@+id/textTipoTarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tipo_tarea"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/textPaso"
+                app:layout_constraintStart_toStartOf="@id/editTarea"/>
+
+            <EditText
+                android:id="@+id/editTarea"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:inputType="text"
+                android:padding="8dp"
+                android:imeOptions="actionDone"
+                android:textSize="18sp"
+                android:hint="Ingresa el tipo de tarea"
+                android:maxLength="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
+                app:layout_constraintWidth_percent="0.85" />
+
+            <TextView
                 android:id="@+id/textMetraje"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,7 +64,8 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/textPaso"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/editTarea"
                 app:layout_constraintStart_toStartOf="@id/editMetraje"/>
 
             <EditText
