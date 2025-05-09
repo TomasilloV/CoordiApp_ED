@@ -208,7 +208,9 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
         1 to RegistrandoFragment2(),
         2 to RegistrandoFragment3(),
         3 to RegistrandoFragment4(),
-        4 to RegistrandoFragment5()
+        4 to RegistrandoFragment5(),
+        5 to RegistrandoFragment6(),
+        6 to RegistrandoFragment7()
     )
 
     /**
@@ -218,7 +220,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
      */
     fun goToNextStep(step: Int) {
         applicationContext.cacheDir.deleteRecursively()
-        if (step == 5) {
+        if (step == 7) {
             startNewActivity(Menu::class.java)
         }
 

@@ -10,7 +10,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/dark_blue">
 
             <TextView
                 android:id="@+id/textPaso"
@@ -27,131 +28,141 @@
                 app:layout_constraintWidth_percent="0.9"/>
 
             <TextView
-                android:id="@+id/textEstado"
+                android:id="@+id/textTitular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estado"
+                android:text="Nombre titular"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/textPaso"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
-
-            <Spinner
-                android:id="@+id/spinnerEstado"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textEstado"
-                app:layout_constraintWidth_percent="0.85" />
-
-            <TextView
-                android:id="@+id/textCiudad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ciudad"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/spinnerEstado"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
-
-            <Spinner
-                android:id="@+id/spinnerCiudad"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerEstado"
-                app:layout_constraintStart_toStartOf="@+id/spinnerEstado"
-                app:layout_constraintTop_toBottomOf="@id/textCiudad" />
-
-
-            <TextView
-                android:id="@+id/textColonia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Colonia"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/spinnerCiudad"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
-
-            <Spinner
-                android:id="@+id/spinnerColonia"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerEstado"
-                app:layout_constraintStart_toStartOf="@+id/spinnerEstado"
-                app:layout_constraintTop_toBottomOf="@id/textColonia" />
-
-            <TextView
-                android:id="@+id/textCalle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calle"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/spinnerColonia"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+                app:layout_constraintStart_toStartOf="@id/editTitular"/>
 
             <EditText
-                android:id="@+id/editCalle"
+                android:id="@+id/editTitular"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
                 android:padding="8dp"
+                android:textSize="18sp"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:textSize="18sp"
-                android:hint="Ingresa la calle"
-                app:layout_constraintEnd_toEndOf="@id/spinnerEstado"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"
-                app:layout_constraintTop_toBottomOf="@id/textCalle"/>
+                android:hint="Ingresa nombre de titular"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTitular"
+                app:layout_constraintWidth_percent="0.85" />
+
 
             <TextView
-                android:id="@+id/textNumeroExterior"
+                android:id="@+id/textPaterno"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Número exterior"
+                android:text="Apellido paterno Titular"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editCalle"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+                app:layout_constraintTop_toBottomOf="@id/editTitular"
+                app:layout_constraintStart_toStartOf="@id/editTitular"/>
 
             <EditText
-                android:id="@+id/editNumeroExterior"
+                android:id="@+id/editApPaterno"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
+                android:hint="Ingresa apellido paterno de titular"
+                android:imeOptions="actionNext"
+                android:inputType="text"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:hint="Ingresa el número del lugar"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textPaterno"/>
+
+            <TextView
+                android:id="@+id/textMaterno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apellido materno Titular"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/editApPaterno"
+                app:layout_constraintStart_toStartOf="@id/editTitular"/>
+
+            <EditText
+                android:id="@+id/editMaterno"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:imeOptions="actionNext"
+                android:hint="Ingresa apellido materno de titular"
                 android:inputType="text"
-                app:layout_constraintEnd_toEndOf="@id/spinnerEstado"
-                app:layout_constraintStart_toStartOf="@id/spinnerEstado"
-                app:layout_constraintTop_toBottomOf="@id/textNumeroExterior"/>
+                android:padding="8dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textMaterno"/>
+
+            <TextView
+                android:id="@+id/textRecibe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Persona que recibe"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/editMaterno"
+                app:layout_constraintStart_toStartOf="@id/editTitular"/>
+
+            <EditText
+                android:id="@+id/editRecibe"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:hint="Ingresa la persona que recibe"
+                android:imeOptions="actionNext"
+                android:padding="8dp"
+                android:inputType="text"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textRecibe"/>
+
+            <TextView
+                android:id="@+id/textContactoCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfono cliente"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/editRecibe"
+                app:layout_constraintStart_toStartOf="@id/editTitular"/>
+
+            <EditText
+                android:id="@+id/editCliente"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:hint="Ingresa teléfono del cliente"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:padding="8dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/editTitular"
+                app:layout_constraintStart_toStartOf="@+id/editTitular"
+                app:layout_constraintTop_toBottomOf="@id/textContactoCliente"/>
 
             <Button
                 android:id="@+id/next"
@@ -162,7 +173,7 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/editNumeroExterior"
+                app:layout_constraintTop_toBottomOf="@+id/editCliente"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -170,19 +181,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/loadingOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#CB000000">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-    </FrameLayout>
-
 </FrameLayout>

@@ -12,8 +12,8 @@ android {
         applicationId = "com.enlacedigital.CoordiApp"
         minSdk = 27
         targetSdk = 35
-        versionCode = 202412171
-        versionName = "2.0.9"
+        versionCode = 202504241
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

@@ -109,27 +109,39 @@
                 android:text="@string/distrito"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:textSize="18sp"
                 android:paddingTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/spinnerCope"
                 app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+
+
+            <Spinner
+                android:id="@+id/spinnerDistrito"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:visibility="gone"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
+                app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
+                app:layout_constraintTop_toBottomOf="@id/textDistrito"/>
+
 
             <EditText
                 android:id="@+id/editDistrito"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
-                android:imeOptions="actionDone"
                 android:background="@color/light_gray"
-                android:inputType="text"
-                android:hint="Ingresa el distrito"
-                android:maxLength="7"
-                android:padding="8dp"
                 android:textSize="18sp"
+                android:visibility="gone"
+                android:hint="Escribe el distrito"
+                android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                 app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
-                app:layout_constraintTop_toBottomOf="@id/textDistrito"/>
-
+                app:layout_constraintTop_toBottomOf="@id/spinnerDistrito"/>
             <TextView
                 android:id="@+id/textTecnologia"
                 android:layout_width="wrap_content"
@@ -176,6 +188,30 @@
                 app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
                 app:layout_constraintTop_toBottomOf="@id/textEstatus"/>
 
+            <TextView
+                android:id="@+id/textInstalación"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de instalación"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/spinnerEstatus"
+                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+            <Spinner
+                android:id="@+id/spinnerInstalacion"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:textSize="18sp"
+                android:enabled="false"
+                app:layout_constraintTop_toBottomOf="@id/textInstalación"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.85" />
             <Button
                 android:id="@+id/next"
                 android:layout_width="0dp"
@@ -185,7 +221,7 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerEstatus"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerInstalacion"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

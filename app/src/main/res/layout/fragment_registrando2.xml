@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_blue">
+    android:background="@color/dark_blue"
+    android:orientation="horizontal">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,15 +19,15 @@
                 android:id="@+id/textPaso"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
+                android:gravity="center"
                 android:text="@string/paso_2"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="24sp"
-                android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.9" />
 
             <TextView
                 android:id="@+id/textTipoTarea"
@@ -34,10 +35,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tipo_tarea"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/textPaso"
-                app:layout_constraintStart_toStartOf="@id/editTarea"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/editTarea"
+                app:layout_constraintTop_toBottomOf="@id/textPaso" />
 
             <EditText
                 android:id="@+id/editTarea"
@@ -45,12 +46,12 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
-                android:inputType="text"
-                android:padding="8dp"
-                android:imeOptions="actionDone"
-                android:textSize="18sp"
                 android:hint="Ingresa el tipo de tarea"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:maxLength="10"
+                android:padding="8dp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
@@ -60,13 +61,13 @@
                 android:id="@+id/textMetraje"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="15dp"
                 android:text="@string/metraje"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editTarea"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/editMetraje"
+                app:layout_constraintTop_toBottomOf="@id/editTarea" />
 
             <EditText
                 android:id="@+id/editMetraje"
@@ -74,12 +75,12 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
+                android:hint="Ingresa el metraje"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="3"
                 android:padding="8dp"
                 android:textSize="18sp"
-                android:imeOptions="actionNext"
-                android:hint="Ingresa el metraje"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textMetraje"
@@ -89,13 +90,13 @@
                 android:id="@+id/textTerminal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="15dp"
                 android:text="@string/terminal"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editMetraje"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/editMetraje"
+                app:layout_constraintTop_toBottomOf="@id/editMetraje" />
 
             <EditText
                 android:id="@+id/editTerminal"
@@ -103,109 +104,42 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/light_gray"
-                android:inputType="text"
                 android:hint="Ingresa la terminal"
                 android:imeOptions="actionDone"
-                android:padding="8dp"
+                android:inputType="text"
                 android:maxLength="2"
+                android:padding="8dp"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/editMetraje"
-                app:layout_constraintStart_toStartOf="@+id/editMetraje"
-                app:layout_constraintTop_toBottomOf="@id/textTerminal"/>
-
-            <TextView
-                android:id="@+id/textPuerto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/puerto"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editTerminal"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"/>
-
-            <Spinner
-                android:id="@+id/spinnerPuerto"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:textSize="18sp"
-                android:background="@color/light_gray"
-                app:layout_constraintTop_toBottomOf="@id/textPuerto"
-                app:layout_constraintStart_toStartOf="@+id/editMetraje"
-                app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/textOnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:text="SELECCIONA ONT"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
-
-            <Spinner
-                android:visibility="gone"
-                android:id="@+id/spinnerOnt"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:textSize="18sp"
-                android:background="@color/light_gray"
-                app:layout_constraintTop_toBottomOf="@id/textOnt"
-                app:layout_constraintStart_toStartOf="@+id/editMetraje"
-                app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
-
-            <TextView
-                android:id="@+id/textFotoOnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fotografia_ont_modem"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/spinnerOnt"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"/>
-
-            <Button
-                android:id="@+id/btnFotoOnt"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/subir_foto"
-                android:background="@color/dark_gray"
-                app:layout_constraintTop_toBottomOf="@id/textFotoOnt"
-                app:layout_constraintStart_toStartOf="@+id/editMetraje"
-                app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
+                app:layout_constraintStart_toStartOf="@+id/textTerminal"
+                app:layout_constraintTop_toBottomOf="@id/textTerminal" />
 
             <TextView
                 android:id="@+id/textFotoSerie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="15dp"
                 android:text="@string/fotografia_no_serie_ont_modem"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/btnFotoOnt"
-                app:layout_constraintStart_toStartOf="@id/editMetraje"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/editTerminal"
+                app:layout_constraintTop_toBottomOf="@id/editTerminal" />
 
             <Button
                 android:id="@+id/btnFotoSerie"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/subir_foto"
+                android:layout_marginTop="12dp"
                 android:background="@color/dark_gray"
+                android:text="@string/subir_foto"
+                android:padding="8dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textFotoSerie"
-                app:layout_constraintStart_toStartOf="@+id/editMetraje"
-                app:layout_constraintEnd_toEndOf="@+id/editMetraje"/>
+                app:layout_constraintBottom_toTopOf="@id/next"
+                app:layout_constraintWidth_percent="0.85" />
 
             <Button
                 android:id="@+id/next"
@@ -216,11 +150,11 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/btnFotoSerie"
+                app:layout_constraintTop_toBottomOf="@id/btnFotoSerie"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent="0.5"/>
+                app:layout_constraintWidth_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -229,13 +163,13 @@
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="#CB000000">
+        android:background="#CB000000"
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
     </FrameLayout>
 </LinearLayout>

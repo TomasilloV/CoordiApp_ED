@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,95 +18,154 @@ import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
+import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
+/**
+ * Fragmento que representa la segunda etapa del proceso de registro.
+ */
 class RegistrandoFragment3 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
 
     private lateinit var photoUri: Uri
-    private lateinit var btnFotoFachada: Button
-    private lateinit var btnFotoOS: Button
-
-    /** Tipo de foto actualmente en uso (e.g., "fachada", "fotoOS"). */
+    private lateinit var spinnerPuerto: Spinner
+    private lateinit var spinnerOnt: Spinner
+    private lateinit var btnFotoOnt: Button
+    private var fotoONT: String? = null
     private var currentPhotoType: String = ""
-    private var fachada: String? = null
-    private var fotoOS: String? = null
     private var currentPhotoPath: String = ""
+    private lateinit var loadingLayout: FrameLayout
+    private var lastSelectedOnt: String? = null
+    private var idOnt: Int? = null
 
-    /** Lanzador para tomar una foto con la cámara. */
-    private val takePhotoLauncher: ActivityResultLauncher<Uri?> =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) handleCameraPhoto()
-        }
+    /**
+     * Launcher para tomar fotos con la cámara.
+     */
+    private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) handleCameraPhoto()
+    }
 
-    /** Lanzador para seleccionar una foto desde la galería. */
-    private val pickPhotoLauncher: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let { handleGalleryPhoto(it) }
-        }
+    /**
+     * Launcher para seleccionar fotos desde la galería.
+     */
+    private val pickPhotoLauncher: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { handleGalleryPhoto(it) }
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_registrando3, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
-
-        btnFotoFachada = view.findViewById(R.id.btnFachada)
-        btnFotoOS = view.findViewById(R.id.btnFotoOs)
-
+        initializeViews(view)
         setupListeners()
+        updateSpinners()
+        fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
+    }
 
-        val instalacionOptions = resources.getStringArray(R.array.instalacion_options)
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            instalacionOptions
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        view.findViewById<Spinner>(R.id.spinnerInstalacion).adapter = adapter
+    private fun initializeViews(view: View) {
+        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
+        spinnerOnt = view.findViewById(R.id.spinnerOnt)
+        btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
+        loadingLayout = view.findViewById(R.id.loadingOverlay)
+        loadingLayout.setLoadingVisibility(false)
+    }
+    /**
+     * Obtiene opciones desde el servicio API y configura el spinner correspondiente.
+     * @param idTecnico ID del técnico.
+     * @param idEstado (Opcional) ID del estado.
+     * @param idMunicipio (Opcional) ID del municipio.
+     */
+    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
+        loadingLayout.setLoadingVisibility(true)
+        val step = "6"
+        apiService.options(step, idEstado, idMunicipio, idTecnico)
+            .enqueue(object : Callback<List<Option>> {
+                override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
+                    loadingLayout.setLoadingVisibility(false)
+                    if (response.isSuccessful) {
+                        val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
+                        val allOptions = listOf("Elige una opción") + options
+                        spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
+                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        }
+                        spinnerOnt.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                                val selectedOnt = (parent.getItemAtPosition(position) as? String)?.takeIf { it != "Elige una opción" }
+                                if (selectedOnt != null && selectedOnt != lastSelectedOnt) {
+                                    lastSelectedOnt = selectedOnt
+                                    idOnt = response.body()?.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
+                                }
+                            }
 
-        view.findViewById<Button>(R.id.next).setOnClickListener { validateAndProceed() }
+                            override fun onNothingSelected(parent: AdapterView<*>) {}
+                        }
+                    } else {
+                        (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                    }
+                }
+                override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
+                    loadingLayout.setLoadingVisibility(false)
+                    if (isAdded) { // Check if the fragment is still attached
+                        (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
+                    }
+                }
+            })
     }
 
     /**
-     * Configura los listeners para los botones de interacción.
+     * Configura los listeners de los eventos de la interfaz de usuario.
      */
     private fun setupListeners() {
-        btnFotoFachada.setOnClickListener { showPhotoOptions("fachada") }
-        btnFotoOS.setOnClickListener { showPhotoOptions("fotoOS") }
+        btnFotoOnt.setOnClickListener {
+            showPhotoOptions()
+            currentPhotoType = "ont"
+        }
+        view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
     /**
-     * Muestra las opciones para tomar una foto.
-     * @param photoType Tipo de foto que se tomará (e.g., "fachada", "fotoOS").
+     * Actualiza las opciones del spinner de puertos.
      */
-    private fun showPhotoOptions(photoType: String) {
-        currentPhotoType = photoType
+    private fun updateSpinners() {
+        val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
+        numbersArray.add(0, "Elige una opción")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbersArray).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        spinnerPuerto.adapter = adapter
+    }
+
+    /**
+     * Muestra las opciones para tomar o elegir una foto.
+     */
+    private fun showPhotoOptions() {
+        currentPhotoType = "ont"
         takePhoto()
     }
 
     /**
-     * Lanza la galería para seleccionar una foto.
+     * Inicia la selección de una foto desde la galería.
      */
     private fun choosePhotoFromGallery() {
         pickPhotoLauncher.launch("image/*")
     }
 
     /**
-     * Inicia el proceso para tomar una foto con la cámara.
+     * Inicia la captura de una foto con la cámara.
      */
     private fun takePhoto() {
         val (photoFile, photoPath) = try {
@@ -116,18 +177,14 @@ class RegistrandoFragment3 : Fragment() {
 
         photoFile?.let {
             currentPhotoPath = photoPath
-            photoUri = FileProvider.getUriForFile(
-                requireContext(),
-                "com.enlacedigital.CoordiApp.fileprovider",
-                it
-            )
+            photoUri = FileProvider.getUriForFile(requireContext(), "com.enlacedigital.CoordiApp.fileprovider", it)
             takePhotoLauncher.launch(photoUri)
         }
     }
 
     /**
-     * Maneja la foto seleccionada desde la galería.
-     * @param uri URI de la imagen seleccionada.
+     * Maneja la selección de una foto desde la galería.
+     * @param uri URI de la foto seleccionada.
      */
     private fun handleGalleryPhoto(uri: Uri) {
         val file = try {
@@ -140,19 +197,20 @@ class RegistrandoFragment3 : Fragment() {
             e.printStackTrace()
             null
         }
-
         file?.let {
+            //if(currentPhotoType == "serie") processImage(it)
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
     }
 
     /**
-     * Maneja la foto tomada con la cámara.
+     * Maneja la captura de una foto con la cámara.
      */
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
+            /**if (currentPhotoType == "serie") processImage(file)*/
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -161,46 +219,73 @@ class RegistrandoFragment3 : Fragment() {
     }
 
     /**
-     * Actualiza el contenido de las fotos según el tipo seleccionado.
-     * @param photoType Tipo de foto ("fachada", "fotoOS").
-     * @param base64 Imagen en formato Base64.
+     * Procesa la imagen para extraer el texto relevante.
+    private fun processImage(file: File) {
+    extractTextFromImage(
+    imageFile = file,
+    onSuccess = { extractedText ->
+    val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+    val matchResult = regex.find(extractedText!!)
+    serieOntFoto = matchResult?.groups?.get(2)?.value
+
+    if (serieOntFoto != null) {
+    btnFotoSerie.text = serieOntFoto
+    } else {
+    AlertDialog.Builder(requireContext())
+    .setTitle("No se reconoce el número de serie")
+    .setMessage("Puedes tomar una foto más legible para obtener el número de serie o continuar sin proporcionarlo")
+    .setPositiveButton("Tomar de nuevo") { _, _ ->
+    showPhotoOptions("serie")
+    }
+    .setNegativeButton("Continuar") { _, _ -> }
+    .setCancelable(false)
+    .show()
+    }
+    },
+    onFailure = { errorMessage ->
+    AlertDialog.Builder(requireContext())
+    .setTitle("Ocurrió un error")
+    .setMessage(errorMessage)
+    .setPositiveButton("Ok") { _, _ -> }
+    .setCancelable(false)
+    .show()
+    }
+    )
+    }
+     */
+    /**
+     * Actualiza la foto actual almacenada con la nueva imagen capturada o seleccionada.
+     * @param photoType Tipo de foto (ont o serie).
+     * @param base64 Imagen codificada en formato Base64.
      */
     private fun updatePhoto(photoType: String, base64: String) {
         when (photoType) {
-            "fachada" -> {
-                fachada = base64
-                btnFotoFachada.text = "Cambiar foto"
-                btnFotoFachada.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.light_gray)
-                )
-            }
-            "fotoOS" -> {
-                fotoOS = base64
-                btnFotoOS.text = "Cambiar foto"
-                btnFotoOS.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.light_gray)
-                )
+            "ont" -> {
+                fotoONT = base64
+                btnFotoOnt.text = "Cambiar foto"
+                btnFotoOnt.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
             }
         }
     }
 
     /**
-     * Valida los campos del formulario y continúa con el proceso de registro.
+     * Valida los campos obligatorios y procede a guardar los datos.
      */
     private fun validateAndProceed() {
-        val instalacion = view?.findViewById<Spinner>(R.id.spinnerInstalacion)?.selectedItem
-            ?.takeIf { it != "Elige una opción" } as? String
+        val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (instalacion == null || fachada == null || fotoOS == null) {
+        if (puerto == null || fotoONT == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-            Tipo_Instalacion = instalacion,
-            Foto_Casa_Cliente = fachada,
-            Foto_INE = fotoOS,
+            Puerto = puerto,
+            Foto_Ont = fotoONT,
+            Ont = lastSelectedOnt,
+            idOnt = idOnt,
             Step_Registro = 3
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

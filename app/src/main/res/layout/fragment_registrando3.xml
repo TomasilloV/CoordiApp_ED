@@ -1,8 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue">
+    android:background="@color/dark_blue"
+    android:orientation="horizontal">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,86 +19,96 @@
                 android:id="@+id/textPaso"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
+                android:gravity="center"
                 android:text="@string/paso_3"
                 android:textColor="@color/white"
-                android:maxLength="10"
-                android:textStyle="bold"
                 android:textSize="24sp"
-                android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.9" />
 
             <TextView
-                android:id="@+id/textInstalación"
+                android:id="@+id/textPuerto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tipo de instalación"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/textPaso"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+                android:text="@string/puerto"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.104"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textPaso" />
 
             <Spinner
-                android:id="@+id/spinnerInstalacion"
+                android:id="@+id/spinnerPuerto"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="12dp"
                 android:background="@color/light_gray"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/textInstalación"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textPuerto"
+                app:layout_constraintBottom_toTopOf="@id/textOnt"
                 app:layout_constraintWidth_percent="0.85" />
 
             <TextView
-                android:id="@+id/textFachada"
+                android:id="@+id/textOnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fachada de casa"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+                android:text="SELECCIONA ONT"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/spinnerPuerto"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
 
-            <Button
-                android:id="@+id/btnFachada"
+            <Spinner
+                android:id="@+id/spinnerOnt"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/dark_gray"
-                android:text="@string/subir_foto"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
-                app:layout_constraintTop_toBottomOf="@id/textFachada" />
+                android:layout_marginTop="12dp"
+                android:background="@color/light_gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textOnt"
+                app:layout_constraintBottom_toTopOf="@id/textFotoOnt"
+                app:layout_constraintWidth_percent="0.85" />
+
 
             <TextView
-                android:id="@+id/textFotoOS"
+                android:id="@+id/textFotoOnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fotografía OS"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
+                android:layout_marginTop="12dp"
                 android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/btnFachada"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+                android:text="@string/fotografia_ont_modem"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/spinnerOnt"
+                app:layout_constraintTop_toBottomOf="@id/spinnerOnt" />
 
             <Button
-                android:id="@+id/btnFotoOs"
+                android:id="@+id/btnFotoOnt"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="12dp"
                 android:background="@color/dark_gray"
                 android:text="@string/subir_foto"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
-                app:layout_constraintTop_toBottomOf="@id/textFotoOS" />
+                android:padding="8dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textFotoOnt"
+                app:layout_constraintBottom_toTopOf="@id/next"
+                app:layout_constraintWidth_percent="0.85" />
 
             <Button
                 android:id="@+id/next"
@@ -107,12 +119,26 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/btnFotoOs"
+                app:layout_constraintTop_toBottomOf="@id/btnFotoOnt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent="0.5"/>
+                app:layout_constraintWidth_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CB000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 </LinearLayout>

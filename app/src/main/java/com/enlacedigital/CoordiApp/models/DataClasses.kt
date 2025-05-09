@@ -111,6 +111,7 @@ data class ActualizarBD(
     val Estatus_Orden: String? = null,
     val Foto_Puerto: String? = null,
     val Metraje: Int? = null,
+    val fk_distrito: Int? = null,
     val Tecnologia: String? = null,
     val Tipo_Instalacion: String? = null,
     val FK_Auditor: Int? = null,
@@ -124,7 +125,9 @@ data class ActualizarBD(
     val Apellido_Materno_Titular: String? = null,
     val Alfa_Ont: String? = null,
     val Ont: String? = null,
-    val idOnt: Int? = null
+    val idOnt: Int? = null,
+    val Latitud_Terminal: String? = null,
+    val Longitud_Terminal: String? = null
 )
 
 data class ApiResponse(
@@ -151,4 +154,29 @@ data class Option(
     val nameEstado: String? = null,
     val idSalidas: Int? = null,
     val Num_Serie_Salida_Det: String? = null,
+    val Producto: String? = null,
+    val Modelo: String? = null,
+)
+
+data class materiales(
+    val mensaje: String,
+    val items: List<materialesdetalle>?
+)
+
+data class materialesdetalle(
+    val Producto: String? = null,
+    val Modelo: String? = null,
+    val Num_Serie_Salida_Det: String? = null,
+)
+
+
+data class DistritosDetalle(
+    val id_distrito: Int? = null,
+    val distrito: String? = null,
+    val tipo_instalacion: String? = null,
+    val fk_cope: Int? = null
+)
+
+data class textAnnotationsDetalle(
+    val description: String? = null
 )

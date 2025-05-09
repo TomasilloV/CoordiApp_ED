@@ -67,6 +67,7 @@ class Menu : AppCompatActivity() {
         setClickListener(R.id.registered, Completed::class.java)
         setClickListener(R.id.incompleted, NoCompletas::class.java)
         setClickListener(R.id.compare, Comparativa::class.java)
+        setClickListener(R.id.materiales, ver_materiales::class.java)
 
         findViewById<ImageButton>(R.id.logout).setOnClickListener {
             performLogout()

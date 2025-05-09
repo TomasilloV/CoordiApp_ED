@@ -46,18 +46,14 @@ class RegistrandoFragment2 : Fragment() {
     private lateinit var photoUri: Uri
     private lateinit var editMetraje: EditText
     private lateinit var editTerminal: EditText
-    private lateinit var spinnerPuerto: Spinner
-    private lateinit var btnFotoOnt: Button
+    private lateinit var spinnerOnt: Spinner
     private lateinit var btnFotoSerie: Button
     private var currentPhotoType: String = ""
-    private var fotoONT: String? = null
     private var fotoSerie: String? = null
     private var currentPhotoPath: String = ""
-    private lateinit var spinnerOnt: Spinner
     private lateinit var loadingLayout: FrameLayout
     private var lastSelectedOnt: String? = null
     private var idOnt: Int? = null
-    private var serieOntFoto: String? = null
 
     /**
      * Launcher para tomar fotos con la cámara.
@@ -82,103 +78,32 @@ class RegistrandoFragment2 : Fragment() {
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         initializeViews(view)
         setupListeners()
-        updateSpinners()
-        //fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
-
     }
 
     private fun initializeViews(view: View) {
         editMetraje = view.findViewById(R.id.editMetraje)
         editTerminal = view.findViewById(R.id.editTerminal)
-        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
-        btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
         btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
-        spinnerOnt = view.findViewById(R.id.spinnerOnt)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
-    }
-
-    /**
-     * Obtiene opciones desde el servicio API y configura el spinner correspondiente.
-     * @param idTecnico ID del técnico.
-     * @param idEstado (Opcional) ID del estado.
-     * @param idMunicipio (Opcional) ID del municipio.
-     */
-    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
-        loadingLayout.setLoadingVisibility(true)
-        val step = "6"
-        apiService.options(step, idEstado, idMunicipio, idTecnico)
-            .enqueue(object : Callback<List<Option>> {
-                override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
-                    loadingLayout.setLoadingVisibility(false)
-                    if (response.isSuccessful) {
-                        val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
-                        val allOptions = listOf("Elige una opción", "ZTEG2429F9E2") + options
-                        spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        }
-                        spinnerOnt.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedOnt = (parent.getItemAtPosition(position) as? String)?.takeIf { it != "Elige una opción" }
-                                if (selectedOnt != null && selectedOnt != lastSelectedOnt) {
-                                    lastSelectedOnt = selectedOnt
-                                    idOnt = response.body()?.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
-                                }
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
-                    } else {
-                        (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
-                    }
-                }
-
-                override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
-                    loadingLayout.setLoadingVisibility(false)
-                    (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
-                }
-            })
     }
 
     /**
      * Configura los listeners de los eventos de la interfaz de usuario.
      */
     private fun setupListeners() {
-        btnFotoOnt.setOnClickListener {
-            showPhotoOptions("ont")
-            currentPhotoType = "ont"
-        }
         btnFotoSerie.setOnClickListener {
-            showPhotoOptions("serie")
+            showPhotoOptions()
             currentPhotoType = "serie"
         }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
     /**
-     * Actualiza las opciones del spinner de puertos.
-     */
-    private fun updateSpinners() {
-        val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
-        numbersArray.add(0, "Elige una opción")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbersArray).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        spinnerPuerto.adapter = adapter
-    }
-
-    /**
      * Muestra las opciones para tomar o elegir una foto.
-     * @param photoType Tipo de foto (ont o serie).
      */
-    private fun showPhotoOptions(photoType: String) {
-        currentPhotoType = photoType
-        /*showPhotoOptions(
-            requireContext(),
-            photoType,
-            ::takePhoto,
-            ::choosePhotoFromGallery
-        )*/
+    private fun showPhotoOptions() {
+        currentPhotoType = "serie"
         takePhoto()
     }
 
@@ -235,7 +160,7 @@ class RegistrandoFragment2 : Fragment() {
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
-            if (currentPhotoType == "serie") processImage(file)
+            /**if (currentPhotoType == "serie") processImage(file)*/
             val imageData = encodeImageToBase64(file)
             updatePhoto(currentPhotoType, imageData)
         } else {
@@ -245,41 +170,40 @@ class RegistrandoFragment2 : Fragment() {
 
     /**
      * Procesa la imagen para extraer el texto relevante.
-     * @param file Archivo de la imagen.
-     */
+     * @paramfile Archivo de la imagen.
     private fun processImage(file: File) {
-        extractTextFromImage(
-            imageFile = file,
-            onSuccess = { extractedText ->
-                val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
-                val matchResult = regex.find(extractedText!!)
-                serieOntFoto = matchResult?.groups?.get(2)?.value
+    extractTextFromImage(
+    imageFile = file,
+    onSuccess = { extractedText ->
+    val regex = Regex("(Telmex\\s*)?S/N\\s*:?\\s*([A-Z0-9\\-]+)")
+    val matchResult = regex.find(extractedText!!)
+    serieOntFoto = matchResult?.groups?.get(2)?.value
 
-                if (serieOntFoto != null) {
-                    btnFotoSerie.text = serieOntFoto
-                } else {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("No se reconoce el número de serie")
-                        .setMessage("Puedes tomar una foto más legible para obtener el número de serie o continuar sin proporcionarlo")
-                        .setPositiveButton("Tomar de nuevo") { _, _ ->
-                            showPhotoOptions("serie")
-                        }
-                        .setNegativeButton("Continuar") { _, _ -> }
-                        .setCancelable(false)
-                        .show()
-                }
-            },
-            onFailure = { errorMessage ->
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Ocurrió un error")
-                    .setMessage(errorMessage)
-                    .setPositiveButton("Ok") { _, _ -> }
-                    .setCancelable(false)
-                    .show()
-            }
-        )
+    if (serieOntFoto != null) {
+    btnFotoSerie.text = serieOntFoto
+    } else {
+    AlertDialog.Builder(requireContext())
+    .setTitle("No se reconoce el número de serie")
+    .setMessage("Puedes tomar una foto más legible para obtener el número de serie o continuar sin proporcionarlo")
+    .setPositiveButton("Tomar de nuevo") { _, _ ->
+    showPhotoOptions("serie")
     }
-
+    .setNegativeButton("Continuar") { _, _ -> }
+    .setCancelable(false)
+    .show()
+    }
+    },
+    onFailure = { errorMessage ->
+    AlertDialog.Builder(requireContext())
+    .setTitle("Ocurrió un error")
+    .setMessage(errorMessage)
+    .setPositiveButton("Ok") { _, _ -> }
+    .setCancelable(false)
+    .show()
+    }
+    )
+    }
+     */
     /**
      * Actualiza la foto actual almacenada con la nueva imagen capturada o seleccionada.
      * @param photoType Tipo de foto (ont o serie).
@@ -287,11 +211,6 @@ class RegistrandoFragment2 : Fragment() {
      */
     private fun updatePhoto(photoType: String, base64: String) {
         when (photoType) {
-            "ont" -> {
-                fotoONT = base64
-                btnFotoOnt.text = "Cambiar foto"
-                btnFotoOnt.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
-            }
             "serie" -> {
                 fotoSerie = base64
                 btnFotoSerie.text = "Cambiar foto"
@@ -307,11 +226,8 @@ class RegistrandoFragment2 : Fragment() {
         val tarea = view?.findViewById<EditText>(R.id.editTarea)?.text.toString().takeIf { it.isNotBlank() }
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
-        val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        //val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val ont = serieOntFoto
 
-        if (metraje == null || terminal == null || puerto == null || fotoONT == null || fotoSerie == null || tarea == null) {
+        if (metraje == null || terminal == null || fotoSerie == null || tarea == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
@@ -321,11 +237,7 @@ class RegistrandoFragment2 : Fragment() {
             Tipo_Tarea = tarea,
             Metraje = metraje.toInt(),
             Terminal = terminal,
-            Puerto = puerto,
-            Foto_Ont = fotoONT,
             No_Serie_ONT = fotoSerie,
-            Ont = ont,
-            /*idOnt = idOnt,*/
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

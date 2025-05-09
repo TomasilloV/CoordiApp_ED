@@ -10,6 +10,7 @@ import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.DistritosDetalle
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -34,11 +35,16 @@ class RegistrandoFragment1 : Fragment() {
     private lateinit var spinnerDivision: Spinner
     private lateinit var spinnerArea: Spinner
     private lateinit var spinnerCope: Spinner
-    private lateinit var editDistrito: EditText
+    private lateinit var spinnerDistrito: Spinner
     private lateinit var spinnerTecnologia: Spinner
     private lateinit var spinnerEstatus: Spinner
+    private lateinit var editDistrito: EditText
+    private lateinit var spinnerTipoInstalacion: Spinner
     private lateinit var textArea: TextView
     private lateinit var textCope: TextView
+    private lateinit var textDistrito: TextView
+    private var distritoOptions: List<String?>? = listOf()
+    private var distritos: List<DistritosDetalle>? = listOf()
 
     private var options: List<Option> = listOf()
     private var divisionMap: Map<Int, List<Option>> = mapOf()
@@ -61,16 +67,19 @@ class RegistrandoFragment1 : Fragment() {
         spinnerCope = view.findViewById(R.id.spinnerCope)
         spinnerDivision = view.findViewById(R.id.spinnerDivision)
         spinnerArea = view.findViewById(R.id.spinnerArea)
-        editDistrito = view.findViewById(R.id.editDistrito)
+        spinnerDistrito = view.findViewById(R.id.spinnerDistrito)
         spinnerTecnologia = view.findViewById(R.id.spinnerTecnologia)
         spinnerEstatus = view.findViewById(R.id.spinnerEstatus)
+        spinnerTipoInstalacion = view.findViewById(R.id.spinnerInstalacion)
+        editDistrito = view.findViewById(R.id.editDistrito)
         textArea = view.findViewById(R.id.textArea)
         textCope = view.findViewById(R.id.textCope)
+        textDistrito = view.findViewById(R.id.textDistrito)
         val nextButton = view.findViewById<Button>(R.id.next)
 
-        setupSpinners(spinnerTecnologia, spinnerEstatus)
-        setupDivisionSpinner(spinnerDivision, spinnerArea, spinnerCope, textArea, textCope)
-        setupButtonClick(nextButton, editDistrito, spinnerTecnologia, spinnerEstatus, spinnerCope, spinnerDivision, spinnerArea)
+        setupSpinners(spinnerTecnologia, spinnerEstatus, spinnerTipoInstalacion)
+        setupDivisionSpinner(spinnerDivision, spinnerArea, spinnerCope, textArea, textCope, textDistrito, spinnerDistrito)
+        setupButtonClick(nextButton, spinnerTecnologia, spinnerEstatus, spinnerCope, spinnerDivision, spinnerArea)
     }
 
     /**
@@ -80,8 +89,10 @@ class RegistrandoFragment1 : Fragment() {
     private fun setupSpinners(vararg spinners: Spinner) {
         val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE")
         val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
+        val instalacionOptions = resources.getStringArray(R.array.instalacion_options).toList()
         setupSpinner(spinners[0], tecnologiaOptions)
         setupSpinner(spinners[1], estatusOptions)
+        setupSpinner(spinners[2], instalacionOptions)
     }
 
     /**
@@ -93,7 +104,7 @@ class RegistrandoFragment1 : Fragment() {
      * @param textCope el TextView asociado al spinner de cope.
      */
     private fun setupDivisionSpinner(spinnerDivision: Spinner, spinnerArea: Spinner, spinnerCope: Spinner,
-                                     textArea: TextView, textCope: TextView) {
+                                     textArea: TextView, textCope: TextView, textDistrito: TextView, spinnerDistrito: Spinner) {
         spinnerDivision.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             /**
              * Evento cuando se selecciona un ítem en el spinner de división.
@@ -111,6 +122,98 @@ class RegistrandoFragment1 : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 hideAreaAndCopeViews(spinnerArea, spinnerCope, textArea, textCope)
+            }
+        }
+        spinnerCope.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+
+
+                    val selectedCopeId = (parent?.adapter as? ArrayAdapter<*>)?.getItem(position)?.let { name ->
+                        options.find { it.COPE == name }?.idCope
+                    }
+                    apiService.obtenerDistritos(selectedCopeId).enqueue(object : Callback<List<DistritosDetalle>> {
+                        override fun onResponse(ignoredCall: Call<List<DistritosDetalle>>, response: Response<List<DistritosDetalle>>) {
+                            if (response.isSuccessful) {
+                                val apiResponse = response.body()
+                                distritos = apiResponse
+
+                                selectedCopeId?.let { updateDistritoSpinner(it, spinnerDistrito) }
+                                toggleViewVisibility(spinnerDistrito, textDistrito, View.VISIBLE)
+                            } else {
+                                (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                            }
+                        }
+
+                        override fun onFailure(ignoredCall: Call<List<DistritosDetalle>>, t: Throwable) {
+                            (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
+                        }
+                    })
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+        spinnerDistrito.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+                    val distritoText = spinnerDistrito.selectedItem as? String
+                    if(distritoText == "Otro"){
+                        editDistrito.apply {
+                            if (visibility == View.GONE) {
+                                visibility = View.VISIBLE
+                                setText("")
+                            }
+                        }
+                        spinnerTipoInstalacion.apply {
+                            isEnabled = true
+                            setSelection(0)
+                        }
+                    }
+                    else if (distritoText != "Elige una opción") {
+                        val selectedDistrito = distritos?.find { it.distrito == distritoText }
+                        editDistrito.apply {
+                            if (visibility == View.VISIBLE) {
+                                setText("")
+                                visibility = View.GONE
+                            }
+                        }
+
+                        if(selectedDistrito?.tipo_instalacion == "SIN INFO"){
+                            spinnerTipoInstalacion.apply {
+                                isEnabled = false
+                                setSelection(2)
+                            }
+                        }
+                        else{
+                            spinnerTipoInstalacion.apply {
+                                isEnabled = false
+                                setSelection(if (selectedDistrito?.tipo_instalacion == "SUBTERRANEO" || selectedDistrito?.tipo_instalacion == "SUBTERRANEA") 1 else 2)
+                            }
+                        }
+                    }
+                    else{
+                        editDistrito.apply {
+                            if (visibility == View.VISIBLE) {
+                                setText("")
+                                visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                val instalacionOptions = resources.getStringArray(R.array.instalacion_options)
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    instalacionOptions
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerTipoInstalacion.adapter = adapter
             }
         }
 
@@ -146,10 +249,9 @@ class RegistrandoFragment1 : Fragment() {
      * @param spinnerDivision el spinner para seleccionar división.
      * @param spinnerArea el spinner para seleccionar área.
      */
-    private fun setupButtonClick(nextButton: Button, editDistrito: EditText, spinnerTecnologia: Spinner, spinnerEstatus: Spinner,
+    private fun setupButtonClick(nextButton: Button, spinnerTecnologia: Spinner, spinnerEstatus: Spinner,
                                  spinnerCope: Spinner, spinnerDivision: Spinner, spinnerArea: Spinner) {
         nextButton.setOnClickListener {
-            val distritoText = editDistrito.text.toString().takeIf { it.isNotBlank() }
             val selectedTecnologia = spinnerTecnologia.selectedItem?.takeIf { it != "Elige una opción" } as? String
             val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
             val selectedCopeId = options.find { it.COPE == spinnerCope.selectedItem?.toString() }?.idCope
@@ -160,25 +262,60 @@ class RegistrandoFragment1 : Fragment() {
                 options.find { it.nameArea == name }?.idAreas
             }
 
-            if (!validateFields(distritoText, selectedTecnologia, selectedEstatus, selectedCopeId, selectedDivisionId, selectedAreaId)) {
-                return@setOnClickListener
-            }
             val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
-            preferencesManager.getString("id")!!.let { id ->
-                val updateRequest = ActualizarBD(
-                    idtecnico_instalaciones_coordiapp = id,
-                    Distrito = distritoText,
-                    Tecnologia = selectedTecnologia,
-                    Estatus_Orden = selectedEstatus,
-                    FK_Cope = selectedCopeId,
-                    FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
-                    Fecha_Coordiapp = fecha,
-                    Step_Registro = 1
-                )
-                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-            } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
+            val instalacion = view?.findViewById<Spinner>(R.id.spinnerInstalacion)?.selectedItem
+                ?.takeIf { it != "Elige una opción" } as? String
+
+            val distrito = if (editDistrito.visibility == View.VISIBLE) editDistrito.text.toString() else spinnerDistrito.selectedItem?.takeIf { it != "Elige una opción" && it != "Otro" } as? String
+
+            if (validateFields(distrito, selectedTecnologia, selectedEstatus, selectedCopeId, selectedDivisionId, selectedAreaId, instalacion)) {
+                (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
+
+
+                preferencesManager.getString("id")!!.let { id ->
+                    val updateRequest = ActualizarBD(
+                        idtecnico_instalaciones_coordiapp = id,
+                        Distrito = distrito?.uppercase(),
+                        Tecnologia = selectedTecnologia,
+                        Estatus_Orden = selectedEstatus,
+                        FK_Cope = selectedCopeId,
+                        FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
+                        Fecha_Coordiapp = fecha,
+                        fk_distrito = distritos?.find { it.distrito == distrito }?.id_distrito,
+                        Tipo_Instalacion = instalacion,
+                        Step_Registro = 1
+                    )
+                    (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
+            }
+
+//
+//            apiService.validarTipoDistrito(distritoText)
+//                .enqueue(object : Callback<TipoDistritoResponse> {
+//                    override fun onResponse(ignoredCall: Call<TipoDistritoResponse>, response: Response<TipoDistritoResponse>) {
+//                        if (response.isSuccessful) {
+//                            val apiResponse = response.body()
+//
+//                            if(apiResponse?.tipo_instalacion != "Omitir" && instalacion != apiResponse?.tipo_instalacion) {
+//                                (requireActivity() as? Registrando)?.toasting("El tipo de instalación no coincide con el distrito")
+//                                return
+//
+//                            }
+//
+//
+//                        } else {
+//                            (requireActivity() as? Registrando)?.toasting("Error")
+//                        }
+//                    }
+//
+//                    override fun onFailure(ignoredCall: Call<TipoDistritoResponse>, t: Throwable) {
+//                        (requireActivity() as? Registrando)?.toasting("Error")
+//                    }
+//                })
+
+
         }
     }
 
@@ -193,10 +330,11 @@ class RegistrandoFragment1 : Fragment() {
      * @return verdadero si todos los campos son válidos, falso en caso contrario.
      */
     private fun validateFields(distritoText: String?, selectedTecnologia: String?, selectedEstatus: String?,
-                               selectedCopeId: Int?, selectedDivisionId: Int?, selectedAreaId: Int?): Boolean {
+                               selectedCopeId: Int?, selectedDivisionId: Int?, selectedAreaId: Int?, instalacion: String?): Boolean {
         return when {
             distritoText.isNullOrBlank() || selectedTecnologia == null || selectedEstatus == null ||
-                    selectedCopeId == null || selectedDivisionId == null || selectedAreaId == null -> {
+                    selectedCopeId == null || selectedDivisionId == null || selectedAreaId == null || instalacion.isNullOrBlank()
+                -> {
                 (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 false
             }
@@ -265,6 +403,12 @@ class RegistrandoFragment1 : Fragment() {
         setupSpinner(spinnerArea, areaOptions)
     }
 
+    private fun updateDistritoSpinner(copeId: Int, spinnerDistrito: Spinner) {
+        val distritos = distritos?.filter { it.fk_cope == copeId }
+        val distritoOptions = listOf("Elige una opción") + distritos?.map { it.distrito }!!
+        setupSpinner(spinnerDistrito, distritoOptions)
+    }
+
     /**
      * Actualiza el spinner de COPE basado en el área seleccionada.
      * @param areaId el ID del área seleccionada.
@@ -295,6 +439,8 @@ class RegistrandoFragment1 : Fragment() {
                 (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }
         })
+
+
     }
 
     /**
@@ -303,5 +449,7 @@ class RegistrandoFragment1 : Fragment() {
     private fun updateSpinners() {
         val divisionOptions = listOf("Elige una opción") + divisionMap.values.flatten().map { it.nameDivision }.distinct()
         setupSpinner(view?.findViewById(R.id.spinnerDivision)!!, divisionOptions)
+
+        setupSpinner(view?.findViewById(R.id.spinnerDistrito)!!, distritoOptions!!)
     }
 }

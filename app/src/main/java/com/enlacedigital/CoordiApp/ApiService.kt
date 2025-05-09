@@ -5,11 +5,13 @@ import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.ComparativaRequest
 import com.enlacedigital.CoordiApp.models.ComparativaResponse
+import com.enlacedigital.CoordiApp.models.DistritosDetalle
 import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.models.LogoutResponse
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.models.SessionResponse
+import com.enlacedigital.CoordiApp.models.materiales
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
@@ -103,6 +105,22 @@ interface ApiService {
     ): Call<Folios>
 
     /**
+     * Obtiene los folios no completados por el técnico especificado.
+     *
+     * @param FK_Tecnico_Salida_Det Identificador del técnico.
+     * @param page Número de página para la paginación.
+     * @param limit Número de elementos por página.
+     * @return Una llamada Retrofit que devuelve los folios no completados.
+     */
+    @FormUrlEncoded
+    @POST("ver-materiales-tecnico")
+    fun vermateriales(
+        @Field("FK_Tecnico_Salida_Det") FK_Tecnico_Salida_Det: Int,
+        @Field("page") page: Int,
+        @Field("limit") limit: Int
+    ): Call<materiales>
+
+    /**
      * Obtiene las opciones para los spinner en la aplicación según el paso y los filtros dados.
      *
      * @param step Paso del flujo en el cual se requiere las opciones.
@@ -151,4 +169,11 @@ interface ApiService {
     fun updateTechnicianData(
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>
+
+
+    @FormUrlEncoded
+    @POST("obtener-distritos")
+    fun obtenerDistritos(
+        @Field("id_cope") id_cope: Int?): Call<List<DistritosDetalle>>
+
 }

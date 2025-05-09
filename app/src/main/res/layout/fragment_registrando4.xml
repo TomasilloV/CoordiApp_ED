@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,6 +19,7 @@
                 android:layout_height="120dp"
                 android:text="@string/paso_4"
                 android:textColor="@color/white"
+                android:maxLength="10"
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:gravity="center"
@@ -27,165 +28,52 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintWidth_percent="0.9"/>
 
+
             <TextView
-                android:id="@+id/textTitular"
+                android:id="@+id/textFachada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre titular"
+                android:text="Fachada de casa"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="18sp"
+                android:paddingTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/textPaso"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
-
-            <EditText
-                android:id="@+id/editTitular"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:hint="Ingresa nombre de titular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textTitular"
-                app:layout_constraintWidth_percent="0.85" />
-
-
-            <TextView
-                android:id="@+id/textPaterno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apellido paterno Titular"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editTitular"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
-
-            <EditText
-                android:id="@+id/editApPaterno"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:hint="Ingresa apellido paterno de titular"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:padding="8dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTitular"
-                app:layout_constraintStart_toStartOf="@+id/editTitular"
-                app:layout_constraintTop_toBottomOf="@id/textPaterno"/>
-
-            <TextView
-                android:id="@+id/textMaterno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apellido materno Titular"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editApPaterno"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
-
-            <EditText
-                android:id="@+id/editMaterno"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:imeOptions="actionNext"
-                android:hint="Ingresa apellido materno de titular"
-                android:inputType="text"
-                android:padding="8dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTitular"
-                app:layout_constraintStart_toStartOf="@+id/editTitular"
-                app:layout_constraintTop_toBottomOf="@id/textMaterno"/>
-
-            <TextView
-                android:id="@+id/textRecibe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Persona que recibe"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editMaterno"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
-
-            <EditText
-                android:id="@+id/editRecibe"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:hint="Ingresa la persona que recibe"
-                android:imeOptions="actionNext"
-                android:padding="8dp"
-                android:inputType="text"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTitular"
-                app:layout_constraintStart_toStartOf="@+id/editTitular"
-                app:layout_constraintTop_toBottomOf="@id/textRecibe"/>
-
-            <TextView
-                android:id="@+id/textContactoCliente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Teléfono cliente"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editRecibe"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
-
-            <EditText
-                android:id="@+id/editCliente"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:hint="Ingresa teléfono del cliente"
-                android:imeOptions="actionDone"
-                android:inputType="phone"
-                android:maxLength="10"
-                android:padding="8dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTitular"
-                app:layout_constraintStart_toStartOf="@+id/editTitular"
-                app:layout_constraintTop_toBottomOf="@id/textContactoCliente"/>
-
-            <TextView
-                android:id="@+id/textPuerto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Foto puerto"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/editCliente"
-                app:layout_constraintStart_toStartOf="@id/editTitular"/>
+                app:layout_constraintStart_toStartOf="@id/btnFachada"/>
 
             <Button
-                android:id="@+id/btnFotoPuerto"
+                android:id="@+id/btnFachada"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/dark_gray"
                 android:text="@string/subir_foto"
-                app:layout_constraintEnd_toEndOf="@+id/editTitular"
-                app:layout_constraintStart_toStartOf="@+id/editTitular"
-                app:layout_constraintTop_toBottomOf="@id/textPuerto" />
+                app:layout_constraintEnd_toEndOf="@+id/textPaso"
+                app:layout_constraintStart_toStartOf="@+id/textPaso"
+                app:layout_constraintTop_toBottomOf="@id/textFachada" />
+
+            <TextView
+                android:id="@+id/textFotoOS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fotografía OS"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/btnFachada"
+                app:layout_constraintStart_toStartOf="@id/btnFachada"/>
+
+            <Button
+                android:id="@+id/btnFotoOs"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/dark_gray"
+                android:text="@string/subir_foto"
+                app:layout_constraintEnd_toEndOf="@+id/btnFachada"
+                app:layout_constraintStart_toStartOf="@+id/btnFachada"
+                app:layout_constraintTop_toBottomOf="@id/textFotoOS" />
 
             <Button
                 android:id="@+id/next"
@@ -196,7 +84,7 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/btnFotoPuerto"
+                app:layout_constraintTop_toBottomOf="@+id/btnFotoOs"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -204,4 +92,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>
