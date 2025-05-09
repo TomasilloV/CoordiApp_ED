@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/dark_blue"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/folio_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/folio_pisa"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:padding="2dp" />
+
+    <TextView
+        android:id="@+id/telefono_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/telefono"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:padding="2dp" />
+</LinearLayout>
+

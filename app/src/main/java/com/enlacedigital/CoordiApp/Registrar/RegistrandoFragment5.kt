@@ -1,0 +1,87 @@
+package com.enlacedigital.CoordiApp.Registrar
+
+import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.fragment.app.Fragment
+import androidx.core.content.FileProvider
+import com.enlacedigital.CoordiApp.R
+import com.enlacedigital.CoordiApp.models.ActualizarBD
+import java.io.File
+import java.io.IOException
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.enlacedigital.CoordiApp.Registrando
+import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
+import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
+import com.enlacedigital.CoordiApp.utils.checkSession
+import com.enlacedigital.CoordiApp.utils.createImageFile
+import com.enlacedigital.CoordiApp.utils.showPhotoOptions
+import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
+
+class RegistrandoFragment5 : Fragment() {
+    val preferencesManager = PreferencesHelper.getPreferencesManager()
+    val apiService = ApiServiceHelper.getApiService()
+    private lateinit var photoUri: Uri
+    private var currentPhotoType: String = ""
+    private var currentPhotoPath: String = ""
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_registrando5, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Verifica la sesión antes de continuar
+        checkSession(apiService, requireContext(), null as Class<Nothing>?)
+
+        // Inicializa las vistas del fragmento
+        val nextButton: Button = view.findViewById(R.id.next)
+        val editTitular: EditText = view.findViewById(R.id.editTitular)
+        val editApPaterno: EditText = view.findViewById(R.id.editApPaterno)
+        val editMaterno: EditText = view.findViewById(R.id.editMaterno)
+        val editRecibe: EditText = view.findViewById(R.id.editRecibe)
+        val editCliente: EditText = view.findViewById(R.id.editCliente)
+
+        // Configura los listeners para botones y campos
+        nextButton.setOnClickListener {
+            val titular = editTitular.text.toString().trim()
+            val apPaterno = editApPaterno.text.toString().trim()
+            val materno = editMaterno.text.toString().trim()
+            val recibe = editRecibe.text.toString().trim()
+            val cliente = editCliente.text.toString().trim()
+
+            // Validación de campos antes de proceder
+            if (titular.isEmpty() || apPaterno.isEmpty() || materno.isEmpty() || recibe.isEmpty() || cliente.isEmpty()) {
+                (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
+                return@setOnClickListener
+            } else if (cliente.length <= 9) {
+                (requireActivity() as? Registrando)?.toasting("Ingresa un teléfono válido")
+                return@setOnClickListener
+            } else if (titular.length < 3 || apPaterno.length < 3 || materno.length < 3 || recibe.length < 3) {
+                (requireActivity() as? Registrando)?.toasting("Ingresa los nombres válidos")
+                return@setOnClickListener
+            }
+
+            // Crea la solicitud de actualización y la envía
+            val updateRequest = ActualizarBD(
+                idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+                Cliente_Titular = titular,
+                Apellido_Paterno_Titular = apPaterno,
+                Apellido_Materno_Titular = materno,
+                Cliente_Recibe = recibe,
+                Telefono_Cliente = cliente,
+                Step_Registro = 5
+            )
+            (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+        }
+    }
+}
