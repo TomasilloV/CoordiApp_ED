@@ -6,127 +6,158 @@
     android:background="@color/dark_blue"
     android:orientation="horizontal">
 
-    <ScrollView
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/swiperefresh"
+        android:layout_height="match_parent"
+        android:background="@color/dark_blue">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_blue">
+
+                <TextView
+                    android:id="@+id/textPaso"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:text="@string/paso_3"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.9" />
+
+                <TextView
+                    android:id="@+id/textPuerto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/puerto"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.104"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
+
+                <Spinner
+                    android:id="@+id/spinnerPuerto"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textPuerto"
+                    app:layout_constraintBottom_toTopOf="@id/textOnt"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textOnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="SELECCIONA ONT"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/spinnerPuerto"
+                    app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
+
+                <Spinner
+                    android:id="@+id/spinnerOnt"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textOnt"
+                    app:layout_constraintBottom_toTopOf="@id/textFotoOnt"
+                    app:layout_constraintWidth_percent="0.85" />
+
+
+                <TextView
+                    android:id="@+id/textFotoOnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingTop="15dp"
+                    android:text="@string/fotografia_ont_modem"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/spinnerOnt"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerOnt" />
+
+                <Button
+                    android:id="@+id/btnFotoOnt"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/dark_gray"
+                    android:text="@string/subir_foto"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textFotoOnt"
+                    app:layout_constraintBottom_toTopOf="@id/next"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siguiente"
+                    android:textColor="@color/white"
+                    android:background="@color/green"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/btnFotoOnt"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btnrecargar"
+                    app:layout_constraintWidth_percent="0.5" />
+
+                <Button
+                    android:id="@+id/btnrecargar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Recargar"
+                    android:textColor="@color/white"
+                    android:background="@color/green"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/next"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_percent="0.5"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/dark_blue">
-
-            <TextView
-                android:id="@+id/textPaso"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:gravity="center"
-                android:text="@string/paso_3"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.9" />
-
-            <TextView
-                android:id="@+id/textPuerto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:text="@string/puerto"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.104"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textPaso" />
-
-            <Spinner
-                android:id="@+id/spinnerPuerto"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textPuerto"
-                app:layout_constraintBottom_toTopOf="@id/textOnt"
-                app:layout_constraintWidth_percent="0.85" />
-
-            <TextView
-                android:id="@+id/textOnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:text="SELECCIONA ONT"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/spinnerPuerto"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
-
-            <Spinner
-                android:id="@+id/spinnerOnt"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textOnt"
-                app:layout_constraintBottom_toTopOf="@id/textFotoOnt"
-                app:layout_constraintWidth_percent="0.85" />
-
-
-            <TextView
-                android:id="@+id/textFotoOnt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingTop="15dp"
-                android:text="@string/fotografia_ont_modem"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/spinnerOnt"
-                app:layout_constraintTop_toBottomOf="@id/spinnerOnt" />
-
-            <Button
-                android:id="@+id/btnFotoOnt"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/dark_gray"
-                android:text="@string/subir_foto"
-                android:padding="8dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textFotoOnt"
-                app:layout_constraintBottom_toTopOf="@id/next"
-                app:layout_constraintWidth_percent="0.85" />
-
-            <Button
-                android:id="@+id/next"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/siguiente"
-                android:textColor="@color/white"
-                android:background="@color/green"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@id/btnFotoOnt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent="0.5" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/loadingOverlay"

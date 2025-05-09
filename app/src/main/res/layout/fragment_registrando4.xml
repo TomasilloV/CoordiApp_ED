@@ -2,117 +2,148 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:background="@color/dark_blue">
 
-    <ScrollView
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/swiperefresh"
+        android:layout_height="match_parent"
+        android:background="@color/dark_blue">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_blue">
+
+                <TextView
+                    android:id="@+id/textPaso"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:text="@string/paso_4"
+                    android:textColor="@color/white"
+                    android:maxLength="10"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.9"/>
+
+                <TextView
+                    android:id="@+id/textInstalación"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de instalación"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Spinner
+                    android:id="@+id/spinnerInstalacion"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toBottomOf="@id/textInstalación"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textFachada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fachada de casa"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Button
+                    android:id="@+id/btnFachada"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/dark_gray"
+                    android:text="@string/subir_foto"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
+                    app:layout_constraintTop_toBottomOf="@id/textFachada" />
+
+                <TextView
+                    android:id="@+id/textFotoOS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fotografía OS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/btnFachada"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Button
+                    android:id="@+id/btnFotoOs"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/dark_gray"
+                    android:text="@string/subir_foto"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
+                    app:layout_constraintTop_toBottomOf="@id/textFotoOS" />
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siguiente"
+                    android:textColor="@color/white"
+                    android:background="@color/green"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="1dp"
+                    app:layout_constraintTop_toBottomOf="@+id/btnFotoOs"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btnrecargar"
+                    app:layout_constraintWidth_percent="0.5"/>
+
+                <Button
+                    android:id="@+id/btnrecargar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Recargar"
+                    android:textColor="@color/white"
+                    android:background="@color/green"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/next"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_percent="0.5"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/dark_blue">
-
-            <TextView
-                android:id="@+id/textPaso"
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:text="@string/paso_4"
-                android:textColor="@color/white"
-                android:maxLength="10"
-                android:textStyle="bold"
-                android:textSize="24sp"
-                android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.9"/>
-
-            <TextView
-                android:id="@+id/textInstalación"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tipo de instalación"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/textPaso"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
-
-            <Spinner
-                android:id="@+id/spinnerInstalacion"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/light_gray"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/textInstalación"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent="0.85" />
-
-            <TextView
-                android:id="@+id/textFachada"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fachada de casa"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
-
-            <Button
-                android:id="@+id/btnFachada"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/dark_gray"
-                android:text="@string/subir_foto"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
-                app:layout_constraintTop_toBottomOf="@id/textFachada" />
-
-            <TextView
-                android:id="@+id/textFotoOS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fotografía OS"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/btnFachada"
-                app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
-
-            <Button
-                android:id="@+id/btnFotoOs"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="4dp"
-                android:background="@color/dark_gray"
-                android:text="@string/subir_foto"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
-                app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
-                app:layout_constraintTop_toBottomOf="@id/textFotoOS" />
-
-            <Button
-                android:id="@+id/next"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/siguiente"
-                android:textColor="@color/white"
-                android:background="@color/green"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                app:layout_constraintTop_toBottomOf="@+id/btnFotoOs"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent="0.5"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>
