@@ -2,6 +2,8 @@ package com.enlacedigital.CoordiApp.Registrar
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,7 +67,25 @@ class RegistrandoFragment3 : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_registrando3, container, false)
+        val view = inflater.inflate(R.layout.fragment_registrando3, container, false)
+        val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
+
+        btnrecargar.setOnClickListener {
+            btnrecargar.isEnabled = false
+            progressBar.visibility = View.VISIBLE
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressBar.visibility = View.GONE
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.swiperefresh, RegistrandoFragment3())
+                    .commit()
+            }, 1500)
+
+        }
+        Thread.sleep(200L)
+        btnrecargar.isEnabled = true
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

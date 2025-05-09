@@ -165,10 +165,31 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4" />
 
+        <!-- Botón para crear nuevo registro -->
+        <ImageButton
+            android:id="@+id/nuevoRegistro"
+            android:layout_width="20dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/ic_launcher_background"
+            android:contentDescription="nuevo_registro"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/outline_add_notes_24"
+            tools:layout_editor_absoluteX="80dp"
+            tools:layout_editor_absoluteY="478dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2" />
+
         <!-- Botón para ver materiales -->
         <ImageButton
             android:id="@+id/materiales"
-            android:layout_width="1dp"
+            android:layout_width="20dp"
             android:layout_height="100dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
@@ -188,7 +209,7 @@
 
         <ImageButton
             android:id="@+id/logout"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="105dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"

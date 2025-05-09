@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/swiperefresh"
     android:layout_height="match_parent"
     android:background="@color/dark_blue">
 
@@ -172,8 +173,23 @@
                 android:textColor="@color/white"
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="1dp"
                 app:layout_constraintTop_toBottomOf="@+id/editCliente"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnrecargar"
+                app:layout_constraintWidth_percent="0.5"/>
+
+            <Button
+                android:id="@+id/btnrecargar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Recargar"
+                android:textColor="@color/white"
+                android:background="@color/green"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/next"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -181,4 +197,12 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </FrameLayout>

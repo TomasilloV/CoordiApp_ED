@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.enlacedigital.CoordiApp.models.LogoutResponse
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
@@ -68,9 +69,21 @@ class Menu : AppCompatActivity() {
         setClickListener(R.id.incompleted, NoCompletas::class.java)
         setClickListener(R.id.compare, Comparativa::class.java)
         setClickListener(R.id.materiales, ver_materiales::class.java)
+        setClickListener(R.id.nuevoRegistro, Registrando::class.java)
 
         findViewById<ImageButton>(R.id.logout).setOnClickListener {
-            performLogout()
+            // Alerta de confirmacion de cierre de sesión
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Alerta")
+            builder.setMessage("¿Estas seguro de cerrar sesión?")
+            builder.setPositiveButton("Aceptar") { dialog, _ ->
+                performLogout()
+            }
+            builder.setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            val alertDialog = builder.create()
+            alertDialog.show()
         }
     }
 

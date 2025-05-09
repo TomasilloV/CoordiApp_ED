@@ -2,6 +2,8 @@ package com.enlacedigital.CoordiApp.Registrar
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +36,25 @@ class RegistrandoFragment5 : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_registrando5, container, false)
+        val view = inflater.inflate(R.layout.fragment_registrando5, container, false)
+        val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+
+        btnrecargar.setOnClickListener {
+            btnrecargar.isEnabled = false
+            progressBar.visibility = View.VISIBLE
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressBar.visibility = View.GONE
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.swiperefresh, RegistrandoFragment5())
+                    .commit()
+            }, 1500)
+
+        }
+        Thread.sleep(200L)
+        btnrecargar.isEnabled = true
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

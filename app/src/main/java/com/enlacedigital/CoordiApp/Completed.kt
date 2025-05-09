@@ -94,10 +94,6 @@ class Completed : AppCompatActivity() {
             addOnScrollListener(createOnScrollListener()) // Agrega el listener para la paginación
         }
 
-        // Configura el botón para registrar un nuevo folio
-        findViewById<Button>(R.id.nuevoRegistro).setOnClickListener {
-            startActivity(Intent(this, Registrando::class.java))
-        }
     }
 
     /**

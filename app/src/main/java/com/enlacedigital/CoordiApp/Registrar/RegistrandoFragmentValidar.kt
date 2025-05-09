@@ -5,11 +5,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.activity.result.ActivityResultLauncher
@@ -30,6 +33,7 @@ import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.startNewActivity
+import kotlinx.coroutines.delay
 
 /**
  * Data class para representar la respuesta del servidor.
@@ -106,7 +110,25 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 (activity as? Registrando)?.goToNextStep(5)
             }
         }
-        return inflater.inflate(R.layout.fragment_registrandovalidar, container, false)
+        val view = inflater.inflate(R.layout.fragment_registrandovalidar, container, false)
+        val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+
+        btnrecargar.setOnClickListener {
+            btnrecargar.isEnabled = false
+            progressBar.visibility = View.VISIBLE
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressBar.visibility = View.GONE
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.swiperefresh, RegistrandoFragmentValidar())
+                    .commit()
+            }, 1500)
+        }
+        Thread.sleep(200L)
+        btnrecargar.isEnabled = true
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
