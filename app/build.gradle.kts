@@ -90,4 +90,7 @@ dependencies {
 
     //reconocimiento de texto
     implementation(libs.text.recognition)
+
+    implementation("androidx.biometric:biometric:1.2.0-alpha03")
+
 }

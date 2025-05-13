@@ -1,5 +1,6 @@
 package com.enlacedigital.CoordiApp.Registrar
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +13,8 @@ import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.FolioRequest
+import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -76,6 +79,7 @@ class RegistrandoFragment1 : Fragment() {
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         setupViews(view)
         getOptions()
+        getTac()
     }
 
     private fun setupViews(view: View) {
@@ -318,6 +322,57 @@ class RegistrandoFragment1 : Fragment() {
         })
     }
 
+    private fun getTac() {
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val request = FolioRequest(folio)
+
+        apiService.obtenertac(request).enqueue(object : Callback<TacResponse> {
+            override fun onResponse(call: Call<TacResponse>, response: Response<TacResponse>) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+
+                    if (body != null && body.items.isNotEmpty()) {
+                        val item = body.items[0]
+
+                        val handler = Handler(Looper.getMainLooper())
+
+                        handler.postDelayed({
+                            val valor = item.nomDivision
+                            val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
+                            if (index >= 0) spinnerDivision.setSelection(index)
+                        }, 0)
+
+                        handler.postDelayed({
+                            val valor1 = item.nomArea
+                            val index1 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor1)
+                            if (index1 >= 0) spinnerArea.setSelection(index1)
+                        }, 200)
+
+                        handler.postDelayed({
+                            val valor2 = item.nomCt
+                            val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor2)
+                            if (index2 >= 0) spinnerCope.setSelection(index2)
+                        }, 400)
+
+                        handler.postDelayed({
+                            editDistrito.setText(item.distrito)
+                        }, 600)
+                    } else {
+                        (requireActivity() as? Registrando)?.toasting("Sin datos para este folio")
+                    }
+
+                } else {
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<TacResponse>, t: Throwable) {
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
+    }
+
+
     /**
      * Actualiza el spinner de divisiones con las opciones obtenidas.
      */
@@ -325,4 +380,5 @@ class RegistrandoFragment1 : Fragment() {
         val divisionOptions = listOf("Elige una opción") + divisionMap.values.flatten().map { it.nameDivision }.distinct()
         setupSpinner(view?.findViewById(R.id.spinnerDivision)!!, divisionOptions)
     }
+
 }
