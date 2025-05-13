@@ -20,10 +20,11 @@
         android:layout_marginBottom="4dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@id/logoTextView"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
         android:id="@+id/logoTextView"
@@ -33,11 +34,10 @@
         android:textColor="@color/light_green"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
         app:layout_constraintVertical_bias="0.388" />
 
     <!-- Botón para iniciar sesión -->
@@ -46,15 +46,14 @@
         android:id="@+id/welcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="@string/bienvenido"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tecnico"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/botones"
         app:layout_constraintWidth_percent="0.8" />
 
     <TextView
@@ -67,23 +66,23 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/version"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcome"
-        app:layout_constraintWidth_percent="0.8" />
+        app:layout_constraintWidth_percent="0.8"
+        android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:id="@+id/botones2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoTextView">
+        app:layout_constraintTop_toBottomOf="@+id/logoTextView">
 
         <!-- Botón para ver registros -->
         <ImageButton
@@ -151,14 +150,13 @@
         android:id="@+id/botones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoTextView">
+        app:layout_constraintTop_toBottomOf="@+id/botones2">
 
         <Space
             android:layout_width="0dp"

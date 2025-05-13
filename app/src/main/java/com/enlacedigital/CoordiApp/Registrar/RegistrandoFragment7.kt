@@ -97,7 +97,18 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             takePhoto()
         }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener {
-            validateAndProceed()
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                locationHelper.verificarUbicacion()
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationHelper.obtenerUbicacion()
+                } else {
+                    locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }, 0)
+            handler.postDelayed({
+                validateAndProceed()
+            }, 500)
         }
     }
 
@@ -187,7 +198,7 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
         val latitud = editLatitud.text.toString().takeIf { it.isNotBlank() }
         val longitud = editLongitud.text.toString().takeIf { it.isNotBlank() }
 
-        if (latitud == null || longitud == null) {
+        if (latitud == null || longitud == null || fotoONT == null) {
             showToast("Completa todos los campos para continuar")
             return
         }

@@ -5,11 +5,13 @@ import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.ComparativaRequest
 import com.enlacedigital.CoordiApp.models.ComparativaResponse
+import com.enlacedigital.CoordiApp.models.FolioRequest
 import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.models.LogoutResponse
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.models.SessionResponse
+import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.models.materiales
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -168,4 +170,9 @@ interface ApiService {
     fun updateTechnicianData(
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>
+
+    @POST("obtener-tac")
+    fun obtenertac(
+        @Body request: FolioRequest
+    ): Call<TacResponse>
 }

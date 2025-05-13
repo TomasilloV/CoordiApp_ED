@@ -1,5 +1,10 @@
 package com.enlacedigital.CoordiApp.models
 
+import com.google.gson.annotations.SerializedName
+import retrofit2.Call
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
 import java.io.Serializable
 
 // ====================================================
@@ -155,6 +160,21 @@ data class Option(
     val Num_Serie_Salida_Det: String? = null,
     val Producto: String? = null,
     val Modelo: String? = null,
+)
+data class FolioRequest(
+    @SerializedName("Folio_Pisa") val folioPisa: Int
+)
+
+data class TacResponse(
+    @SerializedName("mensaje") val mensaje: String,
+    @SerializedName("items") val items: List<TacItem>
+)
+
+data class TacItem(
+    @SerializedName("DISTRITO") val distrito: String,
+    @SerializedName("NOM_DIVISION") val nomDivision: String,
+    @SerializedName("NOM_AREA") val nomArea: String,
+    @SerializedName("NOM_CT") val nomCt: String,
 )
 
 data class materiales(

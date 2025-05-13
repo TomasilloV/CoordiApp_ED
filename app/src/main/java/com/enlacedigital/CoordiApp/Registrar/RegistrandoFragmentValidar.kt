@@ -10,6 +10,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -154,13 +155,26 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             val latitud = editLatitud.text.toString()
             val longitud = editLongitud.text.toString()
 
-            if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty()) {
-                (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
-            } else if (!telefono.matches(Regex("\\d{10}"))) {
-                (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
-            } else {
-                sendData(folio, telefono, latitud, longitud, preferencesManager.getString("id_tecnico"))
-            }
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                locationHelper.verificarUbicacion()
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationHelper.obtenerUbicacion()
+                } else {
+                    locationPermissionRequest.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }, 0)
+            handler.postDelayed({
+                preferencesManager.saveString("folio-pisa",folio)
+
+                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty()) {
+                    (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
+                } else if (!telefono.matches(Regex("\\d{10}"))) {
+                    (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
+                } else {
+                    sendData(folio, telefono, latitud, longitud, preferencesManager.getString("id_tecnico"))
+                }
+            }, 400)
         }
     }
 
