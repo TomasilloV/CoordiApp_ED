@@ -6,8 +6,7 @@
     android:background="@color/dark_blue"
     android:orientation="horizontal">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/swiperefresh"
         android:layout_height="match_parent"
@@ -37,6 +36,62 @@
                     app:layout_constraintWidth_percent="0.9" />
 
                 <TextView
+                    android:id="@+id/textPuerto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/puerto"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.104"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
+
+                <Spinner
+                    android:id="@+id/spinnerPuerto"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textPuerto"
+                    app:layout_constraintWidth_percent="0.85" />
+
+
+                <TextView
+                    android:id="@+id/textTerminal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/terminal"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintHorizontal_bias="0.104"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerPuerto"
+                    app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
+
+                <EditText
+                    android:id="@+id/editTerminal"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:background="@color/light_gray"
+                    android:hint="Ingresa la terminal"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="2"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toBottomOf="@+id/textTerminal"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerPuerto"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerPuerto" />
+
+
+                <TextView
                     android:id="@+id/textLatitud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -48,7 +103,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.104"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    android:visibility="gone"
+                    />
 
                 <EditText
                     android:id="@+id/editLatitud"
@@ -64,7 +121,8 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/textPaso"
                     app:layout_constraintStart_toStartOf="@+id/textLatitud"
-                    app:layout_constraintTop_toBottomOf="@id/textLatitud"/>
+                    app:layout_constraintTop_toBottomOf="@id/textLatitud"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textLongitud"
@@ -76,7 +134,8 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/editLatitud"
-                    app:layout_constraintTop_toBottomOf="@id/editLatitud" />
+                    app:layout_constraintTop_toBottomOf="@id/editLatitud"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/editLongitud"
@@ -92,10 +151,11 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/editLatitud"
                     app:layout_constraintStart_toStartOf="@+id/textLongitud"
-                    app:layout_constraintTop_toBottomOf="@id/textLongitud"/>
+                    app:layout_constraintTop_toBottomOf="@id/textLongitud"
+                    android:visibility="gone"/>
 
                 <TextView
-                    android:id="@+id/textTerminal"
+                    android:id="@+id/textTerminal2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Foto Terminal"
@@ -103,8 +163,8 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
-                    app:layout_constraintTop_toBottomOf="@id/editLongitud"
-                    app:layout_constraintStart_toStartOf="@id/editLongitud"/>
+                    app:layout_constraintTop_toBottomOf="@id/editTerminal"
+                    app:layout_constraintStart_toStartOf="@id/editTerminal"/>
 
                 <Button
                     android:id="@+id/btnFoto_Puerto"
@@ -113,9 +173,9 @@
                     android:layout_marginTop="4dp"
                     android:background="@color/dark_gray"
                     android:text="@string/subir_foto"
-                    app:layout_constraintEnd_toEndOf="@+id/editLatitud"
-                    app:layout_constraintStart_toStartOf="@+id/textTerminal"
-                    app:layout_constraintTop_toBottomOf="@id/textTerminal" />
+                    app:layout_constraintEnd_toEndOf="@+id/editTerminal"
+                    app:layout_constraintStart_toStartOf="@+id/editTerminal"
+                    app:layout_constraintTop_toBottomOf="@id/textTerminal2" />
 
                 <Button
                     android:id="@+id/next"

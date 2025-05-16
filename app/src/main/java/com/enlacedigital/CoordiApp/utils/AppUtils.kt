@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -155,6 +156,10 @@ fun <T> checkSession(apiService: ApiService, context: Context, successActivity: 
                     context.showToast("Inicia sesión para continuar")
                 }
             } else {
+                Log.d("SesionDebug", "Código HTTP: ${response.code()}")
+                Log.d("SesionDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("SesionDebug", "Mensaje: ${response.message()}")
+                Log.d("SesionDebug", "Raw body: ${response.errorBody()?.string()}")
                 context.startNewActivity(Login::class.java)
             }
         }

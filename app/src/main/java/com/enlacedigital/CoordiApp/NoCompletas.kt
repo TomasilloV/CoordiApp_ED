@@ -113,7 +113,7 @@ class NoCompletas : AppCompatActivity() {
         isLoading = true
         loadingLayout.setLoadingVisibility(true) // Muestra el layout de carga
 
-        apiService.getNoCompletados(tecnicoId, page, limit).enqueue(object : Callback<Folios> {
+        apiService.getNoCompletados(tecnicoId/*, page, limit*/).enqueue(object : Callback<Folios> {
             override fun onResponse(call: Call<Folios>, response: Response<Folios>) {
                 loadingLayout.setLoadingVisibility(false)
                 isLoading = false

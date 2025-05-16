@@ -76,7 +76,7 @@ data class SessionResponse(
 
 data class LoginResponse(
     val mensaje: String,
-    val info: LoginDetalle
+    val usuario: LoginDetalle
 )
 
 data class LoginDetalle(
@@ -175,6 +175,8 @@ data class TacItem(
     @SerializedName("NOM_DIVISION") val nomDivision: String,
     @SerializedName("NOM_AREA") val nomArea: String,
     @SerializedName("NOM_CT") val nomCt: String,
+    @SerializedName("TECNOLOGIA") val tecnologia: String,
+    @SerializedName("Tipo_tarea") val tipTarea: String
 )
 
 data class materiales(

@@ -19,7 +19,7 @@ fun createRetrofitService(context: Context): ApiService {
     val client = createCustomOkHttpClient(context)
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("https://vps.ed-intra.com/API/") // URL base de la API
+        .baseUrl("https://api.ed-intra.com/") // URL base de la API
         .client(client) // Cliente personalizado
         .addConverterFactory(GsonConverterFactory.create()) // Conversor para JSON
         .build()

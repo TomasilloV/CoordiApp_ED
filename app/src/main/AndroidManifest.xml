@@ -55,13 +55,13 @@
             android:name=".Menu"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".Actualizar"
             android:exported="false" />
         <activity
             android:name=".Completed"
             android:exported="false" />
         <activity
-            android:name=".Actualizar"
+            android:name=".Login"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

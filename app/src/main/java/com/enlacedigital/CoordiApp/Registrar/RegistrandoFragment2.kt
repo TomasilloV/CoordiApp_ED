@@ -24,7 +24,9 @@ import com.enlacedigital.CoordiApp.Menu
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.FolioRequest
 import com.enlacedigital.CoordiApp.models.Option
+import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -48,11 +50,12 @@ class RegistrandoFragment2 : Fragment() {
 
     private lateinit var photoUri: Uri
     private lateinit var editMetraje: EditText
-    private lateinit var editTerminal: EditText
+    // private lateinit var editTerminal: EditText
     private lateinit var spinnerOnt: Spinner
-    private lateinit var btnFotoSerie: Button
+    private lateinit var editTarea: EditText
+    //private lateinit var btnFotoSerie: Button
     private var currentPhotoType: String = ""
-    private var fotoSerie: String? = null
+    //private var fotoSerie: String? = null
     private var currentPhotoPath: String = ""
     private lateinit var loadingLayout: FrameLayout
     private var lastSelectedOnt: String? = null
@@ -61,22 +64,22 @@ class RegistrandoFragment2 : Fragment() {
     /**
      * Launcher para tomar fotos con la cámara.
      */
-    private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+    /*private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) handleCameraPhoto()
-    }
+    }*/
 
     /**
      * Launcher para seleccionar fotos desde la galería.
      */
-    private val pickPhotoLauncher: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    /*private val pickPhotoLauncher: ActivityResultLauncher<String> = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { handleGalleryPhoto(it) }
-    }
+    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_registrando2, container, false)
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
-
+        getTac()
         btnrecargar.setOnClickListener {
             btnrecargar.isEnabled = false
             progressBar.visibility = View.VISIBLE
@@ -103,8 +106,9 @@ class RegistrandoFragment2 : Fragment() {
 
     private fun initializeViews(view: View) {
         editMetraje = view.findViewById(R.id.editMetraje)
-        editTerminal = view.findViewById(R.id.editTerminal)
-        btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
+        editTarea = view.findViewById(R.id.editTarea)
+        // editTerminal = view.findViewById(R.id.editTerminal)
+        //btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
     }
@@ -113,32 +117,32 @@ class RegistrandoFragment2 : Fragment() {
      * Configura los listeners de los eventos de la interfaz de usuario.
      */
     private fun setupListeners() {
-        btnFotoSerie.setOnClickListener {
+        /*btnFotoSerie.setOnClickListener {
             showPhotoOptions()
             currentPhotoType = "serie"
-        }
+        }*/
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
     /**
      * Muestra las opciones para tomar o elegir una foto.
      */
-    private fun showPhotoOptions() {
+    /*private fun showPhotoOptions() {
         currentPhotoType = "serie"
         takePhoto()
-    }
+    }*/
 
     /**
      * Inicia la selección de una foto desde la galería.
      */
-    private fun choosePhotoFromGallery() {
+    /*private fun choosePhotoFromGallery() {
         pickPhotoLauncher.launch("image/*")
-    }
+    }*/*/
 
     /**
      * Inicia la captura de una foto con la cámara.
      */
-    private fun takePhoto() {
+    /*private fun takePhoto() {
         val (photoFile, photoPath) = try {
             createImageFile(requireContext())
         } catch (ex: IOException) {
@@ -151,13 +155,13 @@ class RegistrandoFragment2 : Fragment() {
             photoUri = FileProvider.getUriForFile(requireContext(), "com.enlacedigital.CoordiApp.fileprovider", it)
             takePhotoLauncher.launch(photoUri)
         }
-    }
+    }*/
 
     /**
      * Maneja la selección de una foto desde la galería.
      * @param uri URI de la foto seleccionada.
      */
-    private fun handleGalleryPhoto(uri: Uri) {
+    /*private fun handleGalleryPhoto(uri: Uri) {
         val file = try {
             requireActivity().contentResolver.openInputStream(uri)?.use { input ->
                 File.createTempFile("gallery_image", ".jpg", requireContext().cacheDir).apply {
@@ -173,12 +177,12 @@ class RegistrandoFragment2 : Fragment() {
             val imageData = encodeImageToBase64(it)
             updatePhoto(currentPhotoType, imageData)
         } ?: (requireActivity() as? Registrando)?.toasting("Error al manejar la imagen seleccionada")
-    }
+    }*/
 
     /**
      * Maneja la captura de una foto con la cámara.
      */
-    private fun handleCameraPhoto() {
+    /*private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
         if (file.exists()) {
             /**if (currentPhotoType == "serie") processImage(file)*/
@@ -187,7 +191,7 @@ class RegistrandoFragment2 : Fragment() {
         } else {
             (requireActivity() as? Registrando)?.toasting("No se encontró la foto")
         }
-    }
+    }*/
 
     /**
      * Procesa la imagen para extraer el texto relevante.
@@ -230,7 +234,7 @@ class RegistrandoFragment2 : Fragment() {
      * @param photoType Tipo de foto (ont o serie).
      * @param base64 Imagen codificada en formato Base64.
      */
-    private fun updatePhoto(photoType: String, base64: String) {
+    /*private fun updatePhoto(photoType: String, base64: String) {
         when (photoType) {
             "serie" -> {
                 fotoSerie = base64
@@ -238,7 +242,7 @@ class RegistrandoFragment2 : Fragment() {
                 btnFotoSerie.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
             }
         }
-    }
+    }*/
 
     /**
      * Valida los campos obligatorios y procede a guardar los datos.
@@ -246,9 +250,9 @@ class RegistrandoFragment2 : Fragment() {
     private fun validateAndProceed() {
         val tarea = view?.findViewById<EditText>(R.id.editTarea)?.text.toString().takeIf { it.isNotBlank() }
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
-        val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
+        // val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
 
-        if (metraje == null || terminal == null || fotoSerie == null || tarea == null) {
+        if (metraje == null /* || terminal == null || fotoSerie == null || tarea == null*/) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
@@ -257,10 +261,43 @@ class RegistrandoFragment2 : Fragment() {
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Tipo_Tarea = tarea,
             Metraje = metraje.toInt(),
-            Terminal = terminal,
-            No_Serie_ONT = fotoSerie,
+            //Terminal = terminal,
+            //No_Serie_ONT = fotoSerie,
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+    }
+
+    private fun getTac() {
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val request = FolioRequest(folio)
+
+        apiService.obtenertac(request).enqueue(object : Callback<TacResponse> {
+            override fun onResponse(call: Call<TacResponse>, response: Response<TacResponse>) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+
+                    if (body != null && body.items.isNotEmpty()) {
+                        val item = body.items[0]
+
+                        val handler = Handler(Looper.getMainLooper())
+
+                        handler.postDelayed({
+                            editTarea.setText(item.tipTarea)
+                        }, 600)
+
+                    } else {
+                        (requireActivity() as? Registrando)?.toasting("Sin datos para este folio")
+                    }
+
+                } else {
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<TacResponse>, t: Throwable) {
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
     }
 }

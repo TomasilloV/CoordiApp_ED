@@ -87,6 +87,32 @@
                 app:layout_constraintTop_toBottomOf="@id/textTelefono" />
 
             <TextView
+                android:id="@+id/textEstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:text="@string/estatus"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/textTelefono"
+                app:layout_constraintTop_toBottomOf="@+id/editTelefono"
+                android:visibility="gone"/>
+
+            <Spinner
+                android:id="@+id/spinnerEstatus"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/light_gray"
+                android:textSize="18sp"
+
+                app:layout_constraintEnd_toEndOf="@+id/editTelefono"
+                app:layout_constraintStart_toStartOf="@+id/editTelefono"
+                app:layout_constraintTop_toBottomOf="@id/textEstatus"
+                android:visibility="gone"/>
+
+            <TextView
                 android:id="@+id/textLatitud"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +122,8 @@
                 android:textSize="18sp"
                 android:paddingTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/editTelefono"
-                app:layout_constraintStart_toStartOf="@id/editLatitud"/>
+                app:layout_constraintStart_toStartOf="@id/editLatitud"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editLatitud"
@@ -112,7 +139,8 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/editFolio"
                 app:layout_constraintStart_toStartOf="@+id/editFolio"
-                app:layout_constraintTop_toBottomOf="@id/textLatitud"/>
+                app:layout_constraintTop_toBottomOf="@id/textLatitud"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/textLongitud"
@@ -124,7 +152,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/textFolio"
-                app:layout_constraintTop_toBottomOf="@id/editLatitud" />
+                app:layout_constraintTop_toBottomOf="@id/editLatitud"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editLongitud"
@@ -140,7 +169,8 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/editFolio"
                 app:layout_constraintStart_toStartOf="@+id/editFolio"
-                app:layout_constraintTop_toBottomOf="@id/textLongitud"/>
+                app:layout_constraintTop_toBottomOf="@id/textLongitud"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/next"
@@ -151,7 +181,7 @@
                 android:background="@color/green"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="1dp"
-                app:layout_constraintTop_toBottomOf="@+id/editLongitud"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerEstatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/btnrecargar"

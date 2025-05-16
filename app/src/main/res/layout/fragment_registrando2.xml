@@ -44,7 +44,8 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/editTarea"
-                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/editTarea"
@@ -61,7 +62,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
-                    app:layout_constraintWidth_percent="0.85" />
+                    app:layout_constraintWidth_percent="0.85"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textMetraje"
@@ -102,7 +104,8 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/editMetraje"
-                    app:layout_constraintTop_toBottomOf="@id/editMetraje" />
+                    app:layout_constraintTop_toBottomOf="@id/editMetraje"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/editTerminal"
@@ -118,7 +121,8 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/editMetraje"
                     app:layout_constraintStart_toStartOf="@+id/textTerminal"
-                    app:layout_constraintTop_toBottomOf="@id/textTerminal" />
+                    app:layout_constraintTop_toBottomOf="@id/textTerminal"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textFotoSerie"
@@ -129,8 +133,9 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/editTerminal"
-                    app:layout_constraintTop_toBottomOf="@id/editTerminal" />
+                    app:layout_constraintStart_toStartOf="@id/editMetraje"
+                    app:layout_constraintTop_toBottomOf="@id/editMetraje"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/btnFotoSerie"
@@ -145,7 +150,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textFotoSerie"
                     app:layout_constraintBottom_toTopOf="@id/next"
-                    app:layout_constraintWidth_percent="0.85" />
+                    app:layout_constraintWidth_percent="0.85"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/next"

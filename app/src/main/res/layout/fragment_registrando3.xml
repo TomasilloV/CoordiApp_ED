@@ -48,7 +48,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.104"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    android:visibility="gone"/>
 
                 <Spinner
                     android:id="@+id/spinnerPuerto"
@@ -61,7 +62,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textPuerto"
                     app:layout_constraintBottom_toTopOf="@id/textOnt"
-                    app:layout_constraintWidth_percent="0.85" />
+                    app:layout_constraintWidth_percent="0.85"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textOnt"
@@ -72,8 +74,8 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/spinnerPuerto"
-                    app:layout_constraintTop_toBottomOf="@+id/spinnerPuerto" />
+                    app:layout_constraintStart_toStartOf="@id/textFotoOnt"
+                    app:layout_constraintTop_toBottomOf="@+id/textPaso" />
 
                 <Spinner
                     android:id="@+id/spinnerOnt"
@@ -114,6 +116,32 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textFotoOnt"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textFotoSerie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/fotografia_no_serie_ont_modem"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/btnFotoOnt"
+                    app:layout_constraintTop_toBottomOf="@id/btnFotoOnt" />
+
+                <Button
+                    android:id="@+id/btnFotoSerie"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/dark_gray"
+                    android:text="@string/subir_foto"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textFotoSerie"
                     app:layout_constraintBottom_toTopOf="@id/next"
                     app:layout_constraintWidth_percent="0.85" />
 
@@ -126,7 +154,7 @@
                     android:background="@color/green"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="1dp"
-                    app:layout_constraintTop_toBottomOf="@id/btnFotoOnt"
+                    app:layout_constraintTop_toBottomOf="@id/btnFotoSerie"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/btnrecargar"
@@ -144,7 +172,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/next"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintWidth_percent="0.5"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

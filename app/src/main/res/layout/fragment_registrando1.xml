@@ -44,7 +44,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     app:layout_constraintTop_toBottomOf="@id/textPaso"
-                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+                    app:layout_constraintStart_toStartOf="@id/spinnerDivision" />
 
                 <Spinner
                     android:id="@+id/spinnerDivision"
@@ -69,7 +69,8 @@
                     android:paddingTop="15dp"
                     android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/spinnerDivision"
-                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"
+                    />
 
                 <Spinner
                     android:id="@+id/spinnerArea"
@@ -81,7 +82,8 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@id/spinnerDivision"
-                    app:layout_constraintTop_toBottomOf="@id/textArea"/>
+                    app:layout_constraintTop_toBottomOf="@id/textArea"
+                    />
 
                 <TextView
                     android:id="@+id/textCope"
@@ -130,12 +132,12 @@
                     android:background="@color/light_gray"
                     android:inputType="text"
                     android:hint="Ingresa el distrito"
-                    android:maxLength="7"
+                    android:maxLength="9"
                     android:padding="8dp"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
-                    app:layout_constraintTop_toBottomOf="@id/textDistrito"/>
+                    app:layout_constraintTop_toBottomOf="@id/textDistrito" />
 
                 <TextView
                     android:id="@+id/textTecnologia"
@@ -147,7 +149,7 @@
                     android:textSize="18sp"
                     android:paddingTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/editDistrito"
-                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+                    app:layout_constraintStart_toStartOf="@id/spinnerDivision" />
 
                 <Spinner
                     android:id="@+id/spinnerTecnologia"
@@ -158,7 +160,7 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
-                    app:layout_constraintTop_toBottomOf="@id/textTecnologia"/>
+                    app:layout_constraintTop_toBottomOf="@id/textTecnologia" />
 
                 <TextView
                     android:id="@+id/textEstatus"
@@ -170,7 +172,7 @@
                     android:textSize="18sp"
                     android:paddingTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/spinnerTecnologia"
-                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+                    app:layout_constraintStart_toStartOf="@id/spinnerDivision" />
 
                 <Spinner
                     android:id="@+id/spinnerEstatus"
@@ -181,7 +183,7 @@
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
-                    app:layout_constraintTop_toBottomOf="@id/textEstatus"/>
+                    app:layout_constraintTop_toBottomOf="@id/textEstatus" />
 
                 <Button
                     android:id="@+id/next"

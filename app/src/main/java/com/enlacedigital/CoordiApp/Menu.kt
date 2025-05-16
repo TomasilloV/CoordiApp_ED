@@ -3,6 +3,7 @@ package com.enlacedigital.CoordiApp
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -116,6 +117,10 @@ class Menu : AppCompatActivity() {
                     preferencesManager.clearSession()
                     startNewActivity(Login::class.java)
                 } else {
+                    Log.d("LoginDebug", "Código HTTP: ${response.code()}")
+                    Log.d("LoginDebug", "Es exitoso: ${response.isSuccessful}")
+                    Log.d("LoginDebug", "Mensaje: ${response.message()}")
+                    Log.d("LoginDebug", "Raw body: ${response.errorBody()?.string()}")
                     showToast("Error en la respuesta del servidor: ${response.code()}")
                 }
             }

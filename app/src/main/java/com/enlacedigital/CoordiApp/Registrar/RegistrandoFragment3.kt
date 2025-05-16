@@ -42,12 +42,14 @@ class RegistrandoFragment3 : Fragment() {
     val apiService = ApiServiceHelper.getApiService()
 
     private lateinit var photoUri: Uri
-    private lateinit var spinnerPuerto: Spinner
+    //private lateinit var spinnerPuerto: Spinner
     private lateinit var spinnerOnt: Spinner
     private lateinit var btnFotoOnt: Button
     private var fotoONT: String? = null
     private var currentPhotoType: String = ""
     private var currentPhotoPath: String = ""
+    private lateinit var btnFotoSerie: Button
+    private var fotoSerie: String? = null
     private lateinit var loadingLayout: FrameLayout
     private var lastSelectedOnt: String? = null
     private var idOnt: Int? = null
@@ -93,16 +95,17 @@ class RegistrandoFragment3 : Fragment() {
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         initializeViews(view)
         setupListeners()
-        updateSpinners()
+        //updateSpinners()
         fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
     }
 
     private fun initializeViews(view: View) {
-        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
+        //spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
         spinnerOnt = view.findViewById(R.id.spinnerOnt)
         btnFotoOnt = view.findViewById(R.id.btnFotoOnt)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
         loadingLayout.setLoadingVisibility(false)
+        btnFotoSerie = view.findViewById(R.id.btnFotoSerie)
     }
     /**
      * Obtiene opciones desde el servicio API y configura el spinner correspondiente.
@@ -150,30 +153,28 @@ class RegistrandoFragment3 : Fragment() {
      * Configura los listeners de los eventos de la interfaz de usuario.
      */
     private fun setupListeners() {
-        btnFotoOnt.setOnClickListener {
-            showPhotoOptions()
-            currentPhotoType = "ont"
-        }
+        btnFotoOnt.setOnClickListener { showPhotoOptions("ont") }
+        btnFotoSerie.setOnClickListener { showPhotoOptions("serie") }
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
     }
 
     /**
      * Actualiza las opciones del spinner de puertos.
      */
-    private fun updateSpinners() {
+    /*private fun updateSpinners() {
         val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
         numbersArray.add(0, "Elige una opción")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbersArray).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         spinnerPuerto.adapter = adapter
-    }
+    }*/
 
     /**
      * Muestra las opciones para tomar o elegir una foto.
      */
-    private fun showPhotoOptions() {
-        currentPhotoType = "ont"
+    private fun showPhotoOptions(photoType: String) {
+        currentPhotoType = photoType
         takePhoto()
     }
 
@@ -285,6 +286,11 @@ class RegistrandoFragment3 : Fragment() {
                 btnFotoOnt.text = "Cambiar foto"
                 btnFotoOnt.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
             }
+            "serie" -> {
+                fotoSerie = base64
+                btnFotoSerie.text = "Cambiar foto"
+                btnFotoSerie.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+            }
         }
     }
 
@@ -292,19 +298,20 @@ class RegistrandoFragment3 : Fragment() {
      * Valida los campos obligatorios y procede a guardar los datos.
      */
     private fun validateAndProceed() {
-        val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        //val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (puerto == null || fotoONT == null) {
+        if (/*puerto == null ||*/ fotoONT == null || fotoSerie == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-            Puerto = puerto,
+            //Puerto = puerto,
             Foto_Ont = fotoONT,
             Ont = lastSelectedOnt,
+            No_Serie_ONT = fotoSerie,
             idOnt = idOnt,
             Step_Registro = 3
         )

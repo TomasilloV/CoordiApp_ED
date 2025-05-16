@@ -2,7 +2,9 @@ package com.enlacedigital.CoordiApp
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.EditText
@@ -18,9 +20,13 @@ import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.hideKeyboardOnOutsideTouch
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 import kotlinx.coroutines.launch
+import okhttp3.CookieJar
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.CookieStore
+import java.util.concurrent.TimeUnit
 
 /**
  * Actividad de inicio de sesión para la aplicación.
@@ -47,6 +53,8 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val cookieJar = MyCookieJar(this)
+        cookieJar.clear()
 
         // Solicita permisos necesarios
         checkPermission(
@@ -80,8 +88,13 @@ class Login : AppCompatActivity() {
                 loadingLayout.setLoadingVisibility(true)
                 val apiService = createRetrofitService(this@Login)
                 val call = apiService.login(username)
+                Log.d("LoginDebug", "Intentando login con usuario: '$username'")
+                Log.d("LoginDebug", "URL: ${call.request().url}")
+                Log.d("LoginDebug", "Headers: ${call.request().headers}")
 
                 call.enqueue(object : Callback<LoginResponse> {
+
+
                     /**
                      * Maneja la respuesta exitosa o con error de la llamada de inicio de sesión.
                      *
@@ -89,6 +102,10 @@ class Login : AppCompatActivity() {
                      * @param response Respuesta HTTP recibida del servidor.
                      */
                     override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                        Log.d("LoginDebug", "Código HTTP: ${response.code()}")
+                        Log.d("LoginDebug", "Es exitoso: ${response.isSuccessful}")
+                        Log.d("LoginDebug", "Mensaje: ${response.message()}")
+                        Log.d("LoginDebug", "Raw body: ${response.errorBody()?.string()}")
                         handleLoginResponse(response)
                     }
 
@@ -100,6 +117,7 @@ class Login : AppCompatActivity() {
                      */
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         loadingLayout.setLoadingVisibility(false)
+                        Log.e("LoginDebug", "Fallo de conexión: ${t.localizedMessage}", t)
                         showToast("Error. Asegúrate de tener una conexión a internet estable")
                     }
                 })
@@ -118,7 +136,7 @@ class Login : AppCompatActivity() {
         if (response.isSuccessful) {
             val loginResponse = response.body()
             if (loginResponse?.mensaje == "Datos Correctos") {
-                loginResponse.info.let { item ->
+                loginResponse.usuario.let { item ->
                     preferencesManager.saveString("id_tecnico", item.idTecnico.toString())
                     val tecnico = "${item.Nombre_T} ${item.Apellidos_T}"
                     preferencesManager.saveString("tecnico", tecnico)
@@ -131,6 +149,7 @@ class Login : AppCompatActivity() {
             showToast("Error en la respuesta del servidor")
         }
     }
+
 
     /**
      * Detecta eventos táctiles para ocultar el teclado al tocar fuera de los campos de texto.

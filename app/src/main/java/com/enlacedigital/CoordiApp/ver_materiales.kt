@@ -114,7 +114,7 @@ class ver_materiales : AppCompatActivity() {
         isLoading = true
         loadingLayout.setLoadingVisibility(true) // Muestra el layout de carga
 
-        apiService.vermateriales(tecnicoId, page, limit).enqueue(object : Callback<materiales> {
+        apiService.vermateriales(tecnicoId/*, page, limit*/).enqueue(object : Callback<materiales> {
             override fun onResponse(call: Call<materiales>, response: Response<materiales>) {
                 loadingLayout.setLoadingVisibility(false)
                 isLoading = false

@@ -10,10 +10,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -31,6 +33,7 @@ import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.createImageFile
 import java.io.File
 import java.io.IOException
+import kotlin.toString
 
 class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
 
@@ -38,11 +41,13 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
     private lateinit var btnFotoPuerto: Button
     private lateinit var editLatitud: EditText
     private lateinit var editLongitud: EditText
+    private lateinit var editTerminal: EditText
     private lateinit var loadingLayout: FrameLayout
     private lateinit var locationHelper: LocationHelper
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
     private lateinit var settingsLauncher: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri?>
+    private lateinit var spinnerPuerto: Spinner
     private var fotoONT: String? = null
     private var currentPhotoPath: String = ""
     private val preferencesManager = PreferencesHelper.getPreferencesManager()
@@ -80,14 +85,17 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews(view)
         setupListeners()
+        updateSpinners()
     }
 
     // Inicialización de vistas
     private fun initializeViews(view: View) {
+        spinnerPuerto = view.findViewById(R.id.spinnerPuerto)
         btnFotoPuerto = view.findViewById(R.id.btnFoto_Puerto)
         editLatitud = view.findViewById(R.id.editLatitud)
         editLongitud = view.findViewById(R.id.editLongitud)
         loadingLayout = view.findViewById(R.id.loadingOverlay)
+        editTerminal = view.findViewById(R.id.editTerminal)
         loadingLayout.setLoadingVisibility(false)
     }
 
@@ -197,8 +205,10 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
     private fun validateAndProceed() {
         val latitud = editLatitud.text.toString().takeIf { it.isNotBlank() }
         val longitud = editLongitud.text.toString().takeIf { it.isNotBlank() }
+        val terminal = editTerminal.text.toString().takeIf { it.isNotBlank() }
+        val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-        if (latitud == null || longitud == null || fotoONT == null) {
+        if (puerto == null || latitud == null || terminal == null || longitud == null || fotoONT == null) {
             showToast("Completa todos los campos para continuar")
             return
         }
@@ -208,6 +218,8 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             Foto_Puerto = fotoONT,
             Latitud_Terminal = latitud,
             Longitud_Terminal = longitud,
+            Puerto = puerto,
+            Terminal = terminal,
             Step_Registro = 7
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
@@ -223,5 +235,17 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
     // Mostrar mensaje
     private fun showToast(message: String) {
         (requireActivity() as? Registrando)?.toasting(message)
+    }
+
+    /**
+    * Actualiza las opciones del spinner de puertos.
+    */
+    private fun updateSpinners() {
+        val numbersArray = resources.getStringArray(R.array.numbersPuerto).toMutableList()
+        numbersArray.add(0, "Elige una opción")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, numbersArray).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        spinnerPuerto.adapter = adapter
     }
 }

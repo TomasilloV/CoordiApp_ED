@@ -357,6 +357,14 @@ class RegistrandoFragment1 : Fragment() {
                         handler.postDelayed({
                             editDistrito.setText(item.distrito)
                         }, 600)
+
+                        handler.postDelayed(
+                            {
+                                val valor3 = item.tecnologia
+                                val index3 = (spinnerTecnologia.adapter as ArrayAdapter<String>).getPosition(valor3)
+                                if (index3 >= 0) spinnerTecnologia.setSelection(index3)
+                            },800
+                        )
                     } else {
                         (requireActivity() as? Registrando)?.toasting("Sin datos para este folio")
                     }

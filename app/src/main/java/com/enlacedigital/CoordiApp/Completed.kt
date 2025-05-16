@@ -136,7 +136,7 @@ class Completed : AppCompatActivity() {
         isLoading = true
         loadingLayout.setLoadingVisibility(true)
 
-        apiService.getCompletados(idTecnico, page, limit).enqueue(object : Callback<Folios> {
+        apiService.getCompletados(idTecnico /*, page, limit*/).enqueue(object : Callback<Folios> {
             /**
              * Maneja la respuesta exitosa de la solicitud.
              */
