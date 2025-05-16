@@ -37,7 +37,7 @@ class MyCookieJar(context: Context) : CookieJar {
      * @param cookies Lista de cookies recibidas.
      */
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        val key = "https://api.ed-intra.com/" // Dominio estático para el almacenamiento
+        val key = "https://erp.ed-intra.com/API/" // Dominio estático para el almacenamiento
         Log.d("MyCookieJar", "Guardando cookies para $key: $cookies")
 
         // Convierte las cookies en objetos serializables
@@ -70,7 +70,7 @@ class MyCookieJar(context: Context) : CookieJar {
      * @return Lista de cookies asociadas a la URL.
      */
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        val key = "https://api.ed-intra.com/"
+        val key = "https://erp.ed-intra.com/API/"
         val serializableCookies = cookieStore[key]?.toList() ?: emptyList()
 
         Log.d("MyCookieJar", "Cargando cookies para $key: $serializableCookies")
@@ -106,11 +106,6 @@ class MyCookieJar(context: Context) : CookieJar {
             editor.putStringSet(key, serializedCookies.toSet())
         }
         editor.apply()
-    }
-
-    fun clear() {
-        cookieStore.clear()
-        sharedPreferences.edit().clear().apply()
     }
 
     /**

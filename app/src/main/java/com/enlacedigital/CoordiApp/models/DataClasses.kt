@@ -76,7 +76,7 @@ data class SessionResponse(
 
 data class LoginResponse(
     val mensaje: String,
-    val usuario: LoginDetalle
+    val info: LoginDetalle
 )
 
 data class LoginDetalle(

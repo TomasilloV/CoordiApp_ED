@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -139,12 +140,14 @@ class RegistrandoFragment3 : Fragment() {
                         }
                     } else {
                         (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                        Log.d("ONTDEBUG","response    "+response.message())
                     }
                 }
 
                 override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
                     loadingLayout.setLoadingVisibility(false)
                     (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
+                    Log.d("ONTDEBUG","t   "+t.message)
                 }
             })
     }

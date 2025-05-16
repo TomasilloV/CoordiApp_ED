@@ -19,10 +19,7 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -39,7 +36,7 @@ interface ApiService {
      * @param request Objeto que contiene los parámetros necesarios para la comparación.
      * @return Una llamada Retrofit con una lista de respuestas de comparación.
      */
-    @POST("coordiapp/comparativa")
+    @POST("comparativa")
     fun getComparativa(@Body request: ComparativaRequest): Call<List<ComparativaResponse>>
 
     /**
@@ -47,7 +44,7 @@ interface ApiService {
      *
      * @return Una llamada Retrofit que devuelve la respuesta de validación de sesión.
      */
-    @GET("login-coordiapp/verificar-sesion")
+    @GET("validar-sesion")
     fun sessionCheck(): Call<SessionResponse>
 
     /**
@@ -55,7 +52,7 @@ interface ApiService {
      *
      * @return Una llamada Retrofit que devuelve un objeto JSON con la versión de la app.
      */
-    @GET("appVersion")
+    @GET("appVersion.json")
     fun checkVersion(): Call<JsonObject?>?
 
     /**
@@ -64,18 +61,16 @@ interface ApiService {
      * @param usuarioApp Nombre del usuario que inicia sesión.
      * @return Una llamada Retrofit que devuelve la respuesta con los detalles del login.
      */
-    @GET("login-coordiapp/iniciar-sesion/{username}")
-    @Headers("Accept: application/json", "Content-Type: application/json")
-    fun login(
-        @Path("username") usuarioApp: String,
-    ): Call<LoginResponse>
+    @FormUrlEncoded
+    @POST("iniciar-sesion")
+    fun login(@Field("Usuario_App") usuarioApp: String): Call<LoginResponse>
 
     /**
      * Cierra la sesión actual del usuario.
      *
      * @return Una llamada Retrofit que devuelve la respuesta de cierre de sesión.
      */
-    @GET("login-coordiapp/cerrar-sesion")
+    @GET("cerrar-sesion")
     fun logout(): Call<LogoutResponse>
 
     /**
@@ -86,9 +81,12 @@ interface ApiService {
      * @param limit Número de elementos por página.
      * @return Una llamada Retrofit que devuelve los folios completados.
      */
-    @GET("coordiapp/completadas-tecnico/{idTecnico}")
+    @FormUrlEncoded
+    @POST("ver-completos")
     fun getCompletados(
-        @Path("idTecnico") idTecnico: Int
+        @Field("idTecnico") idTecnico: Int,
+        @Field("page") page: Int,
+        @Field("limit") limit: Int
     ): Call<Folios>
 
     /**
@@ -99,9 +97,12 @@ interface ApiService {
      * @param limit Número de elementos por página.
      * @return Una llamada Retrofit que devuelve los folios no completados.
      */
-    @GET("coordiapp/incompletas-tecnico/{idTecnico}")
+    @FormUrlEncoded
+    @POST("ver-no-completos")
     fun getNoCompletados(
-        @Path("idTecnico") idTecnico: Int
+        @Field("idTecnico") idTecnico: Int,
+        @Field("page") page: Int,
+        @Field("limit") limit: Int
     ): Call<Folios>
 
     /**
@@ -112,9 +113,12 @@ interface ApiService {
      * @param limit Número de elementos por página.
      * @return Una llamada Retrofit que devuelve los folios no completados.
      */
-    @GET("materiales/{FK_Tecnico_Salida_Det}")
+    @FormUrlEncoded
+    @POST("ver-materiales-tecnico")
     fun vermateriales(
-        @Path("FK_Tecnico_Salida_Det") FK_Tecnico_Salida_Det: Int
+        @Field("FK_Tecnico_Salida_Det") FK_Tecnico_Salida_Det: Int,
+        @Field("page") page: Int,
+        @Field("limit") limit: Int
     ): Call<materiales>
 
     /**
@@ -126,7 +130,7 @@ interface ApiService {
      * @param idTecnico Opcional, id del técnico para filtrar las opciones.
      * @return Una llamada Retrofit que devuelve una lista de opciones.
      */
-    @GET("coordiapp/opciones")
+    @GET("obtener-opciones")
     fun options(
         @Query("step") step: String,
         @Query("idEstado") idEstado: Int? = null,
@@ -146,7 +150,7 @@ interface ApiService {
      * @return Una llamada Retrofit que devuelve una respuesta de verificación o creación del folio.
      */
     @FormUrlEncoded
-    @POST("coordiapp/get-orden")
+    @POST("buscar-crear-folio")
     fun checkAndInsert(
         @Field("Folio_Pisa") folioPisa: String,
         @Field("Telefono") telefono: String,
@@ -156,23 +160,18 @@ interface ApiService {
         @Field("fecha") fecha: String?,
     ): Call<Checking>
 
-    /*@GET("coordiapp/get-orden/{Folio_Pisa}")
-    fun checkAndInsert(
-        @Path("Folio_Pisa") folioPisa: String
-    ): Call<Checking>*/
-
     /**
      * Actualiza los datos del técnico en la base de datos.
      *
      * @param requestData Objeto que contiene los datos que se deben actualizar.
      * @return Una llamada Retrofit que devuelve la respuesta de la actualización.
      */
-    @PUT("coordiapp/actualizar")
+    @POST("actualizar")
     fun updateTechnicianData(
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>
 
-    @POST("bolsa-tac")
+    @POST("obtener-tac")
     fun obtenertac(
         @Body request: FolioRequest
     ): Call<TacResponse>

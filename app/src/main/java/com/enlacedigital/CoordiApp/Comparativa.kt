@@ -1,7 +1,6 @@
 package com.enlacedigital.CoordiApp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -174,10 +173,6 @@ class Comparativa : AppCompatActivity() {
                 apiService.getComparativa(ComparativaRequest(selectedYear, mesIndex, idTecnico, 2))
                     .enqueue(object : Callback<List<ComparativaResponse>> {
                         override fun onResponse(ignoredCall: Call<List<ComparativaResponse>>, response: Response<List<ComparativaResponse>>) {
-                            Log.d("ComparativaDebug", "Código HTTP: ${response.code()}")
-                            Log.d("ComparativaDebug", "Es exitoso: ${response.isSuccessful}")
-                            Log.d("ComparativaDebug", "Mensaje: ${response.message()}")
-                            Log.d("ComparativaDebug", "Raw body: ${response.errorBody()?.string()}")
                             if (response.isSuccessful) {
                                 response.body()?.let { folios ->
                                     foliosList = folios
