@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.activity.result.IntentSenderRequest
-import com.enlacedigital.CoordiApp.models.OrdenRequest
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -198,12 +198,17 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 if (response.isSuccessful) {
                     response.body()?.let { processResponse(it, folio) }
                 } else {
-                    (requireActivity() as? Registrando)?.toasting("Error: verifica tu conexión")
+                    Log.d("ValidarDebug", "Código HTTP: ${response.code()}")
+                    Log.d("ValidarDebug", "Es exitoso: ${response.isSuccessful}")
+                    Log.d("ValidarDebug", "Mensaje: ${response.message()}")
+                    Log.d("ValidarDebug", "Raw body: ${response.errorBody()?.string()}")
+                    (requireActivity() as? Registrando)?.toasting("Error: verifica tu conexión bueno")
                 }
             }
 
             override fun onFailure(call: Call<Checking>, t: Throwable) {
-                (activity as? Registrando)?.toasting("Error: verifica tu conexión")
+                Log.e("ValidarDebug", "Fallo de conexión: ${t.localizedMessage}", t)
+                (activity as? Registrando)?.toasting("Error: verifica tu conexión malo")
             }
         })
     }

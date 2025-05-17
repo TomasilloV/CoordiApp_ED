@@ -10,7 +10,6 @@ import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.models.LogoutResponse
 import com.enlacedigital.CoordiApp.models.Option
-import com.enlacedigital.CoordiApp.models.OrdenRequest
 import com.enlacedigital.CoordiApp.models.SessionResponse
 import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.models.materiales
@@ -40,7 +39,7 @@ interface ApiService {
      * @param request Objeto que contiene los parámetros necesarios para la comparación.
      * @return Una llamada Retrofit con una lista de respuestas de comparación.
      */
-    @POST("coordiapp/comparativa")
+    @POST("api/coordiapp/comparativa")
     fun getComparativa(@Body request: ComparativaRequest): Call<List<ComparativaResponse>>
 
     /**
@@ -157,15 +156,20 @@ interface ApiService {
         @Field("fecha") fecha: String?,
     ): Call<Checking>*/
 
-    @GET("coordiapp/get-orden/{Folio_Pisa}")
+    @GET("api/coordiapp/get-orden/{Folio_Pisa}/{Telefono}/{Latitud}/{Longitud}/{FK_Tecnico_apps}/{Fecha_Coordiapp}")
     fun checkAndInsert(
-        @Path("Folio_Pisa") folioPisa: String
+        @Path("Folio_Pisa") folio: String,
+        @Path("Telefono") telefono: String?,
+        @Path("Latitud") latitud: String?,
+        @Path("Longitud") longitud: String?,
+        @Path("FK_Tecnico_apps") idTecnico: String?,
+        @Path("Fecha_Coordiapp") fecha: String?
     ): Call<Checking>
 
-    @POST("coordiapp/get-orden")
+    /*@POST("coordiapp/get-orden")
     fun checkAndInsert(
         @Body request: OrdenRequest
-    ): Call<Checking>
+    ): Call<Checking>*/
 
     /**
      * Actualiza los datos del técnico en la base de datos.
@@ -178,7 +182,7 @@ interface ApiService {
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>
 
-    @POST("bolsa-tac")
+    @POST("api/bolsa-tac")
     fun obtenertac(
         @Body request: FolioRequest
     ): Call<TacResponse>

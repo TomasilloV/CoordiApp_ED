@@ -197,6 +197,8 @@ class Comparativa : AppCompatActivity() {
                         }
 
                         override fun onFailure(ignoredCall: Call<List<ComparativaResponse>>, t: Throwable) {
+                            Log.d("ComparativaDebug","Error al obtener la comparativa: ${t.message}")
+                            Log.d("ComparativaDebug","Error al obtener la comparativa: ${ignoredCall}")
                             showToast("Error al obtener la comparativa: ${t.message}")
                             loadingLayout.setLoadingVisibility(false)
                             startNewActivity(Menu::class.java)

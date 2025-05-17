@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -328,6 +329,10 @@ class RegistrandoFragment1 : Fragment() {
 
         apiService.obtenertac(request).enqueue(object : Callback<TacResponse> {
             override fun onResponse(call: Call<TacResponse>, response: Response<TacResponse>) {
+                Log.d("ValidarDebug", "Código HTTP: ${response.code()}")
+                Log.d("ValidarDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("ValidarDebug", "Mensaje: ${response.message()}")
+                Log.d("ValidarDebug", "Raw body: ${response.errorBody()?.string()}")
                 if (response.isSuccessful) {
                     val body = response.body()
 

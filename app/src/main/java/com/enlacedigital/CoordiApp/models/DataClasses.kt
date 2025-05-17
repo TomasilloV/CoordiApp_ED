@@ -165,15 +165,6 @@ data class FolioRequest(
     @SerializedName("Folio_Pisa") val folioPisa: Int
 )
 
-data class OrdenRequest(
-    @SerializedName("Folio_Pisa") val foliopisa: Int,
-    @SerializedName("Telefono") val telefono: String,
-    @SerializedName("Latitud") val latitud: String,
-    @SerializedName("Longitud") val longitud: String,
-    @SerializedName("idTecnico") val idTecnico: String?,
-    @SerializedName("fecha") val fecha: String?
-)
-
 data class TacResponse(
     @SerializedName("mensaje") val mensaje: String,
     @SerializedName("items") val items: List<TacItem>
