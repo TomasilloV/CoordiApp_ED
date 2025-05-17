@@ -30,6 +30,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.activity.result.IntentSenderRequest
+import com.enlacedigital.CoordiApp.models.OrdenRequest
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -191,6 +192,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val fechaActual = Date()
         val fecha = formato.format(fechaActual)
+
         apiService.checkAndInsert(folio, telefono, latitud, longitud, idTecnico, fecha).enqueue(object : Callback<Checking> {
             override fun onResponse(call: Call<Checking>, response: Response<Checking>) {
                 if (response.isSuccessful) {

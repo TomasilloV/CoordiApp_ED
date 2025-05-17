@@ -10,6 +10,7 @@ import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.models.LogoutResponse
 import com.enlacedigital.CoordiApp.models.Option
+import com.enlacedigital.CoordiApp.models.OrdenRequest
 import com.enlacedigital.CoordiApp.models.SessionResponse
 import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.models.materiales
@@ -145,7 +146,7 @@ interface ApiService {
      * @param fecha Opcional, fecha asociada al folio.
      * @return Una llamada Retrofit que devuelve una respuesta de verificación o creación del folio.
      */
-    @FormUrlEncoded
+    /*@FormUrlEncoded
     @POST("coordiapp/get-orden")
     fun checkAndInsert(
         @Field("Folio_Pisa") folioPisa: String,
@@ -154,12 +155,17 @@ interface ApiService {
         @Field("Longitud") longitud: String,
         @Field("idTecnico") idTecnico: String?,
         @Field("fecha") fecha: String?,
-    ): Call<Checking>
+    ): Call<Checking>*/
 
-    /*@GET("coordiapp/get-orden/{Folio_Pisa}")
+    @GET("coordiapp/get-orden/{Folio_Pisa}")
     fun checkAndInsert(
         @Path("Folio_Pisa") folioPisa: String
-    ): Call<Checking>*/
+    ): Call<Checking>
+
+    @POST("coordiapp/get-orden")
+    fun checkAndInsert(
+        @Body request: OrdenRequest
+    ): Call<Checking>
 
     /**
      * Actualiza los datos del técnico en la base de datos.
