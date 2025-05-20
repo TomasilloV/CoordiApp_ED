@@ -192,6 +192,8 @@ class RegistrandoFragment1 : Fragment() {
             val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
+            Log.d("Paso1Debug","id: "+preferencesManager.getString("id"))
+            Log.d("Paso1Debug","id: "+preferencesManager.getString("id_tecnico"))
             preferencesManager.getString("id")!!.let { id ->
                 val updateRequest = ActualizarBD(
                     idtecnico_instalaciones_coordiapp = id,
@@ -203,6 +205,7 @@ class RegistrandoFragment1 : Fragment() {
                     Fecha_Coordiapp = fecha,
                     Step_Registro = 1
                 )
+                Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
             } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
         }
@@ -313,7 +316,7 @@ class RegistrandoFragment1 : Fragment() {
                     divisionMap = options.groupBy { it.idDivision!! }
                     updateSpinners()
                 } else {
-                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Errorpaso1options: ${response.message()}")
                 }
             }
 
@@ -329,10 +332,10 @@ class RegistrandoFragment1 : Fragment() {
 
         apiService.obtenertac(request).enqueue(object : Callback<TacResponse> {
             override fun onResponse(call: Call<TacResponse>, response: Response<TacResponse>) {
-                Log.d("ValidarDebug", "Código HTTP: ${response.code()}")
-                Log.d("ValidarDebug", "Es exitoso: ${response.isSuccessful}")
-                Log.d("ValidarDebug", "Mensaje: ${response.message()}")
-                Log.d("ValidarDebug", "Raw body: ${response.errorBody()?.string()}")
+                Log.d("ValidarDebug1", "Código HTTP: ${response.code()}")
+                Log.d("ValidarDebug1", "Es exitoso: ${response.isSuccessful}")
+                Log.d("ValidarDebug1", "Mensaje: ${response.message()}")
+                Log.d("ValidarDebug1", "Raw body: ${response.errorBody()?.string()}")
                 if (response.isSuccessful) {
                     val body = response.body()
 
@@ -375,7 +378,7 @@ class RegistrandoFragment1 : Fragment() {
                     }
 
                 } else {
-                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Errorpaso1tac: ${response.message()}")
                 }
             }
 

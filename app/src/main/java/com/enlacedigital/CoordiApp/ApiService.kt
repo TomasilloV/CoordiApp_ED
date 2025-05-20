@@ -39,7 +39,7 @@ interface ApiService {
      * @param request Objeto que contiene los parámetros necesarios para la comparación.
      * @return Una llamada Retrofit con una lista de respuestas de comparación.
      */
-    @POST("api/coordiapp/comparativa")
+    @POST("api/comparativa")
     fun getComparativa(@Body request: ComparativaRequest): Call<List<ComparativaResponse>>
 
     /**
@@ -156,7 +156,7 @@ interface ApiService {
         @Field("fecha") fecha: String?,
     ): Call<Checking>*/
 
-    @GET("api/coordiapp/get-orden/{Folio_Pisa}/{Telefono}/{Latitud}/{Longitud}/{FK_Tecnico_apps}/{Fecha_Coordiapp}")
+    @GET("coordiapp/get-orden/{Folio_Pisa}/{Telefono}/{Latitud}/{Longitud}/{FK_Tecnico_apps}/{Fecha_Coordiapp}")
     fun checkAndInsert(
         @Path("Folio_Pisa") folio: String,
         @Path("Telefono") telefono: String?,
@@ -177,7 +177,7 @@ interface ApiService {
      * @param requestData Objeto que contiene los datos que se deben actualizar.
      * @return Una llamada Retrofit que devuelve la respuesta de la actualización.
      */
-    @PUT("coordiapp/actualizar")
+    @POST("api/actualizar")
     fun updateTechnicianData(
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>

@@ -291,7 +291,7 @@ class RegistrandoFragment2 : Fragment() {
                     }
 
                 } else {
-                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                    (requireActivity() as? Registrando)?.toasting("Errorpaso2: ${response.message()}")
                 }
             }
 

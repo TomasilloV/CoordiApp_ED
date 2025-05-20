@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -315,6 +316,7 @@ class RegistrandoFragment3 : Fragment() {
             idOnt = idOnt,
             Step_Registro = 3
         )
+        Log.d("FragmentDebug",""+updateRequest.No_Serie_ONT)
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
     }
 }

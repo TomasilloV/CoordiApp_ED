@@ -3,6 +3,7 @@ package com.enlacedigital.CoordiApp
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
@@ -170,14 +171,21 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
                 val response = withContext(Dispatchers.IO) {
                     apiService.updateTechnicianData(requestData).execute()
                 }
+                Log.d("dataDebug",""+response)
+                Log.d("dataDebug",""+requestData)
                 val apiResponse = response.body()
+                Log.d("dataDebug","api response=     "+apiResponse+response.body())
                 if (response.isSuccessful) {
                     if (apiResponse?.mensaje == "Registro actualizado exitosamente.") {
                         showToast(apiResponse.mensaje)
                         if (requestData.Estatus_Orden == "OBJETADA") startNewActivity(Menu::class.java)
                         else goToNextStep(requestData.Step_Registro!!)
                     } else showToast(apiResponse?.mensaje ?: "Intenta de nuevo")
-                } else showToast("Error: ${response.code()}")
+                } else showToast("ErrorRegistrandotechniciandata: ${response.code()}")
+                Log.d("dataDebug", "Código HTTP: ${response.code()}")
+                Log.d("dataDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("dataDebug", "Mensaje: ${response.message()}")
+                Log.d("dataDebug", "Raw body: ${response.errorBody()?.string()}")
             } catch (e: Exception) {
                 handleUpdateException(e)
             } finally {
@@ -198,7 +206,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
             is UnknownHostException -> showToast("Sin conexión a Internet. Verifica tu red e intenta de nuevo.")
             is SocketTimeoutException -> showToast("Tiempo de espera agotado. La red puede estar lenta o caída.")
             is IOException -> showToast("Error de red. Verifica tu conexión e intenta nuevamente.")
-            else -> showToast("Error: ${e.message}")
+            else -> showToast("ErrorRegistrandoupdate: ${e.message}")
         }
     }
 
