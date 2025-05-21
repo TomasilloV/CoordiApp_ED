@@ -74,6 +74,17 @@ class RegistrandoFragment3 : Fragment() {
         val view = inflater.inflate(R.layout.fragment_registrando3, container, false)
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
+        val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            btnRegresar.setOnClickListener {
+                    val fragmentA = MenuRegistrando()
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+            }
+        }, 1500)
 
         btnrecargar.setOnClickListener {
             btnrecargar.isEnabled = false
@@ -146,7 +157,6 @@ class RegistrandoFragment3 : Fragment() {
 
                 override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
                     loadingLayout.setLoadingVisibility(false)
-                    (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
                 }
             })
     }

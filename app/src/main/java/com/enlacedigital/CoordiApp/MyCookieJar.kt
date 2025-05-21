@@ -39,16 +39,13 @@ class MyCookieJar(context: Context) : CookieJar {
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val key = "https://api.ed-intra.com/"
 
-        // Nos aseguramos de tener la lista creada
         val list = cookieStore.getOrPut(key) { mutableListOf() }
 
         cookies.forEach { cookie ->
-            // 1) quita la vieja con el mismo nombre, dominio y path
             list.removeAll { it.name == cookie.name &&
                     it.domain == cookie.domain &&
                     it.path == cookie.path }
 
-            // 2) mete la nueva
             list.add(
                 SerializableCookie(
                     name      = cookie.name,

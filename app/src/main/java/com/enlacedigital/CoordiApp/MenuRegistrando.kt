@@ -54,37 +54,37 @@ class MenuRegistrando : Fragment() {
         val boton7= preferencesManager.getString("boton7")
 
         if (boton1 == "listo1") {
-            buttonPaso1.setBackgroundColor(Color.GREEN)
+            buttonPaso1.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso1.isEnabled = false
         }
 
         if (boton2 == "listo2") {
-            buttonPaso2.setBackgroundColor(Color.GREEN)
+            buttonPaso2.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso2.isEnabled = false
         }
 
         if (boton3 == "listo3") {
-            buttonPaso3.setBackgroundColor(Color.GREEN)
+            buttonPaso3.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso3.isEnabled = false
         }
 
         if (boton4 == "listo4") {
-            buttonPaso4.setBackgroundColor(Color.GREEN)
+            buttonPaso4.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso4.isEnabled = false
         }
 
         if (boton5 == "listo5") {
-            buttonPaso5.setBackgroundColor(Color.GREEN)
+            buttonPaso5.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso5.isEnabled = false
         }
 
         if (boton6 == "listo6") {
-            buttonPaso6.setBackgroundColor(Color.GREEN)
+            buttonPaso6.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso6.isEnabled = false
         }
 
         if (boton7 == "listo7") {
-            buttonPaso7.setBackgroundColor(Color.GREEN)
+            buttonPaso7.setBackgroundColor(Color.rgb(34,139,34))
             buttonPaso7.isEnabled = false
         }
 

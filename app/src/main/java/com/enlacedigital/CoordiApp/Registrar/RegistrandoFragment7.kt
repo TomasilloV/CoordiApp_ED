@@ -64,6 +64,17 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
         val view = inflater.inflate(R.layout.fragment_registrando7, container, false)
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
+        val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            btnRegresar.setOnClickListener {
+                val fragmentA = MenuRegistrando()
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main, fragmentA)
+                    .commit()
+            }
+        }, 1500)
 
         btnrecargar.setOnClickListener {
             btnrecargar.isEnabled = false
