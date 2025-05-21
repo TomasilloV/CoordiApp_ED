@@ -5,88 +5,117 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/textPasos"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:text="Selecciona los recuadros Para llenar los pasos"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:backgroundTint="@color/light_green"
-        android:editable="false"
-        android:textSize="35dp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso1"
-        android:layout_width="205dp"
-        android:layout_height="160dp"
-        android:text="PASO 1"
-        android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPasos" />
-
-    <Button
-        android:id="@+id/buttonPaso2"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:text="PASO 1"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPasos"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonPaso2"
+        style="@style/Widget.SuperFancyButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 2"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonPaso1"
-        app:layout_constraintTop_toBottomOf="@+id/textPasos" />
+        app:layout_constraintTop_toBottomOf="@+id/textPasos"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso3"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 3"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/buttonPaso1"
         app:layout_constraintStart_toStartOf="@+id/buttonPaso1"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPaso1" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso1"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso4"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 4"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/buttonPaso2"
-        app:layout_constraintStart_toEndOf="@+id/buttonPaso1"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPaso2" />
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso2"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso2"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso5"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 5"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/buttonPaso3"
         app:layout_constraintStart_toStartOf="@+id/buttonPaso3"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPaso3" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso3"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso6"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 6"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/buttonPaso4"
-        app:layout_constraintStart_toEndOf="@+id/buttonPaso3"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPaso4" />
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso4"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso4"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintHeight_percent="0.18" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPaso7"
+        style="@style/Widget.SuperFancyButton"
         android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="161dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         android:text="PASO 7"
-        android:textSize="30dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/buttonPaso6"
-        app:layout_constraintStart_toStartOf="@+id/buttonPaso5" />
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso5"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso5"
+        app:layout_constraintWidth_percent="0.96"
+        app:layout_constraintHeight_percent="0.18" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
