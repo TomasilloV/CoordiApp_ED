@@ -37,29 +37,31 @@ class MyCookieJar(context: Context) : CookieJar {
      * @param cookies Lista de cookies recibidas.
      */
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        val key = "https://api.ed-intra.com/" // Dominio estático para el almacenamiento
-        Log.d("MyCookieJar", "Guardando cookies para $key: $cookies")
+        val key = "https://api.ed-intra.com/"
 
-        // Convierte las cookies en objetos serializables
-        val serializableCookies = cookies.map { cookie ->
-            SerializableCookie(
-                name = cookie.name,
-                value = cookie.value,
-                expiresAt = cookie.expiresAt,
-                domain = cookie.domain,
-                path = cookie.path,
-                secure = cookie.secure,
-                httpOnly = cookie.httpOnly
+        // Nos aseguramos de tener la lista creada
+        val list = cookieStore.getOrPut(key) { mutableListOf() }
+
+        cookies.forEach { cookie ->
+            // 1) quita la vieja con el mismo nombre, dominio y path
+            list.removeAll { it.name == cookie.name &&
+                    it.domain == cookie.domain &&
+                    it.path == cookie.path }
+
+            // 2) mete la nueva
+            list.add(
+                SerializableCookie(
+                    name      = cookie.name,
+                    value     = cookie.value,
+                    expiresAt = cookie.expiresAt,
+                    domain    = cookie.domain,
+                    path      = cookie.path,
+                    secure    = cookie.secure,
+                    httpOnly  = cookie.httpOnly
+                )
             )
         }
 
-        // Guarda las cookies en el almacén local
-        cookieStore[key]?.addAll(serializableCookies) ?: cookieStore.put(
-            key,
-            serializableCookies.toMutableList()
-        )
-
-        // Persiste las cookies en SharedPreferences
         saveCookiesToPreferences()
     }
 

@@ -11,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
@@ -110,6 +111,12 @@ class RegistrandoFragment6 : Fragment() {
             Step_Registro = 6
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+        val fragmentA = MenuRegistrando()
+        preferencesManager.saveString("boton6","listo6")
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main, fragmentA)
+            .commit()
     }
 
     /**

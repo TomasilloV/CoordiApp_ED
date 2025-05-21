@@ -2,6 +2,7 @@ package com.enlacedigital.CoordiApp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -133,6 +134,10 @@ class ver_materiales : AppCompatActivity() {
                         showToast("No hay más datos disponibles")
                     }
                 } else {
+                    Log.d("MateialesDebug", "Código HTTP: ${response.code()}")
+                    Log.d("MateialesDebug", "Es exitoso: ${response.isSuccessful}")
+                    Log.d("MateialesDebug", "Mensaje: ${response.message()}")
+                    Log.d("MateialesDebug", "Raw body: ${response.errorBody()?.string()}")
                     showToast("Error en la respuesta")
                     finish()
                 }

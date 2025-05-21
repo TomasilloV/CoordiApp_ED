@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.Menu
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
@@ -266,6 +267,12 @@ class RegistrandoFragment2 : Fragment() {
             Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+        val fragmentA = MenuRegistrando()
+        preferencesManager.saveString("boton2","listo2")
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main, fragmentA)
+            .commit()
     }
 
     private fun getTac() {

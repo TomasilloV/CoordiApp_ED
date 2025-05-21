@@ -25,6 +25,7 @@ import com.enlacedigital.CoordiApp.LocationHelper
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import androidx.activity.result.IntentSenderRequest
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
@@ -223,6 +224,12 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             Step_Registro = 7
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+        val fragmentA = MenuRegistrando()
+        preferencesManager.saveString("boton7","listo7")
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main, fragmentA)
+            .commit()
     }
 
     // Mostrar mensaje y salir

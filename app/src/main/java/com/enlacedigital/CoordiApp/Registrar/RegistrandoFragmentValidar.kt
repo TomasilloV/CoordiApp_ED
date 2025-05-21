@@ -76,6 +76,13 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        preferencesManager.saveString("boton1","")
+        preferencesManager.saveString("boton2","")
+        preferencesManager.saveString("boton3","")
+        preferencesManager.saveString("boton4","")
+        preferencesManager.saveString("boton5","")
+        preferencesManager.saveString("boton6","")
+        preferencesManager.saveString("boton7","")
         // Configuración del lanzador de ajustes
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -264,8 +271,32 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
      */
     private fun existing(stepRegistro: Int) {
         if (stepRegistro in 0..5) {
-            (activity as? Registrando)?.goToNextStep(stepRegistro)
+            var iaa = 0
+            while (iaa <= stepRegistro)
+            {
+                if (iaa == 1) {
+                    preferencesManager.saveString("boton1", "listo1")
+                }
+                if (iaa == 2) {
+                    preferencesManager.saveString("boton2", "listo2")
+                }
+                if (iaa == 3) {
+                    preferencesManager.saveString("boton3", "listo3")
+                }
+                if (iaa == 4) {
+                    preferencesManager.saveString("boton4", "listo4")
+                }
+                if (iaa == 5) {
+                    preferencesManager.saveString("boton5", "listo5")
+                }
+                if (iaa == 6) {
+                    preferencesManager.saveString("boton6", "listo6")
+                }
+                iaa = iaa + 1
+            }
+            (activity as? Registrando)?.goToNextStep(0)
         } else {
+            Log.d("stepDebug",""+stepRegistro)
             (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
         }
     }

@@ -163,7 +163,7 @@ interface ApiService {
         @Path("Latitud") latitud: String?,
         @Path("Longitud") longitud: String?,
         @Path("FK_Tecnico_apps") idTecnico: String?,
-        @Path("Fecha_Coordiapp") fecha: String?
+        @Path("Fecha_Coordiapp") fecha: String?,
     ): Call<Checking>
 
     /*@POST("coordiapp/get-orden")

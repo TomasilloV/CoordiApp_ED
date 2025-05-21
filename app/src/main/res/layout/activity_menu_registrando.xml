@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Menusito"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/textPasos"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="Selecciona los recuadros Para llenar los pasos"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/light_green"
+        android:editable="false"
+        android:textSize="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPaso1"
+        android:layout_width="205dp"
+        android:layout_height="160dp"
+        android:text="PASO 1"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPasos" />
+
+    <Button
+        android:id="@+id/buttonPaso2"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:text="PASO 2"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonPaso1"
+        app:layout_constraintTop_toBottomOf="@+id/textPasos" />
+
+    <Button
+        android:id="@+id/buttonPaso3"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:text="PASO 3"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPaso1"
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso1"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso1" />
+
+    <Button
+        android:id="@+id/buttonPaso4"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:text="PASO 4"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPaso2"
+        app:layout_constraintStart_toEndOf="@+id/buttonPaso1"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso2" />
+
+    <Button
+        android:id="@+id/buttonPaso5"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:text="PASO 5"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPaso3"
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso3" />
+
+    <Button
+        android:id="@+id/buttonPaso6"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:text="PASO 6"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPaso4"
+        app:layout_constraintStart_toEndOf="@+id/buttonPaso3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso4" />
+
+    <Button
+        android:id="@+id/buttonPaso7"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="161dp"
+        android:text="PASO 7"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPaso6"
+        app:layout_constraintStart_toStartOf="@+id/buttonPaso5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import java.io.IOException
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
@@ -101,7 +103,14 @@ class RegistrandoFragment5 : Fragment() {
                 Telefono_Cliente = cliente,
                 Step_Registro = 5
             )
+            Log.d("dataDebug",""+updateRequest)
             (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+            val fragmentA = MenuRegistrando()
+            preferencesManager.saveString("boton5","listo5")
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main, fragmentA)
+                .commit()
         }
     }
 }

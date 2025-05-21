@@ -2,6 +2,7 @@ package com.enlacedigital.CoordiApp
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -16,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
+import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.google.android.gms.location.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.common.api.ApiException
@@ -36,6 +38,8 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
     /** Overlay que se muestra al cargar procesos */
     private lateinit var loadingOverlay: FrameLayout
+
+    val preferencesManager = PreferencesHelper.getPreferencesManager()
 
     /** Job para controlar las actualizaciones con coroutines */
     private var updateJob: Job? = null
@@ -179,7 +183,6 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
                     if (apiResponse?.mensaje == "Registro actualizado exitosamente.") {
                         showToast(apiResponse.mensaje)
                         if (requestData.Estatus_Orden == "OBJETADA") startNewActivity(Menu::class.java)
-                        else goToNextStep(requestData.Step_Registro!!)
                     } else showToast(apiResponse?.mensaje ?: "Intenta de nuevo")
                 } else showToast("ErrorRegistrandotechniciandata: ${response.code()}")
                 Log.d("dataDebug", "Código HTTP: ${response.code()}")
@@ -212,13 +215,14 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
 
     /** Mapa de fragmentos de registro por paso */
     private val fragmentMap = mapOf(
-        0 to RegistrandoFragment1(),
-        1 to RegistrandoFragment2(),
-        2 to RegistrandoFragment3(),
-        3 to RegistrandoFragment4(),
-        4 to RegistrandoFragment5(),
-        5 to RegistrandoFragment6(),
-        6 to RegistrandoFragment7()
+        0 to MenuRegistrando(),
+        1 to RegistrandoFragment1(),
+        2 to RegistrandoFragment2(),
+        3 to RegistrandoFragment3(),
+        4 to RegistrandoFragment4(),
+        5 to RegistrandoFragment5(),
+        6 to RegistrandoFragment6(),
+        7 to RegistrandoFragment7()
     )
 
     /**
@@ -228,7 +232,7 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
      */
     fun goToNextStep(step: Int) {
         applicationContext.cacheDir.deleteRecursively()
-        if (step == 7) {
+        if (step == 8) {
             startNewActivity(Menu::class.java)
         }
 
@@ -244,5 +248,11 @@ class Registrando : AppCompatActivity(), ActualizadBDListener {
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         hideKeyboardOnOutsideTouch(ev)
         return super.dispatchTouchEvent(ev)
+    }
+
+    fun intentFinal()
+    {
+        val intentFinal = Intent(this, Menu::class.java)
+        startActivity(intentFinal)
     }
 }

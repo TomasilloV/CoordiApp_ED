@@ -6,10 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
@@ -207,6 +209,12 @@ class RegistrandoFragment1 : Fragment() {
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                val fragmentA = MenuRegistrando()
+                preferencesManager.saveString("boton1","listo1")
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main, fragmentA)
+                    .commit()
             } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
         }
     }
