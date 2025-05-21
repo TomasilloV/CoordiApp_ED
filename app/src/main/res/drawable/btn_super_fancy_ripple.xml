@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ripple bonito que usa el fondo anterior -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/sf_ripple">
+    <item android:drawable="@drawable/btn_super_fancy_bg" />
+</ripple>

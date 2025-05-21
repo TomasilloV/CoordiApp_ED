@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Capa 0: sombra   | Capa 1: cuerpo con gradiente + borde   | Capa 2: brillo superior -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- SOMBRA (poco desplazada abajo para dar profundidad) -->
+    <item android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <solid android:color="#55000000"/> <!-- sombra semitransparente -->
+        </shape>
+    </item>
+
+    <!-- CUERPO PRINCIPAL -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <!-- gradiente vertical: más oscuro abajo, más claro arriba  -->
+            <gradient
+                android:startColor="@color/sf_start"
+                android:centerColor="@color/sf_center"
+                android:endColor="@color/sf_end"
+                android:angle="270" />
+            <!-- borde exterior -->
+            <stroke android:width="2dp" android:color="@color/sf_stroke" />
+        </shape>
+    </item>
+
+    <!-- BRILLO/REFLEJO (de arriba a transparente) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="24dp" />
+            <gradient
+                android:startColor="#66FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+        </shape>
+    </item>
+
+</layer-list>
