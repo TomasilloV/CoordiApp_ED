@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.activity.result.ActivityResultLauncher
@@ -31,6 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.activity.result.IntentSenderRequest
+import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -61,6 +63,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
     private lateinit var locationPermissionRequest: ActivityResultLauncher<String>
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
+    private lateinit var spinnerEstatus: Spinner
 
     /**
      * Lanzador para gestionar los ajustes de ubicación.
@@ -147,6 +150,9 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         val editLatitud = view.findViewById<EditText>(R.id.editLatitud)
         val editLongitud = view.findViewById<EditText>(R.id.editLongitud)
         val nextButton = view.findViewById<Button>(R.id.next)
+        spinnerEstatus = view.findViewById(R.id.spinnerEstatus)
+
+        setupSpinners(spinnerEstatus)
 
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
 
@@ -174,8 +180,9 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             }, 0)
             handler.postDelayed({
                 preferencesManager.saveString("folio-pisa",folio)
+                val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty()) {
+                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty() || selectedEstatus == null) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
                 } else if (!telefono.matches(Regex("\\d{10}"))) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
@@ -220,6 +227,45 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         })
     }
 
+    private fun setupSpinner(spinner: Spinner, items: List<String?>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+    }
+
+    private fun setupSpinners(vararg spinners: Spinner) {
+        val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
+        setupSpinner(spinners[0], estatusOptions)
+    }
+
+    private fun setupButtonClick(spinnerEstatus: Spinner) {
+            val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
+            val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val fechaActual = Date()
+            val fecha = formato.format(fechaActual)
+            Log.d("Paso1Debug","id: "+preferencesManager.getString("id"))
+            Log.d("Paso1Debug","id: "+preferencesManager.getString("id_tecnico"))
+            preferencesManager.getString("id")!!.let { id ->
+                val updateRequest = ActualizarBD(
+                    idtecnico_instalaciones_coordiapp = id,
+                    Estatus_Orden = selectedEstatus,
+                    FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
+                    Fecha_Coordiapp = fecha,
+                )
+                Log.d("Paso1Debug","updateRequest: "+updateRequest)
+                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                if (selectedEstatus == "OBJETADA")
+                {
+                    startNewActivity(Menu::class.java)
+                }
+                val fragmentA = MenuRegistrando()
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main, fragmentA)
+                    .commit()
+            } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
+    }
+
     /**
      * Procesa la respuesta del servidor y gestiona el flujo de trabajo según el estado.
      *
@@ -234,7 +280,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         when (mensaje) {
             "Registro insertado correctamente" -> {
                 preferencesManager.saveString("id", id.toString())
-                (activity as? Registrando)?.goToNextStep(1)
+                setupButtonClick(spinnerEstatus)
             }
             "Registro existente" -> {
                 val registroId = registro?.idtecnico_instalaciones_coordiapp.toString()

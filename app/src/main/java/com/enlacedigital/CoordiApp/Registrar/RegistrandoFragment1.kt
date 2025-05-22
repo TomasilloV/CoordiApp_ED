@@ -1,6 +1,7 @@
 package com.enlacedigital.CoordiApp.Registrar
 
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,8 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.Option
@@ -21,9 +28,14 @@ import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
+import com.enlacedigital.CoordiApp.utils.createImageFile
+import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
+import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -44,9 +56,26 @@ class RegistrandoFragment1 : Fragment() {
     private lateinit var spinnerCope: Spinner
     private lateinit var editDistrito: EditText
     private lateinit var spinnerTecnologia: Spinner
-    private lateinit var spinnerEstatus: Spinner
+    //private lateinit var spinnerEstatus: Spinner
     private lateinit var textArea: TextView
     private lateinit var textCope: TextView
+
+    private var selectedCodigoPostal: Int? = null
+    private lateinit var loadingLayout: FrameLayout
+    private lateinit var spinnerEstado: Spinner
+    private lateinit var spinnerCiudad: Spinner
+    private lateinit var spinnerColonia: Spinner
+    private lateinit var editCalle: EditText
+    private lateinit var editNumeroExterior: EditText
+    private lateinit var textCiudad: TextView
+    private lateinit var textColonia: TextView
+    private var lastSelectedEstado: String? = null
+    private var lastSelectedCiudad: String? = null
+    private lateinit var btnFotoFachada: Button
+    private var fachada: String? = null
+    private var currentPhotoType: String = ""
+    private var currentPhotoPath: String = ""
+    private lateinit var photoUri: Uri
 
     private var options: List<Option> = listOf()
     private var divisionMap: Map<Int, List<Option>> = mapOf()
@@ -57,7 +86,7 @@ class RegistrandoFragment1 : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_registrando1, container, false)
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
         val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -94,6 +123,7 @@ class RegistrandoFragment1 : Fragment() {
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         setupViews(view)
         getOptions()
+        getOptions1("5e")
         getTac()
     }
 
@@ -103,14 +133,30 @@ class RegistrandoFragment1 : Fragment() {
         spinnerArea = view.findViewById(R.id.spinnerArea)
         editDistrito = view.findViewById(R.id.editDistrito)
         spinnerTecnologia = view.findViewById(R.id.spinnerTecnologia)
-        spinnerEstatus = view.findViewById(R.id.spinnerEstatus)
+        //spinnerEstatus = view.findViewById(R.id.spinnerEstatus)
         textArea = view.findViewById(R.id.textArea)
         textCope = view.findViewById(R.id.textCope)
+        spinnerEstado = view.findViewById(R.id.spinnerEstado)
+        spinnerCiudad = view.findViewById(R.id.spinnerCiudad)
+        spinnerColonia = view.findViewById(R.id.spinnerColonia)
+        editCalle = view.findViewById(R.id.editCalle)
+        editNumeroExterior = view.findViewById(R.id.editNumeroExterior)
+        textCiudad = view.findViewById(R.id.textCiudad)
+        textColonia = view.findViewById(R.id.textColonia)
+        loadingLayout = view.findViewById(R.id.loadingOverlay)
+        loadingLayout.setOnTouchListener { _, _ -> loadingLayout.visibility == VISIBLE }
+        btnFotoFachada = view.findViewById(R.id.btnFachada)
         val nextButton = view.findViewById<Button>(R.id.next)
+        btnFotoFachada.setOnClickListener { showPhotoOptions("fachada") }
 
-        setupSpinners(spinnerTecnologia, spinnerEstatus)
+        setupSpinners(spinnerTecnologia/*, spinnerEstatus*/)
         setupDivisionSpinner(spinnerDivision, spinnerArea, spinnerCope, textArea, textCope)
-        setupButtonClick(nextButton, editDistrito, spinnerTecnologia, spinnerEstatus, spinnerCope, spinnerDivision, spinnerArea)
+        setupButtonClick(nextButton, editDistrito, spinnerTecnologia, /*spinnerEstatus,*/ spinnerCope, spinnerDivision, spinnerArea)
+    }
+
+    private fun showPhotoOptions(photoType: String) {
+        currentPhotoType = photoType
+        takePhoto()
     }
 
     /**
@@ -119,9 +165,55 @@ class RegistrandoFragment1 : Fragment() {
      */
     private fun setupSpinners(vararg spinners: Spinner) {
         val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE")
-        val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
+        //val estatusOptions = listOf("Elige una opción", "OBJETADA", "COMPLETADA")
         setupSpinner(spinners[0], tecnologiaOptions)
-        setupSpinner(spinners[1], estatusOptions)
+        //setupSpinner(spinners[1], estatusOptions)
+    }
+
+    private fun updatePhoto(photoType: String, base64: String) {
+        when (photoType) {
+            "fachada" -> {
+                fachada = base64
+                btnFotoFachada.text = "Cambiar foto"
+                btnFotoFachada.setBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.light_gray)
+                )
+            }
+        }
+    }
+
+    private fun takePhoto() {
+        val (photoFile, photoPath) = try {
+            createImageFile(requireContext())
+        } catch (ex: IOException) {
+            (requireActivity() as? Registrando)?.toasting("Error al crear la imagen")
+            null to ""
+        }
+
+        photoFile?.let {
+            currentPhotoPath = photoPath
+            photoUri = FileProvider.getUriForFile(
+                requireContext(),
+                "com.enlacedigital.CoordiApp.fileprovider",
+                it
+            )
+            takePhotoLauncher.launch(photoUri)
+        }
+    }
+
+    private val takePhotoLauncher: ActivityResultLauncher<Uri?> =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) handleCameraPhoto()
+        }
+
+    private fun handleCameraPhoto() {
+        val file = File(currentPhotoPath)
+        if (file.exists()) {
+            val imageData = encodeImageToBase64(file)
+            updatePhoto(currentPhotoType, imageData)
+        } else {
+            (requireActivity() as? Registrando)?.toasting("No se encontró la foto")
+        }
     }
 
     /**
@@ -186,12 +278,17 @@ class RegistrandoFragment1 : Fragment() {
      * @param spinnerDivision el spinner para seleccionar división.
      * @param spinnerArea el spinner para seleccionar área.
      */
-    private fun setupButtonClick(nextButton: Button, editDistrito: EditText, spinnerTecnologia: Spinner, spinnerEstatus: Spinner,
+    private fun setupButtonClick(nextButton: Button, editDistrito: EditText, spinnerTecnologia: Spinner, //spinnerEstatus: Spinner,
                                  spinnerCope: Spinner, spinnerDivision: Spinner, spinnerArea: Spinner) {
         nextButton.setOnClickListener {
+            val estado = spinnerEstado.selectedItem?.takeIf { it != "Elige una opción" } as? String
+            val ciudad = spinnerCiudad.selectedItem?.takeIf { it != "Elige una opción" } as? String
+            val colonia = spinnerColonia.selectedItem?.takeIf { it != "Elige una opción" } as? String
+            val calle = editCalle.text.toString().takeIf { it.isNotBlank() }
+            val numeroExterior = editNumeroExterior.text.toString().takeIf { it.isNotBlank() }
             val distritoText = editDistrito.text.toString().takeIf { it.isNotBlank() }
             val selectedTecnologia = spinnerTecnologia.selectedItem?.takeIf { it != "Elige una opción" } as? String
-            val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
+            //val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
             val selectedCopeId = options.find { it.COPE == spinnerCope.selectedItem?.toString() }?.idCope
             val selectedDivisionId = (spinnerDivision.selectedItem as? String)?.let { name ->
                 options.find { it.nameDivision == name }?.idDivision
@@ -200,9 +297,15 @@ class RegistrandoFragment1 : Fragment() {
                 options.find { it.nameArea == name }?.idAreas
             }
 
-            if (!validateFields(distritoText, selectedTecnologia, selectedEstatus, selectedCopeId, selectedDivisionId, selectedAreaId)) {
+            if (estado == null || ciudad == null || colonia == null || calle == null || numeroExterior == null || selectedCodigoPostal == null || fachada == null) {
+                (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 return@setOnClickListener
             }
+
+            if (!validateFields(/*distritoText, selectedTecnologia, selectedEstatus,*/ selectedCopeId, selectedDivisionId, selectedAreaId)) {
+                return@setOnClickListener
+            }
+
             val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
@@ -211,13 +314,14 @@ class RegistrandoFragment1 : Fragment() {
             preferencesManager.getString("id")!!.let { id ->
                 val updateRequest = ActualizarBD(
                     idtecnico_instalaciones_coordiapp = id,
-                    Distrito = distritoText,
-                    Tecnologia = selectedTecnologia,
-                    Estatus_Orden = selectedEstatus,
+                    //Distrito = distritoText,
+                    //Tecnologia = selectedTecnologia,
+                    Foto_Casa_Cliente = fachada,
+                    Direccion_Cliente = "$calle $numeroExterior, $colonia, $selectedCodigoPostal, $ciudad, $estado",
+                    //Estatus_Orden = selectedEstatus,
                     FK_Cope = selectedCopeId,
                     FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
                     Fecha_Coordiapp = fecha,
-                    Step_Registro = 1
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
@@ -241,18 +345,18 @@ class RegistrandoFragment1 : Fragment() {
      * @param selectedAreaId el ID de área seleccionado.
      * @return verdadero si todos los campos son válidos, falso en caso contrario.
      */
-    private fun validateFields(distritoText: String?, selectedTecnologia: String?, selectedEstatus: String?,
+    private fun validateFields(//distritoText: String?, selectedTecnologia: String?, selectedEstatus: String?,
                                selectedCopeId: Int?, selectedDivisionId: Int?, selectedAreaId: Int?): Boolean {
         return when {
-            distritoText.isNullOrBlank() || selectedTecnologia == null || selectedEstatus == null ||
+            //distritoText.isNullOrBlank() || selectedTecnologia == null || selectedEstatus == null ||
                     selectedCopeId == null || selectedDivisionId == null || selectedAreaId == null -> {
                 (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 false
             }
-            distritoText.length < 7 -> {
+            /*distritoText.length < 7 -> {
                 (requireActivity() as? Registrando)?.toasting("El distrito debe tener al menos 7 caracteres")
                 false
-            }
+            }*/
             else -> true
         }
     }
@@ -344,6 +448,125 @@ class RegistrandoFragment1 : Fragment() {
                 (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
             }
         })
+    }
+
+    private fun getOptions1(step: String, idEstado: Int? = null, idMunicipio: Int? = null) {
+        loadingLayout.setLoadingVisibility(true)
+        apiService.options(step, idEstado, idMunicipio).enqueue(object : Callback<List<Option>> {
+            override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
+                loadingLayout.setLoadingVisibility(false)
+                if (response.isSuccessful) {
+                    val options = response.body() ?: emptyList()
+                    handleOptionsResponse(step, options, idEstado, idMunicipio)
+                } else {
+                    (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
+                loadingLayout.setLoadingVisibility(false)
+                (requireActivity() as? Registrando)?.toasting("Failed: ${t.message}")
+            }
+        })
+    }
+
+    private fun handleOptionsResponse(step: String, options: List<Option>, idEstado: Int?, idMunicipio: Int?) {
+        when (step) {
+            "5e" -> updateEstadoSpinner(options)
+            "5m" -> {
+                updateCiudadSpinner(options, idEstado)
+                textCiudad.visibility = VISIBLE
+                spinnerCiudad.visibility = VISIBLE
+            }
+            "5c" -> {
+                updateColoniaSpinner(options, idMunicipio)
+                textColonia.visibility = VISIBLE
+                spinnerColonia.visibility = VISIBLE
+            }
+        }
+    }
+
+    private fun updateEstadoSpinner(options: List<Option>) {
+        val estados = options.mapNotNull { it.nameEstado }.distinct().sorted()
+        setupSpinnerAndListener(spinnerEstado, estados) { selectedEstado ->
+            if (selectedEstado != lastSelectedEstado) {
+                lastSelectedEstado = selectedEstado
+                val idEstado = options.find { it.nameEstado == selectedEstado }?.idEstado
+                if (idEstado != null) {
+                    getOptions1("5m", idEstado = idEstado)
+                } else {
+                    hideCiudadColonia()
+                }
+            }
+        }
+    }
+
+    private fun updateCiudadSpinner(options: List<Option>, idEstado: Int?) {
+        val ciudades = options.filter { it.estadoMunicipio == idEstado }
+            .mapNotNull { it.nameMunicipio }
+            .distinct()
+            .sorted()
+
+        setupSpinnerAndListener(spinnerCiudad, ciudades) { selectedCiudad ->
+            if (selectedCiudad != lastSelectedCiudad) {
+                lastSelectedCiudad = selectedCiudad
+                val idMunicipio = options.find { it.nameMunicipio == selectedCiudad }?.idMunicipio
+                if (idMunicipio != null) {
+                    getOptions1("5c", idMunicipio = idMunicipio)
+                } else {
+                    hideColonia()
+                }
+            }
+        }
+    }
+
+    /**
+     * Oculta los spinners y etiquetas relacionadas con ciudad y colonia.
+     */
+    private fun hideCiudadColonia() {
+        textCiudad.visibility = GONE
+        textColonia.visibility = GONE
+        spinnerCiudad.visibility = GONE
+        spinnerColonia.visibility = GONE
+    }
+
+    /**
+     * Oculta el spinner y etiqueta relacionados con la colonia.
+     */
+    private fun hideColonia() {
+        textColonia.visibility = GONE
+        spinnerColonia.visibility = GONE
+    }
+
+    private fun updateColoniaSpinner(options: List<Option>, idMunicipio: Int?) {
+        val colonias = options.filter { it.idMunicipio == idMunicipio }
+            .mapNotNull { it.nameColonia }
+            .distinct()
+            .sorted()
+
+        setupSpinnerAndListener(spinnerColonia, colonias) { selectedColonia ->
+            selectedCodigoPostal = options.find { it.nameColonia == selectedColonia }?.CodigoPostal
+        }
+    }
+
+    private fun setupSpinnerAndListener(
+        spinner: Spinner,
+        data: List<String>,
+        onItemSelected: (String?) -> Unit
+    ) {
+        val options = mutableListOf("Elige una opción").apply { addAll(data) }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, options)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selected = parent.getItemAtPosition(position) as? String
+                onItemSelected(selected.takeIf { it != "Elige una opción" })
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
     }
 
     private fun getTac() {

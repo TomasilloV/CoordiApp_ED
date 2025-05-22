@@ -25,6 +25,15 @@ class PreferencesManager(context: Context) {
         sharedPreferences.edit().putString(name, key).apply()
     }
 
+    fun saveInt(name: String, key: Int)
+    {
+        sharedPreferences.edit().putInt(name,key).apply()
+    }
+
+    fun getInt(name: String): Int? {
+        return sharedPreferences.getInt(name, 0)
+    }
+
     /**
      * Recupera un valor de tipo String desde las preferencias compartidas.
      *

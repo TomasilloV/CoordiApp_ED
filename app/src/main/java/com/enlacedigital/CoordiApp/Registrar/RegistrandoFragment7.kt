@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -232,7 +233,7 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             Longitud_Terminal = longitud,
             Puerto = puerto,
             Terminal = terminal,
-            Step_Registro = 7
+            Step_Registro = 5
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
         val fragmentA = MenuRegistrando()

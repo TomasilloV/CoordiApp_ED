@@ -4,11 +4,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
@@ -35,6 +37,10 @@ class RegistrandoFragment4 : Fragment() {
     private lateinit var photoUri: Uri
     private lateinit var btnFotoFachada: Button
     private lateinit var btnFotoOS: Button
+    private lateinit var editDistrito: EditText
+    private lateinit var spinnerTecnologia: Spinner
+    private lateinit var editMetraje: EditText
+
 
     /** Tipo de foto actualmente en uso (e.g., "fachada", "fotoOS"). */
     private var currentPhotoType: String = ""
@@ -63,7 +69,6 @@ class RegistrandoFragment4 : Fragment() {
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
 
         val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
-
         Handler(Looper.getMainLooper()).postDelayed({
             btnRegresar.setOnClickListener {
                     val fragmentA = MenuRegistrando()
@@ -98,6 +103,10 @@ class RegistrandoFragment4 : Fragment() {
 
         btnFotoFachada = view.findViewById(R.id.btnFachada)
         btnFotoOS = view.findViewById(R.id.btnFotoOs)
+        editDistrito = view.findViewById(R.id.editDistrito)
+        spinnerTecnologia = view.findViewById(R.id.spinnerTecnologia)
+        editMetraje = view.findViewById(R.id.editMetraje)
+        setupSpinners(spinnerTecnologia)
 
         setupListeners()
 
@@ -111,6 +120,17 @@ class RegistrandoFragment4 : Fragment() {
         view.findViewById<Spinner>(R.id.spinnerInstalacion).adapter = adapter
 
         view.findViewById<Button>(R.id.next).setOnClickListener { validateAndProceed() }
+    }
+
+    private fun setupSpinners(vararg spinners: Spinner) {
+        val tecnologiaOptions = listOf("Elige una opción", "FIBRA", "COBRE")
+        setupSpinner(spinners[0], tecnologiaOptions)
+    }
+
+    private fun setupSpinner(spinner: Spinner, items: List<String?>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
     }
 
     /**
@@ -224,18 +244,28 @@ class RegistrandoFragment4 : Fragment() {
     private fun validateAndProceed() {
         val instalacion = view?.findViewById<Spinner>(R.id.spinnerInstalacion)?.selectedItem
             ?.takeIf { it != "Elige una opción" } as? String
+        val distritoText = editDistrito.text.toString().takeIf { it.isNotBlank() }
+        val selectedTecnologia = spinnerTecnologia.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
 
-        if (instalacion == null || fachada == null || fotoOS == null) {
+        if (instalacion == null /*|| fachada == null */ || fotoOS == null || distritoText.isNullOrBlank() || selectedTecnologia == null || metraje == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
+            return
+        }
+        if (distritoText.length < 7) {
+            (requireActivity() as? Registrando)?.toasting("El distrito debe tener al menos 7 caracteres")
             return
         }
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Tipo_Instalacion = instalacion,
-            Foto_Casa_Cliente = fachada,
+            Distrito = distritoText,
+            Metraje = metraje.toInt(),
+            Tecnologia = selectedTecnologia,
+            //Foto_Casa_Cliente = fachada,
             Foto_INE = fotoOS,
-            Step_Registro = 4
+            Step_Registro = 2
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
         val fragmentA = MenuRegistrando()

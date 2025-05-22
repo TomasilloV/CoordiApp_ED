@@ -113,7 +113,7 @@ class RegistrandoFragment5 : Fragment() {
                 Apellido_Materno_Titular = materno,
                 Cliente_Recibe = recibe,
                 Telefono_Cliente = cliente,
-                Step_Registro = 5
+                Step_Registro = 4
             )
             Log.d("dataDebug",""+updateRequest)
             (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

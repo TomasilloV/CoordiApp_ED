@@ -26,7 +26,7 @@
                     android:layout_height="120dp"
                     android:text="@string/paso_4"
                     android:textColor="@color/white"
-                    android:maxLength="10"
+                    android:maxLength="20"
                     android:textStyle="bold"
                     android:textSize="24sp"
                     android:gravity="center"
@@ -34,6 +34,86 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintWidth_percent="0.9"/>
+
+                <TextView
+                    android:id="@+id/textDistrito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/distrito"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    app:layout_constraintStart_toStartOf="@id/textInstalación"/>
+
+                <EditText
+                    android:id="@+id/editDistrito"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:imeOptions="actionDone"
+                    android:background="@color/light_gray"
+                    android:inputType="text"
+                    android:hint="Ingresa el distrito"
+                    android:maxLength="9"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
+                    app:layout_constraintTop_toBottomOf="@id/textDistrito" />
+
+                <TextView
+                    android:id="@+id/textTecnologia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tecnologia"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/editDistrito"
+                    app:layout_constraintStart_toStartOf="@id/textDistrito" />
+
+                <Spinner
+                    android:id="@+id/spinnerTecnologia"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"
+                    app:layout_constraintTop_toBottomOf="@id/textTecnologia" />
+
+                <TextView
+                    android:id="@+id/textMetraje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/metraje"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editMetraje"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerTecnologia" />
+
+                <EditText
+                    android:id="@+id/editMetraje"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:hint="Ingresa el metraje"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textMetraje"
+                    app:layout_constraintWidth_percent="0.85" />
 
                 <TextView
                     android:id="@+id/textInstalación"
@@ -44,7 +124,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
-                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    app:layout_constraintTop_toBottomOf="@id/editMetraje"
                     app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
 
                 <Spinner
@@ -65,6 +145,7 @@
                     android:layout_height="wrap_content"
                     android:text="Fachada de casa"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
@@ -77,6 +158,7 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp"
                     android:background="@color/dark_gray"
+                    android:visibility="gone"
                     android:text="@string/subir_foto"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerInstalacion"
                     app:layout_constraintStart_toStartOf="@+id/spinnerInstalacion"

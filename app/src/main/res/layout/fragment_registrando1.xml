@@ -117,6 +117,7 @@
                     android:text="@string/distrito"
                     android:textColor="@color/white"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/spinnerCope"
@@ -133,10 +134,161 @@
                     android:hint="Ingresa el distrito"
                     android:maxLength="9"
                     android:padding="8dp"
+                    android:visibility="gone"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
                     app:layout_constraintTop_toBottomOf="@id/textDistrito" />
+
+                <TextView
+                    android:id="@+id/textEstado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado"
+                    android:paddingTop="15dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    app:layout_constraintTop_toBottomOf="@id/editDistrito"
+                    app:layout_constraintStart_toStartOf="@id/spinnerDivision"/>
+
+                <Spinner
+                    android:id="@+id/spinnerEstado"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textEstado"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textCiudad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ciudad"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerEstado"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCiudad"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerEstado"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerEstado"
+                    app:layout_constraintTop_toBottomOf="@id/textCiudad" />
+
+                <TextView
+                    android:id="@+id/textColonia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Colonia"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerCiudad"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+
+                <Spinner
+                    android:id="@+id/spinnerColonia"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/spinnerEstado"
+                    app:layout_constraintStart_toStartOf="@+id/spinnerEstado"
+                    app:layout_constraintTop_toBottomOf="@id/textColonia" />
+
+                <TextView
+                    android:id="@+id/textCalle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calle"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerColonia"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+
+                <EditText
+                    android:id="@+id/editCalle"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:padding="8dp"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="18sp"
+                    android:hint="Ingresa la calle"
+                    app:layout_constraintEnd_toEndOf="@id/spinnerEstado"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"
+                    app:layout_constraintTop_toBottomOf="@id/textCalle"/>
+
+                <TextView
+                    android:id="@+id/textNumeroExterior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número exterior"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/editCalle"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"/>
+
+                <EditText
+                    android:id="@+id/editNumeroExterior"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    android:hint="Ingresa el número del lugar"
+                    android:inputType="text"
+                    app:layout_constraintEnd_toEndOf="@id/spinnerEstado"
+                    app:layout_constraintStart_toStartOf="@id/spinnerEstado"
+                    app:layout_constraintTop_toBottomOf="@id/textNumeroExterior"/>
+
+                <TextView
+                    android:id="@+id/textFachada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fachada de casa"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintTop_toBottomOf="@id/editNumeroExterior"
+                    app:layout_constraintStart_toStartOf="@id/editNumeroExterior"/>
+
+                <Button
+                    android:id="@+id/btnFachada"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/dark_gray"
+                    android:text="@string/subir_foto"
+                    app:layout_constraintEnd_toEndOf="@+id/editNumeroExterior"
+                    app:layout_constraintStart_toStartOf="@+id/editNumeroExterior"
+                    app:layout_constraintTop_toBottomOf="@id/textFachada" />
 
                 <TextView
                     android:id="@+id/textTecnologia"
@@ -145,6 +297,7 @@
                     android:text="@string/tecnologia"
                     android:textColor="@color/white"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/editDistrito"
@@ -156,6 +309,7 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp"
                     android:background="@color/light_gray"
+                    android:visibility="gone"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
@@ -167,6 +321,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/estatus"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
@@ -179,6 +334,7 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp"
                     android:background="@color/light_gray"
+                    android:visibility="gone"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/spinnerDivision"
                     app:layout_constraintStart_toStartOf="@+id/spinnerDivision"
@@ -193,7 +349,7 @@
                     android:background="@color/green"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="1dp"
-                    app:layout_constraintTop_toBottomOf="@+id/spinnerEstatus"
+                    app:layout_constraintTop_toBottomOf="@+id/btnFachada"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/btnrecargar"
@@ -222,23 +378,36 @@
                     android:background="@drawable/btn_super_fancy_bg"
                     android:backgroundTint="@color/green"
                     android:text="Regresar"
-                    android:visibility="gone"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHeight_percent="0.17"
+                    app:layout_constraintHeight_percent="0.10"
                     app:layout_constraintWidth_percent="0.2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBar2"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/loadingOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#CB000000"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
 
     </FrameLayout>
 </LinearLayout>
