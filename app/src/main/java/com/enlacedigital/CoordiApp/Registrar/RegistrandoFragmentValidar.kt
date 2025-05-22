@@ -234,7 +234,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         when (mensaje) {
             "Registro insertado correctamente" -> {
                 preferencesManager.saveString("id", id.toString())
-                (activity as? Registrando)?.goToNextStep(0)
+                (activity as? Registrando)?.goToNextStep(1)
             }
             "Registro existente" -> {
                 val registroId = registro?.idtecnico_instalaciones_coordiapp.toString()
