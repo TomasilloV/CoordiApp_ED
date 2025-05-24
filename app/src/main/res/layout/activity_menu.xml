@@ -256,11 +256,11 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/ic_launcher_background"
+            android:backgroundTint="@color/dark_gray"
             android:contentDescription="ver_materiales"
             android:padding="12dp"
             android:scaleType="fitCenter"
-            android:src="@android:drawable/ic_menu_manage"
+            android:src="@drawable/outline_construction_24"
             tools:layout_editor_absoluteX="80dp"
             tools:layout_editor_absoluteY="478dp" />
 
