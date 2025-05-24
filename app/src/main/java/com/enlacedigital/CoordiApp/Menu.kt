@@ -9,9 +9,12 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LogoutResponse
+import com.enlacedigital.CoordiApp.models.materiales
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
+import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 import retrofit2.Call
@@ -45,7 +48,16 @@ class Menu : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_menu)
-
+        val idTecnicoString = preferencesManager.getString("id_tecnico")
+        if (idTecnicoString.isNullOrEmpty()) {
+            showToast("Por favor, inicia sesión nuevamente.")
+            startNewActivity(Login::class.java)
+            return
+        }
+        val idTecnico = idTecnicoString.toInt()
+        completadas(idTecnico)
+        Incompletas(idTecnico)
+        Materiales(idTecnico)
         setupListeners()
         setupUI()
     }
@@ -98,6 +110,100 @@ class Menu : AppCompatActivity() {
         findViewById<ImageButton>(buttonId).setOnClickListener {
             startActivity(Intent(this, activityClass))
         }
+    }
+
+    fun completadas (idTecnico: Int)
+    {
+        val cantCompletadas: TextView = findViewById<TextView>(R.id.cantidad_completadas)
+        apiService.getCompletados(idTecnico /*, page, limit*/).enqueue(object : Callback<Folios> {
+            /**
+             * Maneja la respuesta exitosa de la solicitud.
+             */
+            override fun onResponse(call: Call<Folios>, response: Response<Folios>) {
+                if (response.isSuccessful) {
+                    val cantidad: Int
+                    if (response.body()!!.items == null)
+                    {
+                        cantidad = 0
+                    }
+                    else
+                    {
+                        cantidad = response.body()!!.items!!.size
+                    }
+                    cantCompletadas.setText(cantidad.toString())
+                } else {
+                    Log.d("DebugCantidad",""+response.message()+response.body()+response.code()+response.isSuccessful)
+                    showToast("Error en la respuesta del servidor")
+                }
+            }
+
+            /**
+             * Maneja el fallo de la solicitud de la API.
+             */
+            override fun onFailure(call: Call<Folios>, t: Throwable) {
+                Log.d("DebugCantidad",""+t.message)
+                showToast("Error en la solicitud: ${t.message}")
+            }
+        })
+    }
+
+    fun Incompletas(tecnicoId: Int)
+    {
+        val cantIncompletadas: TextView = findViewById<TextView>(R.id.cantidad_incompletadas)
+        apiService.getNoCompletados(tecnicoId/*, page, limit*/).enqueue(object : Callback<Folios> {
+            override fun onResponse(call: Call<Folios>, response: Response<Folios>) {
+                if (response.isSuccessful) {
+                    val cantidad: Int
+                    if (response.body()!!.items == null)
+                    {
+                        cantidad = 0
+                    }
+                    else
+                    {
+                        cantidad = response.body()!!.items!!.size
+                    }
+                    cantIncompletadas.setText(cantidad.toString())
+                } else {
+                    showToast("Error en la respuesta")
+                    finish()
+                }
+            }
+
+            override fun onFailure(call: Call<Folios>, t: Throwable) {
+                showToast("Error en la solicitud: ${t.message}")
+                finish()
+            }
+        })
+    }
+
+    fun Materiales(tecnicoId: Int)
+    {
+        val cantMateriales: TextView = findViewById<TextView>(R.id.cantidad_materiales)
+        apiService.vermateriales(tecnicoId/*, page, limit*/).enqueue(object : Callback<materiales> {
+            override fun onResponse(call: Call<materiales>, response: Response<materiales>) {
+
+                if (response.isSuccessful) {
+                    val cantidad: Int
+                    if (response.body()!!.items == null)
+                    {
+                        cantidad = 0
+                    }
+                    else
+                    {
+                        cantidad = response.body()!!.items!!.size
+                    }
+                    cantMateriales.setText(cantidad.toString())
+                } else {
+                    showToast("Error en la respuesta")
+                    finish()
+                }
+            }
+
+            override fun onFailure(ignoredCall: Call<materiales>, t: Throwable) {
+                showToast("Error en la solicitud: ${t.message}")
+                finish()
+            }
+        })
     }
 
     /**

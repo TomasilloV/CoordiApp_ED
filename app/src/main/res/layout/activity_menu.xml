@@ -72,6 +72,68 @@
         app:layout_constraintWidth_percent="0.8"
         android:layout_marginBottom="20dp"/>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.14"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.43"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.44"
+        />
+
+    <TextView
+        android:id="@+id/cantidad_completadas"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:background="@drawable/btn_super_fancy_bg_color"
+        android:layout_marginTop="7dp"
+        android:text="99+"
+        android:textSize="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/logoTextView" />
+
+    <TextView
+        android:id="@+id/cantidad_incompletadas"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:background="@drawable/btn_super_fancy_bg_color"
+        android:text="99+"
+        android:layout_marginTop="7dp"
+        android:textSize="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/logoTextView" />
+
+    <TextView
+        android:id="@+id/cantidad_materiales"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        android:background="@drawable/btn_super_fancy_bg_color"
+        android:text="99+"
+        android:textSize="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@id/guideline3"
+        app:layout_constraintBottom_toTopOf="@id/botones" />
+
     <LinearLayout
         android:id="@+id/botones2"
         android:layout_width="match_parent"
@@ -85,6 +147,7 @@
         app:layout_constraintTop_toBottomOf="@+id/logoTextView">
 
         <!-- Botón para ver registros -->
+
         <ImageButton
             android:id="@+id/registered"
             android:layout_width="0dp"
@@ -104,6 +167,7 @@
             android:layout_weight="0.2" />
 
         <!-- Botón para ingresar registro -->
+
         <ImageButton
             android:id="@+id/incompleted"
             android:layout_width="0dp"

@@ -84,11 +84,24 @@
                     android:layout_marginTop="12dp"
                     android:background="@color/light_gray"
                     android:textSize="18sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textOnt"
                     app:layout_constraintBottom_toTopOf="@id/textFotoOnt"
                     app:layout_constraintWidth_percent="0.85" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:background="@color/white"
+                    android:hint="Buscar ONT..."
+                    app:layout_constraintEnd_toEndOf="@id/btnFotoOnt"
+                    app:layout_constraintStart_toStartOf="@id/btnFotoOnt"
+                    app:layout_constraintTop_toBottomOf="@id/textOnt"
+                    app:layout_constraintBottom_toTopOf="@id/textFotoOnt"
+                    app:layout_constraintWidth_percent="0.85"/>
 
 
                 <TextView
@@ -101,8 +114,8 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/spinnerOnt"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerOnt" />
+                    app:layout_constraintStart_toStartOf="@id/btnFotoOnt"
+                    app:layout_constraintTop_toBottomOf="@id/autoCompleteTextView" />
 
                 <Button
                     android:id="@+id/btnFotoOnt"

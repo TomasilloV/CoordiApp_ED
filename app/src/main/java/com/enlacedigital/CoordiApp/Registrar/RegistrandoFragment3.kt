@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -75,6 +76,7 @@ class RegistrandoFragment3 : Fragment() {
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
         val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
+
         Handler(Looper.getMainLooper()).postDelayed({
 
             btnRegresar.setOnClickListener {
@@ -107,9 +109,9 @@ class RegistrandoFragment3 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
         initializeViews(view)
-        setupListeners()
+        setupListeners(view)
         //updateSpinners()
-        fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt())
+        fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt(),view)
     }
 
     private fun initializeViews(view: View) {
@@ -126,7 +128,7 @@ class RegistrandoFragment3 : Fragment() {
      * @param idEstado (Opcional) ID del estado.
      * @param idMunicipio (Opcional) ID del municipio.
      */
-    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, idEstado: Int? = null, idMunicipio: Int? = null) {
+    private fun fetchOptionsAndSetupSpinner(idTecnico: Int, view: View,idEstado: Int? = null, idMunicipio: Int? = null) {
         loadingLayout.setLoadingVisibility(true)
         val step = "6"
         apiService.options(step, idEstado, idMunicipio, idTecnico)
@@ -134,40 +136,34 @@ class RegistrandoFragment3 : Fragment() {
                 override fun onResponse(ignoredCall: Call<List<Option>>, response: Response<List<Option>>) {
                     loadingLayout.setLoadingVisibility(false)
                     if (response.isSuccessful) {
+                        Log.d("DebugONT",""+response.body())
                         val options = response.body()?.mapNotNull { it.Num_Serie_Salida_Det }?.sorted() ?: emptyList()
                         val allOptions = listOf("Elige una opción") + options
-                        spinnerOnt.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allOptions).apply {
-                            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        }
-                        spinnerOnt.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                                val selectedOnt = (parent.getItemAtPosition(position) as? String)?.takeIf { it != "Elige una opción" }
-                                if (selectedOnt != null && selectedOnt != lastSelectedOnt) {
-                                    lastSelectedOnt = selectedOnt
-                                    idOnt = response.body()?.find { it.Num_Serie_Salida_Det == selectedOnt }?.idSalidas
-                                }
-                            }
+                        val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+                        val items= allOptions
 
-                            override fun onNothingSelected(parent: AdapterView<*>) {}
-                        }
+                        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+                        autoCompleteTextView.setAdapter(adapter)
                     } else {
                         (requireActivity() as? Registrando)?.toasting("Error: ${response.message()}")
                     }
                 }
 
                 override fun onFailure(ignoredCall: Call<List<Option>>, t: Throwable) {
+                    Log.d("DebugONT",""+t.message)
                     loadingLayout.setLoadingVisibility(false)
                 }
             })
     }
 
+
     /**
      * Configura los listeners de los eventos de la interfaz de usuario.
      */
-    private fun setupListeners() {
+    private fun setupListeners(viewt: View) {
         btnFotoOnt.setOnClickListener { showPhotoOptions("ont") }
         btnFotoSerie.setOnClickListener { showPhotoOptions("serie") }
-        view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed() }
+        view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed(viewt) }
     }
 
     /**
@@ -309,9 +305,12 @@ class RegistrandoFragment3 : Fragment() {
     /**
      * Valida los campos obligatorios y procede a guardar los datos.
      */
-    private fun validateAndProceed() {
+    private fun validateAndProceed(view: View) {
         //val puerto = spinnerPuerto.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val ont = spinnerOnt.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        val ontnew =  autoCompleteTextView.text .toString()
+        Log.d("TextONTValidate",""+ontnew)
 
         if (/*puerto == null ||*/ fotoONT == null || fotoSerie == null) {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
@@ -322,7 +321,7 @@ class RegistrandoFragment3 : Fragment() {
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             //Puerto = puerto,
             Foto_Ont = fotoONT,
-            Ont = lastSelectedOnt,
+            Ont = ontnew,
             No_Serie_ONT = fotoSerie,
             idOnt = idOnt,
             Step_Registro = 3

@@ -99,7 +99,7 @@ class MenuRegistrando : Fragment() {
         {
             val updateRequest = ActualizarBD(
                 idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                Step_Registro = 100
+                Step_Registro = 5
             )
             (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
             (activity as? Registrando)?.intentFinal()
