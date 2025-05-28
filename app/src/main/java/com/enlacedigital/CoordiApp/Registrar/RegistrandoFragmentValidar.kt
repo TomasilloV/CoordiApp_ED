@@ -251,6 +251,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     Estatus_Orden = selectedEstatus,
                     FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
                     Fecha_Coordiapp = fecha,
+                    Step_Registro = 0
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
@@ -286,6 +287,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 val registroId = registro?.idtecnico_instalaciones_coordiapp.toString()
                 val estado = registro?.Estatus_Orden.toString()
                 if (estado == "OBJETADA") {
+                    Log.d("ValidarDebug","Aqui esta el error if")
                     AlertDialog.Builder(requireContext())
                         .setTitle("Este folio ya ha sido objetado")
                         .setMessage("¿Deseas actualizar?")
@@ -300,10 +302,15 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                         .setCancelable(false)
                         .show()
                 } else {
+                    Log.d("ValidarDebug","Aqui esta el error else")
                     if(registro?.Step_Registro == 5) (requireActivity() as? Registrando)?.toasting("Ya fue registrado anteriormente")
+                    Log.d("ValidarDebug","Aqui esta el error else1")
                     preferencesManager.saveString("id", registroId)
+                    Log.d("ValidarDebug","Aqui esta el error else2")
                     preferencesManager.saveString("folio", folio)
+                    Log.d("ValidarDebug","Aqui esta el error else3: "+registro?.Step_Registro)
                     existing(registro?.Step_Registro!!)
+                    Log.d("ValidarDebug","Aqui esta el error else4")
                 }
             }
             else -> (requireActivity() as? Registrando)?.toasting("Otro caso")
@@ -316,6 +323,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
      * @param stepRegistro El paso de registro actual.
      */
     private fun existing(stepRegistro: Int) {
+        Log.d("ValidarDebug","Aqui esta el error else: "+stepRegistro)
         if (stepRegistro in 0..5) {
             var iaa = 0
             while (iaa <= stepRegistro)
@@ -338,6 +346,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 if (iaa == 6) {
                     preferencesManager.saveString("boton6", "listo6")
                 }
+                Log.d("ValidarDebug","Aqui esta el error else iaa: "+iaa)
                 iaa = iaa + 1
             }
             (activity as? Registrando)?.goToNextStep(0)

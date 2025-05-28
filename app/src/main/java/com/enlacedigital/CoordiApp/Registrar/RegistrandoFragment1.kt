@@ -322,6 +322,7 @@ class RegistrandoFragment1 : Fragment() {
                     FK_Cope = selectedCopeId,
                     FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
                     Fecha_Coordiapp = fecha,
+                    Step_Registro = 1
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
