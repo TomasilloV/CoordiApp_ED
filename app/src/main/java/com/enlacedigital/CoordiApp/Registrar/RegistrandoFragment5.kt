@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.core.content.FileProvider
 import com.enlacedigital.CoordiApp.R
@@ -17,6 +18,7 @@ import java.io.File
 import java.io.IOException
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.Registrando
@@ -73,6 +75,24 @@ class RegistrandoFragment5 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¿Estás seguro?")
+                    .setMessage("¿Seguro que quieres salir del paso de Cliente y volver al menu de pasos?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        isEnabled = false
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.main, MenuRegistrando())
+                            .commit()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        })
 
         // Verifica la sesión antes de continuar
         checkSession(apiService, requireContext(), null as Class<Nothing>?)

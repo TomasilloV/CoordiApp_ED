@@ -1,5 +1,6 @@
 package com.enlacedigital.CoordiApp.models
 
+import androidx.compose.material3.DatePickerState
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Field
@@ -132,6 +133,16 @@ data class ActualizarBD(
     val idOnt: Int? = null,
     val Latitud_Terminal: String? = null,
     val Longitud_Terminal: String? = null
+)
+
+data class ONTCOBRE(
+    val FK_Folio_Pisa_Cobre: Int? = null,
+    val FK_Tecnico_Cobre: Int? = null,
+    val Fecha: String? = null,
+    val Num_Serie_Ont_Cobre: String? = null,
+    val Sku: String? = null,
+    val Foto_Ont_Cobre_Delante: String? = null,
+    val Foto_Ont_Cobre_Detras: String? = null
 )
 
 data class ApiResponse(

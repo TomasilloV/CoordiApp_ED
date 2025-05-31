@@ -9,6 +9,7 @@ import com.enlacedigital.CoordiApp.models.FolioRequest
 import com.enlacedigital.CoordiApp.models.Folios
 import com.enlacedigital.CoordiApp.models.LoginResponse
 import com.enlacedigital.CoordiApp.models.LogoutResponse
+import com.enlacedigital.CoordiApp.models.ONTCOBRE
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.models.SessionResponse
 import com.enlacedigital.CoordiApp.models.TacResponse
@@ -181,6 +182,11 @@ interface ApiService {
     fun updateTechnicianData(
         @Body requestData: ActualizarBD
     ): Call<ApiResponse>
+
+    @POST("api/ontCobre")
+    fun ontCobre(
+        @Body requestData: ONTCOBRE
+    ): Call <ApiResponse>
 
     @POST("api/bolsa-tac")
     fun obtenertac(

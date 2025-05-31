@@ -15,8 +15,10 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Spinner
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -112,6 +114,24 @@ class RegistrandoFragment3 : Fragment() {
         setupListeners(view)
         //updateSpinners()
         fetchOptionsAndSetupSpinner(preferencesManager.getString("id_tecnico")!!.toInt(),view)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¿Estás seguro?")
+                    .setMessage("¿Seguro que quieres salir del paso de ONT/Modem y volver al menu de pasos?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        isEnabled = false
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.main, MenuRegistrando())
+                            .commit()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        })
     }
 
     private fun initializeViews(view: View) {

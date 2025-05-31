@@ -76,18 +76,32 @@
         app:layout_constraintWidth_percent="0.48" />
 
     <Button
-        android:id="@+id/buttonPaso7"
-        android:background="@drawable/btn_super_fancy_bg"
+        android:id="@+id/buttonPasoONTCobre"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
+        android:background="@drawable/btn_super_fancy_bg"
+        android:text="ONT/COBRE"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso5"
+        app:layout_constraintWidth_percent="0.45"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/buttonPaso7"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/btn_super_fancy_bg"
         android:text="Terminal"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonPaso5"
+        app:layout_constraintEnd_toStartOf="@+id/buttonPasoONTCobre"
+        app:layout_constraintHeight_percent="0.18"
         app:layout_constraintStart_toStartOf="@+id/buttonPaso3"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPaso3"
-        app:layout_constraintWidth_percent="0.96"
-        app:layout_constraintHeight_percent="0.18" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonPaso3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

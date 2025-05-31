@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.enlacedigital.CoordiApp.Registrar.ActualizadBDListener
@@ -29,6 +30,8 @@ import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
+import androidx.activity.OnBackPressedCallback
+import com.enlacedigital.CoordiApp.Registrar.RegistrandoFragmentCobre
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 
 class MenuRegistrando : Fragment() {
@@ -45,12 +48,20 @@ class MenuRegistrando : Fragment() {
         val buttonPaso4 = view.findViewById<Button>(R.id.buttonPaso4)
         val buttonPaso5 = view.findViewById<Button>(R.id.buttonPaso5)
         val buttonPaso7 = view.findViewById<Button>(R.id.buttonPaso7)
+        val buttonPasoCobre = view.findViewById<Button>(R.id.buttonPasoONTCobre)
 
         val boton1= preferencesManager.getString("boton1")
         val boton3= preferencesManager.getString("boton3")
         val boton4 = preferencesManager.getString("boton4")
         val boton5= preferencesManager.getString("boton5")
         val boton7= preferencesManager.getString("boton7")
+        val botonCobre = preferencesManager.getString("botonCobre")
+        val QuejaMigra = preferencesManager.getString("QUEJAMIGRA")
+
+        if (QuejaMigra == "SI")
+        {
+            buttonPasoCobre.visibility = View.VISIBLE
+        }
 
         if (boton1 == "listo1") {
             buttonPaso1.setBackgroundColor(Color.rgb(34,139,34))
@@ -77,6 +88,11 @@ class MenuRegistrando : Fragment() {
             buttonPaso7.isEnabled = false
         }
 
+        if (botonCobre == "listoCobre") {
+            buttonPasoCobre.setBackgroundColor(Color.rgb(34,139,34))
+            buttonPasoCobre.isEnabled = false
+        }
+
         buttonPaso1.setOnClickListener {
             (activity as? Registrando)?.goToNextStep(1)
         }
@@ -92,19 +108,57 @@ class MenuRegistrando : Fragment() {
         buttonPaso7.setOnClickListener {
             (activity as? Registrando)?.goToNextStep(7)
         }
+        buttonPasoCobre.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main, RegistrandoFragmentCobre())
+                .commit()
+        }
 
-
-
-        if(boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7")
+        if (QuejaMigra == "SI")
         {
-            val updateRequest = ActualizarBD(
-                idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                Step_Registro = 5
-            )
-            (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-            (activity as? Registrando)?.intentFinal()
+            if(boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7" && botonCobre == "listoCobre")
+            {
+                val updateRequest = ActualizarBD(
+                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+                    Step_Registro = 5
+                )
+                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                (activity as? Registrando)?.intentFinal()
+            }
+        }else
+        {
+            if(boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7")
+            {
+                val updateRequest = ActualizarBD(
+                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
+                    Step_Registro = 5
+                )
+                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
+                (activity as? Registrando)?.intentFinal()
+            }
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¿Estás seguro?")
+                    .setMessage("¿Seguro que quieres salir del menú de pasos?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        })
+
     }
 }

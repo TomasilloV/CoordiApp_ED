@@ -64,6 +64,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
     val preferencesManager = PreferencesHelper.getPreferencesManager()
     val apiService = ApiServiceHelper.getApiService()
     private lateinit var spinnerEstatus: Spinner
+    private lateinit var spinnerTipoInstalacion: Spinner
 
     /**
      * Lanzador para gestionar los ajustes de ubicación.
@@ -86,6 +87,8 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         preferencesManager.saveString("boton5","")
         preferencesManager.saveString("boton6","")
         preferencesManager.saveString("boton7","")
+        preferencesManager.saveString("QUEJAMIGRA","")
+        preferencesManager.saveString("botonCobre","")
         // Configuración del lanzador de ajustes
         settingsLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -151,8 +154,10 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         val editLongitud = view.findViewById<EditText>(R.id.editLongitud)
         val nextButton = view.findViewById<Button>(R.id.next)
         spinnerEstatus = view.findViewById(R.id.spinnerEstatus)
+        spinnerTipoInstalacion = view.findViewById(R.id.spinnerTipoInstalacion)
 
         setupSpinners(spinnerEstatus)
+        setupSpinners2(spinnerTipoInstalacion)
 
         checkSession(apiService, requireContext(), null as Class<Nothing>?)
 
@@ -181,8 +186,9 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             handler.postDelayed({
                 preferencesManager.saveString("folio-pisa",folio)
                 val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
+                val selectedTipoInstalacion = spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty() || selectedEstatus == null) {
+                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty() || selectedEstatus == null || selectedTipoInstalacion == null) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
                 } else if (!telefono.matches(Regex("\\d{10}"))) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
@@ -238,13 +244,23 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         setupSpinner(spinners[0], estatusOptions)
     }
 
-    private fun setupButtonClick(spinnerEstatus: Spinner) {
-            val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
-            val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    private fun setupSpinners2(vararg spinners: Spinner) {
+        val estatusOptions = listOf("Elige una opción", "ALTA", "QUEJA MIGRA")
+        setupSpinner(spinners[0], estatusOptions)
+    }
+
+    private fun setupButtonClick(spinnerEstatus: Spinner, spinnerTipoInstalacion: Spinner) {
+        val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val selectedTipoInstalacion = spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
             Log.d("Paso1Debug","id: "+preferencesManager.getString("id"))
             Log.d("Paso1Debug","id: "+preferencesManager.getString("id_tecnico"))
+        if (selectedTipoInstalacion == "QUEJA MIGRA")
+        {
+            preferencesManager.saveString("QUEJAMIGRA","SI")
+        }
             preferencesManager.getString("id")!!.let { id ->
                 val updateRequest = ActualizarBD(
                     idtecnico_instalaciones_coordiapp = id,
@@ -281,7 +297,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         when (mensaje) {
             "Registro insertado correctamente" -> {
                 preferencesManager.saveString("id", id.toString())
-                setupButtonClick(spinnerEstatus)
+                setupButtonClick(spinnerEstatus,spinnerTipoInstalacion)
             }
             "Registro existente" -> {
                 val registroId = registro?.idtecnico_instalaciones_coordiapp.toString()
@@ -325,6 +341,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
     private fun existing(stepRegistro: Int) {
         Log.d("ValidarDebug","Aqui esta el error else: "+stepRegistro)
         if (stepRegistro in 0..5) {
+            val selectedTipoInstalacion = spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
             var iaa = 0
             while (iaa <= stepRegistro)
             {
@@ -348,6 +365,10 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 }
                 Log.d("ValidarDebug","Aqui esta el error else iaa: "+iaa)
                 iaa = iaa + 1
+            }
+            if (selectedTipoInstalacion == "QUEJA MIGRA")
+            {
+                preferencesManager.saveString("QUEJAMIGRA","SI")
             }
             (activity as? Registrando)?.goToNextStep(0)
         } else {

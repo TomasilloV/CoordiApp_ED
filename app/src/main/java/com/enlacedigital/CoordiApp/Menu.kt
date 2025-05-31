@@ -20,6 +20,7 @@ import com.enlacedigital.CoordiApp.utils.startNewActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.activity.OnBackPressedCallback
 
 /**
  * Clase `Menu` que representa la pantalla principal de navegación en la aplicación.
@@ -55,11 +56,29 @@ class Menu : AppCompatActivity() {
             return
         }
         val idTecnico = idTecnicoString.toInt()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mostrarAlertaSalir()
+            }
+        })
         completadas(idTecnico)
         Incompletas(idTecnico)
         Materiales(idTecnico)
         setupListeners()
         setupUI()
+    }
+
+    private fun mostrarAlertaSalir() {
+        AlertDialog.Builder(this)
+            .setTitle("¿Estás seguro?")
+            .setMessage("¿Seguro que quieres salir de la aplicación?")
+            .setPositiveButton("Sí") { _, _ ->
+                finish()
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     /**

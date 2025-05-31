@@ -13,8 +13,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -125,6 +127,24 @@ class RegistrandoFragment1 : Fragment() {
         getOptions()
         getOptions1("5e")
         getTac()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¿Estás seguro?")
+                    .setMessage("¿Seguro que quieres salir del paso de Domicilio y volver al menu de pasos?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        isEnabled = false
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.main, MenuRegistrando())
+                            .commit()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        })
     }
 
     private fun setupViews(view: View) {

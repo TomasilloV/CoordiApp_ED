@@ -140,6 +140,84 @@
                     app:layout_constraintWidth_percent="0.85" />
 
                 <TextView
+                    android:id="@+id/textTipoReparacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de Reparación"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerInstalacion"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Spinner
+                    android:id="@+id/spinnerTipoReparacion"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/texts_and_spinners"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/textTipoReparacion"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textCambioConector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Opciones Cambio de Conector"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerTipoReparacion"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCambioConector"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/texts_and_spinners"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/textCambioConector"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textCambioModem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Opciones Cambio de Modem"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerCambioConector"
+                    app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCambioModem"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/texts_and_spinners"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/textCambioModem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
                     android:id="@+id/textFachada"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,7 +227,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerInstalacion"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerTipoReparacion"
                     app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
 
                 <Button
@@ -173,7 +251,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
-                    app:layout_constraintTop_toBottomOf="@id/btnFachada"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerCambioModem"
                     app:layout_constraintStart_toStartOf="@id/spinnerInstalacion"/>
 
                 <Button

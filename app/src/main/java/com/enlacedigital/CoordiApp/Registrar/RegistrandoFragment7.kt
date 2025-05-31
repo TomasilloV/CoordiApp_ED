@@ -17,6 +17,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Spinner
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -26,6 +27,7 @@ import com.enlacedigital.CoordiApp.LocationHelper
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import androidx.activity.result.IntentSenderRequest
+import androidx.appcompat.app.AlertDialog
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
@@ -99,6 +101,23 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
         initializeViews(view)
         setupListeners()
         updateSpinners()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("¿Estás seguro?")
+                    .setMessage("¿Seguro que quieres salir del paso de Terminal y volver al menu de pasos?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        isEnabled = false
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.main, MenuRegistrando())
+                            .commit()
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+            }
+        })
     }
 
     // Inicialización de vistas
