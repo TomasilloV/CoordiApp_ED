@@ -1,0 +1,245 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+    android:orientation="horizontal">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:id="@+id/swiperefresh"
+        android:layout_height="match_parent"
+        android:background="@color/dark_blue">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_blue">
+
+                <TextView
+                    android:id="@+id/textPaso"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:text="ONT/COBRE"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.9" />
+
+                <TextView
+                    android:id="@+id/textTipoTarea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tipo_tarea"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editTarea"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso"
+                    android:visibility="gone"/>
+
+                <EditText
+                    android:id="@+id/editTarea"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/light_gray"
+                    android:hint="Ingresa el tipo de tarea"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textTipoTarea"
+                    app:layout_constraintWidth_percent="0.85"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/textSKU"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="SKU"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintTop_toBottomOf="@id/editTarea" />
+
+                <EditText
+                    android:id="@+id/editSKU"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/texts_and_spinners"
+                    android:hint="Ingresa el SKU"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="30"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textSKU"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textOntCobre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="Numero Serie Ont Cobre"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintTop_toBottomOf="@id/editSKU" />
+
+                <EditText
+                    android:id="@+id/editOntCobre"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/texts_and_spinners"
+                    android:hint="Ingresa Numero de Serie"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/editSKU"
+                    app:layout_constraintStart_toStartOf="@+id/textOntCobre"
+                    app:layout_constraintTop_toBottomOf="@id/textOntCobre" />
+
+                <TextView
+                    android:id="@+id/textFotoOntCobre1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="Fotografia ONT Cobre por delante"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintTop_toBottomOf="@id/editOntCobre" />
+
+                <Button
+                    android:id="@+id/btnFotoOntCobre1"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/btn_fotos"
+                    android:text="@string/subir_foto"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textFotoOntCobre1"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/textFotoOntCobre2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="Fotografia ONT Cobre por detras"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintTop_toBottomOf="@id/btnFotoOntCobre1" />
+
+                <Button
+                    android:id="@+id/btnFotoOntCobre2"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/btn_fotos"
+                    android:text="@string/subir_foto"
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textFotoOntCobre2"
+                    app:layout_constraintBottom_toTopOf="@id/next"
+                    app:layout_constraintWidth_percent="0.85" />
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/siguiente"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_options"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/btnFotoOntCobre2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btnrecargar"
+                    app:layout_constraintWidth_percent="0.5" />
+
+                <Button
+                    android:id="@+id/btnrecargar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Recargar"
+                    android:textColor="@color/white"
+                    android:background="@drawable/btn_options"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/next"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintWidth_percent="0.5"/>
+
+                <Button
+                    android:id="@+id/btnRegresar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/btn_options"
+                    android:text="Regresar"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent="0.15"
+                    app:layout_constraintWidth_percent="0.2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CB000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</LinearLayout>
