@@ -132,7 +132,10 @@ data class ActualizarBD(
     val Ont: String? = null,
     val idOnt: Int? = null,
     val Latitud_Terminal: String? = null,
-    val Longitud_Terminal: String? = null
+    val Longitud_Terminal: String? = null,
+    val Tipo_Orden: String? = null,
+    val Tipo_reparacion: String? = null,
+    val Tipo_sub_reparaviob: String? = null
 )
 
 data class ONTCOBRE(

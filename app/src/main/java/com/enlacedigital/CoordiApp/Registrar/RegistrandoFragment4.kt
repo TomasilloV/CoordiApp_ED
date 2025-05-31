@@ -345,6 +345,21 @@ class RegistrandoFragment4 : Fragment() {
         val selectedTecnologia = spinnerTecnologia.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val selectedTipoReparacion = spinnerTipoReparacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
+        val selectedCambioModem = spinnerCambioModem.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val selectedCambioConector = spinnerCambioConector.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val opcionTipoReparacion:String?
+        if (selectedCambioModem == null)
+        {
+            opcionTipoReparacion = selectedCambioModem
+        }
+        else if (selectedCambioConector == null)
+        {
+            opcionTipoReparacion = selectedCambioConector
+        }
+        else
+        {
+            opcionTipoReparacion = "No asignado"
+        }
         var QuejaMigra = preferencesManager.getString("QUEJAMIGRA")
         if (QuejaMigra == "SI")
         {
@@ -355,7 +370,7 @@ class RegistrandoFragment4 : Fragment() {
         }
         else
         {
-            if (instalacion == null /*|| fachada == null */ || fotoOS == null || distritoText.isNullOrBlank() || selectedTecnologia == null || metraje == null || selectedTipoReparacion == null) {
+            if (instalacion == null /*|| fachada == null */ || fotoOS == null || distritoText.isNullOrBlank() || selectedTecnologia == null || metraje == null) {
                 (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 return
             }
@@ -371,6 +386,7 @@ class RegistrandoFragment4 : Fragment() {
             Distrito = distritoText,
             Metraje = metraje?.toInt(),
             Tecnologia = selectedTecnologia,
+            Tipo_sub_reparaviob = opcionTipoReparacion,
             //Foto_Casa_Cliente = fachada,
             Foto_INE = fotoOS,
             Step_Registro = 2

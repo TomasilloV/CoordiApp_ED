@@ -222,13 +222,13 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     Log.d("ValidarDebug", "Es exitoso: ${response.isSuccessful}")
                     Log.d("ValidarDebug", "Mensaje: ${response.message()}")
                     Log.d("ValidarDebug", "Raw body: ${response.errorBody()?.string()}")
-                    (requireActivity() as? Registrando)?.toasting("Error: verifica tu conexión bueno")
+                    (requireActivity() as? Registrando)?.toasting("Error: verifica tu conexión")
                 }
             }
 
             override fun onFailure(call: Call<Checking>, t: Throwable) {
                 Log.e("ValidarDebug", "Fallo de conexión: ${t.localizedMessage}", t)
-                (activity as? Registrando)?.toasting("Error: verifica tu conexión malo")
+                (activity as? Registrando)?.toasting("Error: verifica tu conexión")
             }
         })
     }
@@ -267,6 +267,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     Estatus_Orden = selectedEstatus,
                     FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
                     Fecha_Coordiapp = fecha,
+                    Tipo_Orden = selectedTipoInstalacion,
                     Step_Registro = 0
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
