@@ -118,22 +118,12 @@ class MenuRegistrando : Fragment() {
         {
             if(boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7" && botonCobre == "listoCobre")
             {
-                val updateRequest = ActualizarBD(
-                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                    Step_Registro = 5
-                )
-                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
                 (activity as? Registrando)?.intentFinal()
             }
         }else
         {
             if(boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7")
             {
-                val updateRequest = ActualizarBD(
-                    idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
-                    Step_Registro = 5
-                )
-                (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
                 (activity as? Registrando)?.intentFinal()
             }
         }

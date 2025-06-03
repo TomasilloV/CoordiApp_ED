@@ -329,8 +329,16 @@ class RegistrandoFragment1 : Fragment() {
             val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
-            Log.d("Paso1Debug","id: "+preferencesManager.getString("id"))
-            Log.d("Paso1Debug","id: "+preferencesManager.getString("id_tecnico"))
+            val boton1= preferencesManager.getString("boton1")
+            val boton3= preferencesManager.getString("boton3")
+            val boton4 = preferencesManager.getString("boton4")
+            val boton5= preferencesManager.getString("boton5")
+            val boton7= preferencesManager.getString("boton7")
+            var step = 1
+            if (boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7")
+            {
+                step = 5
+            }
             preferencesManager.getString("id")!!.let { id ->
                 val updateRequest = ActualizarBD(
                     idtecnico_instalaciones_coordiapp = id,
@@ -342,7 +350,7 @@ class RegistrandoFragment1 : Fragment() {
                     FK_Cope = selectedCopeId,
                     FK_Tecnico_apps = preferencesManager.getString("id_tecnico")!!.toInt(),
                     Fecha_Coordiapp = fecha,
-                    Step_Registro = 1
+                    Step_Registro = step
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
@@ -607,36 +615,49 @@ class RegistrandoFragment1 : Fragment() {
                         val item = body.items[0]
 
                         val handler = Handler(Looper.getMainLooper())
+                        val valor = item.nomDivision
+                        val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
+                        if (index < 0)
+                        {
+                            spinnerDivision.setSelection(0)
+                            spinnerArea.setSelection(0)
+                            spinnerCope.setSelection(0)
+                            spinnerTecnologia.setSelection(0)
+                            editDistrito.setText("")
+                            (requireActivity() as? Registrando)?.toasting("No se pudieron cargar los datos")
+                        }
+                        else
+                        {
+                            handler.postDelayed({
+                                val valor = item.nomDivision
+                                val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
+                                if (index >= 0) spinnerDivision.setSelection(index)
+                            }, 0)
 
-                        handler.postDelayed({
-                            val valor = item.nomDivision
-                            val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
-                            if (index >= 0) spinnerDivision.setSelection(index)
-                        }, 0)
+                            handler.postDelayed({
+                                val valor1 = item.nomArea
+                                val index1 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor1)
+                                if (index1 >= 0) spinnerArea.setSelection(index1)
+                            }, 200)
 
-                        handler.postDelayed({
-                            val valor1 = item.nomArea
-                            val index1 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor1)
-                            if (index1 >= 0) spinnerArea.setSelection(index1)
-                        }, 200)
+                            handler.postDelayed({
+                                val valor2 = item.nomCt
+                                val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor2)
+                                if (index2 >= 0) spinnerCope.setSelection(index2)
+                            }, 400)
 
-                        handler.postDelayed({
-                            val valor2 = item.nomCt
-                            val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor2)
-                            if (index2 >= 0) spinnerCope.setSelection(index2)
-                        }, 400)
+                            handler.postDelayed({
+                                editDistrito.setText(item.distrito)
+                            }, 600)
 
-                        handler.postDelayed({
-                            editDistrito.setText(item.distrito)
-                        }, 600)
-
-                        handler.postDelayed(
-                            {
-                                val valor3 = item.tecnologia
-                                val index3 = (spinnerTecnologia.adapter as ArrayAdapter<String>).getPosition(valor3)
-                                if (index3 >= 0) spinnerTecnologia.setSelection(index3)
-                            },800
-                        )
+                            handler.postDelayed(
+                                {
+                                    val valor3 = item.tecnologia
+                                    val index3 = (spinnerTecnologia.adapter as ArrayAdapter<String>).getPosition(valor3)
+                                    if (index3 >= 0) spinnerTecnologia.setSelection(index3)
+                                },800
+                            )
+                        }
                     } else {
                         (requireActivity() as? Registrando)?.toasting("Sin datos para este folio")
                     }

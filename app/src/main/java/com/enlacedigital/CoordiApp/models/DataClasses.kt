@@ -123,7 +123,7 @@ data class ActualizarBD(
     val Fecha_Asignacion_Auditor: String? = null,
     val Cliente_Titular: String? = null,
     val Cliente_Recibe: String? = null,
-    val Step_Registro: Int? = null,
+    val Step_Registro: Int? = 0,
     val Direccion_Cliente: String? = null,
     val Telefono_Cliente: String? = null,
     val Apellido_Paterno_Titular: String? = null,

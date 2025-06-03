@@ -379,7 +379,16 @@ class RegistrandoFragment4 : Fragment() {
             (requireActivity() as? Registrando)?.toasting("El distrito debe tener al menos 7 caracteres")
             return
         }
-
+        val boton1= preferencesManager.getString("boton1")
+        val boton3= preferencesManager.getString("boton3")
+        val boton5= preferencesManager.getString("boton5")
+        val boton7= preferencesManager.getString("boton7")
+        var step = 2
+        if (boton1 == "listo1" && boton3 == "listo3" && boton5 == "listo5" && boton7 == "listo7")
+        {
+            step = 5
+            Log.d("PasosDebug","si entra"+step)
+        }
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Tipo_Instalacion = instalacion,
@@ -389,7 +398,7 @@ class RegistrandoFragment4 : Fragment() {
             Tipo_sub_reparaviob = opcionTipoReparacion,
             //Foto_Casa_Cliente = fachada,
             Foto_INE = fotoOS,
-            Step_Registro = 2
+            Step_Registro = step
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
         val fragmentA = MenuRegistrando()

@@ -326,7 +326,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     Log.d("ValidarDebug","Aqui esta el error else2")
                     preferencesManager.saveString("folio", folio)
                     Log.d("ValidarDebug","Aqui esta el error else3: "+registro?.Step_Registro)
-                    existing(registro?.Step_Registro!!)
+                    existing(0)
                     Log.d("ValidarDebug","Aqui esta el error else4")
                 }
             }
@@ -350,19 +350,16 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     preferencesManager.saveString("boton1", "listo1")
                 }
                 if (iaa == 2) {
-                    preferencesManager.saveString("boton2", "listo2")
+                    preferencesManager.saveString("boton4", "listo4")
                 }
                 if (iaa == 3) {
                     preferencesManager.saveString("boton3", "listo3")
                 }
                 if (iaa == 4) {
-                    preferencesManager.saveString("boton4", "listo4")
-                }
-                if (iaa == 5) {
                     preferencesManager.saveString("boton5", "listo5")
                 }
-                if (iaa == 6) {
-                    preferencesManager.saveString("boton6", "listo6")
+                if (iaa == 5) {
+                    preferencesManager.saveString("boton7", "listo7")
                 }
                 Log.d("ValidarDebug","Aqui esta el error else iaa: "+iaa)
                 iaa = iaa + 1

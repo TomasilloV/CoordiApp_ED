@@ -124,7 +124,16 @@ class RegistrandoFragment5 : Fragment() {
                 (requireActivity() as? Registrando)?.toasting("Ingresa los nombres válidos")
                 return@setOnClickListener
             }
-
+            val boton1= preferencesManager.getString("boton1")
+            val boton3= preferencesManager.getString("boton3")
+            val boton4 = preferencesManager.getString("boton4")
+            val boton5= preferencesManager.getString("boton5")
+            val boton7= preferencesManager.getString("boton7")
+            var step = 4
+            if (boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton7 == "listo7")
+            {
+                step = 5
+            }
             // Crea la solicitud de actualización y la envía
             val updateRequest = ActualizarBD(
                 idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
@@ -133,7 +142,7 @@ class RegistrandoFragment5 : Fragment() {
                 Apellido_Materno_Titular = materno,
                 Cliente_Recibe = recibe,
                 Telefono_Cliente = cliente,
-                Step_Registro = 4
+                Step_Registro = step
             )
             Log.d("dataDebug",""+updateRequest)
             (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)

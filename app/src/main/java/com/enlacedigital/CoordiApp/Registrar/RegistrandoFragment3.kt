@@ -336,7 +336,16 @@ class RegistrandoFragment3 : Fragment() {
             (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
             return
         }
-
+        val boton1= preferencesManager.getString("boton1")
+        val boton3= preferencesManager.getString("boton3")
+        val boton4 = preferencesManager.getString("boton4")
+        val boton5= preferencesManager.getString("boton5")
+        val boton7= preferencesManager.getString("boton7")
+        var step = 3
+        if (boton1 == "listo1" && boton4 == "listo4" && boton5 == "listo5" && boton7 == "listo7")
+        {
+            step = 5
+        }
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             //Puerto = puerto,
@@ -344,7 +353,7 @@ class RegistrandoFragment3 : Fragment() {
             Ont = ontnew,
             No_Serie_ONT = fotoSerie,
             idOnt = idOnt,
-            Step_Registro = 3
+            Step_Registro = step
         )
         Log.d("FragmentDebug",""+updateRequest.No_Serie_ONT)
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
