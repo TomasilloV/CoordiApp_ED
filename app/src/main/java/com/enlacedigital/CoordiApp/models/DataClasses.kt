@@ -140,10 +140,8 @@ data class ActualizarBD(
 
 data class ONTCOBRE(
     val FK_Folio_Pisa_Cobre: Int? = null,
-    val FK_Tecnico_Cobre: Int? = null,
     val Fecha: String? = null,
     val Num_Serie_Ont_Cobre: String? = null,
-    val Sku: String? = null,
     val Foto_Ont_Cobre_Delante: String? = null,
     val Foto_Ont_Cobre_Detras: String? = null
 )
@@ -179,6 +177,16 @@ data class FolioRequest(
     @SerializedName("Folio_Pisa") val folioPisa: Int
 )
 
+data class registropasos(
+    val  folioPisaRegistro: Int? = null,
+    val paso1: Int? = null,
+    val paso2: Int? = null,
+    val paso3: Int? = null,
+    val paso4: Int? = null,
+    val paso5: Int? = null,
+    val Fecha: String? = null,
+)
+
 data class TacResponse(
     @SerializedName("mensaje") val mensaje: String,
     @SerializedName("items") val items: List<TacItem>
@@ -202,4 +210,19 @@ data class materialesdetalle(
     val Producto: String? = null,
     val Modelo: String? = null,
     val Num_Serie_Salida_Det: String? = null,
+)
+
+data class pasos(
+    val mensaje: String,
+    val items: List<pasosdetalle>?
+)
+
+data class pasosdetalle(
+    val Folio_Pisa: String? = null,
+    val Paso1: String? = null,
+    val Paso2: String? = null,
+    val Paso3: String? = null,
+    val Paso4: String? = null,
+    val Paso5: String? = null,
+    val Fecha: String? = null,
 )

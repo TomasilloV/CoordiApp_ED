@@ -117,6 +117,7 @@
                 android:paddingTop="15dp"
                 android:text="Tipo Instalacion"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/textTelefono"
@@ -129,6 +130,7 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/texts_and_spinners"
                 android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/editTelefono"
                 app:layout_constraintStart_toStartOf="@+id/editTelefono"
                 app:layout_constraintTop_toBottomOf="@id/textTipoInstalacion" />

@@ -201,7 +201,7 @@ class RegistrandoFragmentCobre : Fragment(R.layout.fragment_registrando_cobre) {
         val folio = preferencesManager.getString("folio-pisa")!!.toInt()
         val SKU = editSKU.text.toString().takeIf { it.isNotBlank() }
         val SerieCobre = editSerieCobre.text.toString().takeIf { it.isNotBlank() }
-        if (SKU == null || SerieCobre == null) {
+        if (SerieCobre == null || fotoCobre1 == null || fotoCobre2 == null) {
             showToast("Completa todos los campos para continuar")
             return
         }
@@ -210,11 +210,9 @@ class RegistrandoFragmentCobre : Fragment(R.layout.fragment_registrando_cobre) {
         val fecha = formato.format(fechaActual)
 
         val updateRequest = ONTCOBRE(
-            FK_Tecnico_Cobre = preferencesManager.getString("id")!!.toInt(),
             FK_Folio_Pisa_Cobre = folio,
             Fecha = fecha,
             Num_Serie_Ont_Cobre = SerieCobre,
-            Sku = SKU,
             Foto_Ont_Cobre_Detras = fotoCobre2,
             Foto_Ont_Cobre_Delante = fotoCobre1
         )

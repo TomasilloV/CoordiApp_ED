@@ -97,6 +97,7 @@
                     android:layout_height="45dp"
                     android:background="@drawable/texts_and_spinners"
                     android:hint="Buscar ONT..."
+                    android:maxLength="30"
                     app:layout_constraintEnd_toEndOf="@id/btnFotoOnt"
                     app:layout_constraintStart_toStartOf="@id/btnFotoOnt"
                     app:layout_constraintTop_toBottomOf="@id/textOnt"

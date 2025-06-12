@@ -33,11 +33,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.activity.result.IntentSenderRequest
 import com.enlacedigital.CoordiApp.MenuRegistrando
+import com.enlacedigital.CoordiApp.models.materiales
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
+import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
+import com.enlacedigital.CoordiApp.utils.showToast
 import com.enlacedigital.CoordiApp.utils.startNewActivity
 import kotlinx.coroutines.delay
+import com.enlacedigital.CoordiApp.utils.showToast
+
 
 /**
  * Data class para representar la respuesta del servidor.
@@ -188,7 +193,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
                 val selectedTipoInstalacion = spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
 
-                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty() || selectedEstatus == null || selectedTipoInstalacion == null) {
+                if (folio.isEmpty() || telefono.isEmpty() || latitud.isEmpty() || longitud.isEmpty() || selectedEstatus == null /*|| selectedTipoInstalacion == null*/) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, completa todos los campos")
                 } else if (!telefono.matches(Regex("\\d{10}"))) {
                     (requireActivity() as? Registrando)?.toasting("Por favor, inserta un número válido")
@@ -233,6 +238,32 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         })
     }
 
+    private fun fetchDataPasos(tecnicoId: Int, page: Int) {
+        apiService.vermateriales(tecnicoId/*, page, limit*/).enqueue(object : Callback<materiales> {
+            override fun onResponse(call: Call<materiales>, response: Response<materiales>) {
+
+                if (response.isSuccessful) {
+                    response.body()?.items?.let { items ->
+                        if (items.isNotEmpty()) {
+                        } else {
+                            startNewActivity(Menu::class.java)
+                        }
+                    } ?: run {
+                    }
+                } else {
+                    Log.d("MateialesDebug", "Código HTTP: ${response.code()}")
+                    Log.d("MateialesDebug", "Es exitoso: ${response.isSuccessful}")
+                    Log.d("MateialesDebug", "Mensaje: ${response.message()}")
+                    Log.d("MateialesDebug", "Raw body: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(ignoredCall: Call<materiales>, t: Throwable) {
+                Log.d("MateialesDebug", "Mensaje: ${t.message}")
+            }
+        })
+    }
+
     private fun setupSpinner(spinner: Spinner, items: List<String?>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -251,7 +282,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
 
     private fun setupButtonClick(spinnerEstatus: Spinner, spinnerTipoInstalacion: Spinner) {
         val selectedEstatus = spinnerEstatus.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val selectedTipoInstalacion = spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
+        val selectedTipoInstalacion = "ALTA"//spinnerTipoInstalacion.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val fechaActual = Date()
             val fecha = formato.format(fechaActual)
@@ -261,6 +292,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
         {
             preferencesManager.saveString("QUEJAMIGRA","SI")
         }
+        Log.d("QUEJADEBUG",""+selectedTipoInstalacion)
             preferencesManager.getString("id")!!.let { id ->
                 val updateRequest = ActualizarBD(
                     idtecnico_instalaciones_coordiapp = id,

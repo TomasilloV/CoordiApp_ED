@@ -63,7 +63,7 @@ class ver_materiales : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@ver_materiales)
             itemAdapter = VerMaterialesAdapter(mutableListOf())
             adapter = itemAdapter
-            addOnScrollListener(createOnScrollListener()) // Listener para paginación
+            //addOnScrollListener(createOnScrollListener()) // Listener para paginación
         }
 
         // Verifica la sesión del usuario

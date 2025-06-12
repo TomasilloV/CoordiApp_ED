@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="15dp"
                     android:text="SKU"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -87,6 +88,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="30"
+                    android:visibility="gone"
                     android:padding="8dp"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -103,8 +105,8 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/editSKU"
-                    app:layout_constraintTop_toBottomOf="@id/editSKU" />
+                    app:layout_constraintStart_toStartOf="@id/btnFotoOntCobre1"
+                    app:layout_constraintTop_toBottomOf="@id/textPaso" />
 
                 <EditText
                     android:id="@+id/editOntCobre"
@@ -118,7 +120,7 @@
                     android:maxLength="30"
                     android:padding="8dp"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/editSKU"
+                    app:layout_constraintEnd_toEndOf="@+id/btnFotoOntCobre1"
                     app:layout_constraintStart_toStartOf="@+id/textOntCobre"
                     app:layout_constraintTop_toBottomOf="@id/textOntCobre" />
 
@@ -131,7 +133,7 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintStart_toStartOf="@id/textOntCobre"
                     app:layout_constraintTop_toBottomOf="@id/editOntCobre" />
 
                 <Button
@@ -157,7 +159,7 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/editSKU"
+                    app:layout_constraintStart_toStartOf="@id/textOntCobre"
                     app:layout_constraintTop_toBottomOf="@id/btnFotoOntCobre1" />
 
                 <Button

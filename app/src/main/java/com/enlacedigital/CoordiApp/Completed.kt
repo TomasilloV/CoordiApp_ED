@@ -92,7 +92,7 @@ class Completed : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@Completed)
             itemAdapter = CompletedAdapter(mutableListOf())
             adapter = itemAdapter
-            addOnScrollListener(createOnScrollListener()) // Agrega el listener para la paginación
+            //addOnScrollListener(createOnScrollListener()) // Agrega el listener para la paginación
         }
 
     }

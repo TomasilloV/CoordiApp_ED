@@ -61,7 +61,7 @@ class NoCompletas : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@NoCompletas)
             itemAdapter = NoCompletasAdapter(mutableListOf())
             adapter = itemAdapter
-            addOnScrollListener(createOnScrollListener()) // Listener para paginación
+            //addOnScrollListener(createOnScrollListener()) // Listener para paginación
         }
 
         // Verifica la sesión del usuario

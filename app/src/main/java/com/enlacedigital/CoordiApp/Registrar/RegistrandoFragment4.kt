@@ -179,7 +179,7 @@ class RegistrandoFragment4 : Fragment() {
         setupSpinner(spinners[0], tecnologiaOptions)
     }
     private fun setupSpinnerModem(vararg spinners: Spinner) {
-        val tecnologiaOptions = listOf("Elige una opción", "Dañado", "Defectuoso")
+        val tecnologiaOptions = listOf("Elige una opción", "Dañado", "Defectuoso", "Remplazo")
         setupSpinner(spinners[0], tecnologiaOptions)
     }
 
@@ -347,22 +347,25 @@ class RegistrandoFragment4 : Fragment() {
         val metraje = editMetraje.text.toString().takeIf { it.isNotBlank() }
         val selectedCambioModem = spinnerCambioModem.selectedItem?.takeIf { it != "Elige una opción" } as? String
         val selectedCambioConector = spinnerCambioConector.selectedItem?.takeIf { it != "Elige una opción" } as? String
-        val opcionTipoReparacion:String?
-        if (selectedCambioModem == null)
+        var opcionTipoReparacion:String?
+        val default = "NO ASIGNADO"
+        if (selectedCambioModem != null)
         {
             opcionTipoReparacion = selectedCambioModem
         }
-        else if (selectedCambioConector == null)
+        else if (selectedCambioConector != null)
         {
             opcionTipoReparacion = selectedCambioConector
         }
-        else
-        {
-            opcionTipoReparacion = "No asignado"
+        else{
+            opcionTipoReparacion = default
         }
+
         var QuejaMigra = preferencesManager.getString("QUEJAMIGRA")
+        var Tipo_Orden:String?
         if (QuejaMigra == "SI")
         {
+            Tipo_Orden = "QUEJA MIGRA"
             if (instalacion == null /*|| fachada == null */ || fotoOS == null || distritoText.isNullOrBlank() || selectedTecnologia == null || selectedTipoReparacion == null) {
                 (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 return
@@ -370,6 +373,7 @@ class RegistrandoFragment4 : Fragment() {
         }
         else
         {
+            Tipo_Orden = "ALTA"
             if (instalacion == null /*|| fachada == null */ || fotoOS == null || distritoText.isNullOrBlank() || selectedTecnologia == null || metraje == null) {
                 (requireActivity() as? Registrando)?.toasting("Completa todos los campos para continuar")
                 return
@@ -389,12 +393,17 @@ class RegistrandoFragment4 : Fragment() {
             step = 5
             Log.d("PasosDebug","si entra"+step)
         }
+        Log.d("ReparacionDebug",""+opcionTipoReparacion)
+        Log.d("ReparacionDebug",""+selectedCambioModem)
+        Log.d("ReparacionDebug",""+selectedCambioConector)
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
             Tipo_Instalacion = instalacion,
             Distrito = distritoText,
             Metraje = metraje?.toInt(),
             Tecnologia = selectedTecnologia,
+            Tipo_Orden = Tipo_Orden,
+            Tipo_reparacion = selectedTipoReparacion,
             Tipo_sub_reparaviob = opcionTipoReparacion,
             //Foto_Casa_Cliente = fachada,
             Foto_INE = fotoOS,
