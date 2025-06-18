@@ -26,7 +26,9 @@ import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.Option
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -38,6 +40,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Fragmento que representa la segunda etapa del proceso de registro.
@@ -58,12 +63,16 @@ class RegistrandoFragment3 : Fragment() {
     private lateinit var loadingLayout: FrameLayout
     private var lastSelectedOnt: String? = null
     private var idOnt: Int? = null
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri?>
+
 
     /**
      * Launcher para tomar fotos con la cámara.
      */
-    private val takePhotoLauncher: ActivityResultLauncher<Uri?> = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success) handleCameraPhoto()
+    private fun setupPhotoLauncher() {
+        takePhotoLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) handleCameraPhoto()
+        }
     }
 
     /**
@@ -78,6 +87,7 @@ class RegistrandoFragment3 : Fragment() {
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
         val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
+        setupPhotoLauncher()
 
         Handler(Looper.getMainLooper()).postDelayed({
 
@@ -182,7 +192,9 @@ class RegistrandoFragment3 : Fragment() {
      */
     private fun setupListeners(viewt: View) {
         btnFotoOnt.setOnClickListener { showPhotoOptions("ont") }
+        Log.d("BUGLOCO","si pasa0")
         btnFotoSerie.setOnClickListener { showPhotoOptions("serie") }
+        Log.d("BUGLOCO","si pasa10")
         view?.findViewById<Button>(R.id.next)?.setOnClickListener { validateAndProceed(viewt) }
     }
 
@@ -202,7 +214,9 @@ class RegistrandoFragment3 : Fragment() {
      * Muestra las opciones para tomar o elegir una foto.
      */
     private fun showPhotoOptions(photoType: String) {
+        Log.d("BUGLOCO","si pasa1")
         currentPhotoType = photoType
+        Log.d("BUGLOCO","si pasa2")
         takePhoto()
     }
 
@@ -217,18 +231,27 @@ class RegistrandoFragment3 : Fragment() {
      * Inicia la captura de una foto con la cámara.
      */
     private fun takePhoto() {
+        Log.d("BUGLOCO","si pasa3")
         val (photoFile, photoPath) = try {
+            Log.d("BUGLOCO","si pasa4")
             createImageFile(requireContext())
         } catch (ex: IOException) {
+            Log.d("BUGLOCO","si pasa5")
             (requireActivity() as? Registrando)?.toasting("Error al crear la imagen")
             null to ""
         }
+        Log.d("BUGLOCO","si pasa6")
 
         photoFile?.let {
+            Log.d("BUGLOCO","si pasa7")
             currentPhotoPath = photoPath
+            Log.d("BUGLOCO","si pasa8")
             photoUri = FileProvider.getUriForFile(requireContext(), "com.enlacedigital.CoordiApp.fileprovider", it)
+            Log.d("BUGLOCO","si pasa9"+photoUri)
             takePhotoLauncher.launch(photoUri)
+            Log.d("BUGLOCO","si pasa99")
         }
+        Log.d("BUGLOCO","si pasa100")
     }
 
     /**
@@ -357,11 +380,50 @@ class RegistrandoFragment3 : Fragment() {
         )
         Log.d("FragmentDebug",""+updateRequest.No_Serie_ONT)
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-        val fragmentA = MenuRegistrando()
-        preferencesManager.saveString("boton3","listo3")
+        pasoscomp()
+    }
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main, fragmentA)
-            .commit()
+
+    private fun pasoscomp()
+    {
+        Log.d("CobreDebug", "ENTRO AL METODO")
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaActual = Date()
+        val fecha = formato.format(fechaActual).toString()
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val requestpaso = requestpasos(
+            Folio_Pisa = folio,
+            Paso_3 = 1,
+            fecha_ultimo_avance = fecha
+        )
+        Log.d("CobreDebug","fecha: "+fecha)
+        Log.d("CobreDebug","folio: "+folio)
+        apiService.registropasos(requestpaso).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                Log.d("CobreDebug", "Código HTTP: ${response.code()}")
+                Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("CobreDebug", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("CobreDebug","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    Log.d("CobreDebug","Se pudoooo")
+                    val fragmentA = MenuRegistrando()
+                    preferencesManager.saveString("boton3","listo3")
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+                } else {
+                    Log.d("CobreDebug","No se pudoooo")
+                    (requireActivity() as? Registrando)?.toasting("ErrorCobre: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("CobreDebug","No se pudoooo X1000")
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
     }
 }

@@ -22,12 +22,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.Registrando
+import com.enlacedigital.CoordiApp.models.ApiResponse
+import com.enlacedigital.CoordiApp.models.pasos
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
 import com.enlacedigital.CoordiApp.utils.createImageFile
 import com.enlacedigital.CoordiApp.utils.showPhotoOptions
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class RegistrandoFragment5 : Fragment() {
     val preferencesManager = PreferencesHelper.getPreferencesManager()
@@ -146,12 +155,50 @@ class RegistrandoFragment5 : Fragment() {
             )
             Log.d("dataDebug",""+updateRequest)
             (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-            val fragmentA = MenuRegistrando()
-            preferencesManager.saveString("boton5","listo5")
-
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main, fragmentA)
-                .commit()
+            pasoscomp()
         }
+    }
+
+    private fun pasoscomp()
+    {
+        Log.d("CobreDebug", "ENTRO AL METODO")
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaActual = Date()
+        val fecha = formato.format(fechaActual).toString()
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val requestpaso = requestpasos(
+            Folio_Pisa = folio,
+            Paso_4 = 1,
+            fecha_ultimo_avance = fecha
+        )
+        Log.d("CobreDebug","fecha: "+fecha)
+        Log.d("CobreDebug","folio: "+folio)
+        apiService.registropasos(requestpaso).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                Log.d("CobreDebug", "Código HTTP: ${response.code()}")
+                Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("CobreDebug", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("CobreDebug","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    Log.d("CobreDebug","Se pudoooo")
+                    val fragmentA = MenuRegistrando()
+                    preferencesManager.saveString("boton5","listo5")
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+                } else {
+                    Log.d("CobreDebug","No se pudoooo")
+                    (requireActivity() as? Registrando)?.toasting("ErrorCobre: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("CobreDebug","No se pudoooo X1000")
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
     }
 }

@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.FolioRequest
 import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.models.TacResponse
@@ -41,6 +43,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Fragmento que representa la segunda etapa del proceso de registro.

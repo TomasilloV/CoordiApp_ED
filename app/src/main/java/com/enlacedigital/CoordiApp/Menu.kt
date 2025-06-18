@@ -68,6 +68,18 @@ class Menu : AppCompatActivity() {
         setupUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        val idTecnicoString = preferencesManager.getString("id_tecnico")
+        val idTecnico = idTecnicoString!!.toInt()
+        Log.d("LogLOco",""+idTecnico)
+        completadas(idTecnico)
+        Incompletas(idTecnico)
+        Materiales(idTecnico)
+        setupListeners()
+        setupUI()
+    }
+
     private fun mostrarAlertaSalir() {
         AlertDialog.Builder(this)
             .setTitle("¿Estás seguro?")

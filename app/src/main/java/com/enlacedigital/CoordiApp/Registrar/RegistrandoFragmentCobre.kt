@@ -33,6 +33,7 @@ import com.enlacedigital.CoordiApp.models.ActualizarBD
 import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.ONTCOBRE
 import com.enlacedigital.CoordiApp.models.TacResponse
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
@@ -218,6 +219,44 @@ class RegistrandoFragmentCobre : Fragment(R.layout.fragment_registrando_cobre) {
         )
 
         apiService.ontCobre(updateRequest).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                Log.d("CobreDebug", "Código HTTP: ${response.code()}")
+                Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("CobreDebug", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("CobreDebug","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    Log.d("CobreDebug","Se pudoooo")
+                    pasoscomp()
+                } else {
+                    Log.d("CobreDebug","No se pudoooo")
+                    (requireActivity() as? Registrando)?.toasting("ErrorCobre: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("CobreDebug","No se pudoooo X1000")
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
+    }
+
+    private fun pasoscomp()
+    {
+        Log.d("CobreDebug", "ENTRO AL METODO")
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaActual = Date()
+        val fecha = formato.format(fechaActual).toString()
+        val folio = preferencesManager.getString("folio")!!.toInt()
+        val requestpaso = requestpasos(
+            Folio_Pisa = folio,
+            Paso_2 = 1,
+            fecha_ultimo_avance = fecha
+        )
+        Log.d("CobreDebug","fecha: "+fecha)
+        Log.d("CobreDebug","folio: "+folio)
+        apiService.registropasos(requestpaso).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 Log.d("CobreDebug", "Código HTTP: ${response.code()}")
                 Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")

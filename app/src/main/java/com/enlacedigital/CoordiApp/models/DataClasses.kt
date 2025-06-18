@@ -177,14 +177,14 @@ data class FolioRequest(
     @SerializedName("Folio_Pisa") val folioPisa: Int
 )
 
-data class registropasos(
-    val  folioPisaRegistro: Int? = null,
-    val paso1: Int? = null,
-    val paso2: Int? = null,
-    val paso3: Int? = null,
-    val paso4: Int? = null,
-    val paso5: Int? = null,
-    val Fecha: String? = null,
+data class requestpasos(
+    val Folio_Pisa: Int? = null,
+    val Paso_1: Int? = 0,
+    val Paso_2: Int? = 0,
+    val Paso_3: Int? = 0,
+    val Paso_4: Int? = 0,
+    val Paso_5: Int? = 0,
+    val fecha_ultimo_avance: String? = null,
 )
 
 data class TacResponse(
@@ -218,11 +218,9 @@ data class pasos(
 )
 
 data class pasosdetalle(
-    val Folio_Pisa: String? = null,
-    val Paso1: String? = null,
-    val Paso2: String? = null,
-    val Paso3: String? = null,
-    val Paso4: String? = null,
-    val Paso5: String? = null,
-    val Fecha: String? = null,
+    val paso_1: Int? = null,
+    val paso_2: Int? = null,
+    val paso_3: Int? = null,
+    val paso_4: Int? = null,
+    val paso_5: Int? = null
 )

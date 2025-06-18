@@ -15,7 +15,7 @@ import com.enlacedigital.CoordiApp.models.SessionResponse
 import com.enlacedigital.CoordiApp.models.TacResponse
 import com.enlacedigital.CoordiApp.models.materiales
 import com.enlacedigital.CoordiApp.models.pasos
-import com.enlacedigital.CoordiApp.models.registropasos
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
@@ -195,13 +195,13 @@ interface ApiService {
         @Body request: FolioRequest
     ): Call<TacResponse>
 
-    @POST("api/registro_pasos")
+    @POST("api/registro-pasos")
     fun registropasos(
-        @Body request: registropasos
-    ): Call <TacResponse>
+        @Body requestData: requestpasos
+    ): Call <ApiResponse>
 
     @GET("registro-pasos/{Folio_Pisa}")
     fun pasosRegistros(
-        @Path("Folio_Pisa") folio: Int
+        @Path("Folio_Pisa") Folio_Pisa: Int?
     ): Call<pasos>
 }

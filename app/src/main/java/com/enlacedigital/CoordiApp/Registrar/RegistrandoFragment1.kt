@@ -25,8 +25,10 @@ import com.enlacedigital.CoordiApp.models.Option
 import com.enlacedigital.CoordiApp.R
 import com.enlacedigital.CoordiApp.Registrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.ApiResponse
 import com.enlacedigital.CoordiApp.models.FolioRequest
 import com.enlacedigital.CoordiApp.models.TacResponse
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -81,6 +83,8 @@ class RegistrandoFragment1 : Fragment() {
 
     private var options: List<Option> = listOf()
     private var divisionMap: Map<Int, List<Option>> = mapOf()
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri?>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +94,7 @@ class RegistrandoFragment1 : Fragment() {
         val btnrecargar = view.findViewById<Button>(R.id.btnrecargar)
         val progressBar = view.findViewById<ProgressBar>(R.id.progressBar2)
         val btnRegresar = view.findViewById<Button>(R.id.btnRegresar)
+        setupPhotoLauncher()
 
         Handler(Looper.getMainLooper()).postDelayed({
             btnRegresar.setOnClickListener {
@@ -221,10 +226,11 @@ class RegistrandoFragment1 : Fragment() {
         }
     }
 
-    private val takePhotoLauncher: ActivityResultLauncher<Uri?> =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+    private fun setupPhotoLauncher() {
+        takePhotoLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) handleCameraPhoto()
         }
+    }
 
     private fun handleCameraPhoto() {
         val file = File(currentPhotoPath)
@@ -354,14 +360,52 @@ class RegistrandoFragment1 : Fragment() {
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-                val fragmentA = MenuRegistrando()
-                preferencesManager.saveString("boton1","listo1")
-
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main, fragmentA)
-                    .commit()
+                pasoscomp()
             } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
         }
+    }
+
+    private fun pasoscomp()
+    {
+        Log.d("CobreDebug", "ENTRO AL METODO")
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaActual = Date()
+        val fecha = formato.format(fechaActual).toString()
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val requestpaso = requestpasos(
+            Folio_Pisa = folio,
+            Paso_1 = 1,
+            fecha_ultimo_avance = fecha
+        )
+        Log.d("CobreDebug","fecha: "+fecha)
+        Log.d("CobreDebug","folio: "+folio)
+        apiService.registropasos(requestpaso).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                Log.d("CobreDebug", "Código HTTP: ${response.code()}")
+                Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("CobreDebug", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("CobreDebug","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    Log.d("CobreDebug","Se pudoooo")
+                    val fragmentA = MenuRegistrando()
+                    preferencesManager.saveString("boton1","listo1")
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+                } else {
+                    Log.d("CobreDebug","No se pudoooo")
+                    (requireActivity() as? Registrando)?.toasting("ErrorCobre: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("CobreDebug","No se pudoooo X1000")
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
     }
 
     /**
@@ -617,7 +661,9 @@ class RegistrandoFragment1 : Fragment() {
                         val handler = Handler(Looper.getMainLooper())
                         val valor = item.nomDivision
                         val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
-                        if (index < 0)
+                        val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor)
+                        val index3 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor)
+                        if (index < 0 || index2 < 0 || index3 < 0)
                         {
                             spinnerDivision.setSelection(0)
                             spinnerArea.setSelection(0)

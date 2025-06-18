@@ -30,13 +30,21 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.appcompat.app.AlertDialog
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.ActualizarBD
+import com.enlacedigital.CoordiApp.models.ApiResponse
+import com.enlacedigital.CoordiApp.models.requestpasos
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.encodeImageToBase64
 import com.enlacedigital.CoordiApp.utils.setLoadingVisibility
 import com.enlacedigital.CoordiApp.utils.createImageFile
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.toString
 
 class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
@@ -244,6 +252,16 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             showToast("Completa todos los campos para continuar")
             return
         }
+        val boton1= preferencesManager.getString("boton1")
+        val boton3= preferencesManager.getString("boton3")
+        val boton4 = preferencesManager.getString("boton4")
+        val boton5= preferencesManager.getString("boton5")
+        val boton7= preferencesManager.getString("boton7")
+        var step = 4
+        if (boton1 == "listo1" && boton3 == "listo3" && boton4 == "listo4" && boton5 == "listo5")
+        {
+            step = 5
+        }
 
         val updateRequest = ActualizarBD(
             idtecnico_instalaciones_coordiapp = preferencesManager.getString("id")!!,
@@ -252,15 +270,53 @@ class RegistrandoFragment7 : Fragment(R.layout.fragment_registrando7) {
             Longitud_Terminal = longitud,
             Puerto = puerto,
             Terminal = terminal,
-            Step_Registro = 5
+            Step_Registro = step
         )
         (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-        val fragmentA = MenuRegistrando()
-        preferencesManager.saveString("boton7","listo7")
+        pasoscomp()
+    }
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.main, fragmentA)
-            .commit()
+    private fun pasoscomp()
+    {
+        Log.d("CobreDebug", "ENTRO AL METODO")
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaActual = Date()
+        val fecha = formato.format(fechaActual).toString()
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        val requestpaso = requestpasos(
+            Folio_Pisa = folio,
+            Paso_5 = 1,
+            fecha_ultimo_avance = fecha
+        )
+        Log.d("CobreDebug","fecha: "+fecha)
+        Log.d("CobreDebug","folio: "+folio)
+        apiService.registropasos(requestpaso).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                Log.d("CobreDebug", "Código HTTP: ${response.code()}")
+                Log.d("CobreDebug", "Es exitoso: ${response.isSuccessful}")
+                Log.d("CobreDebug", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("CobreDebug","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    Log.d("CobreDebug","Se pudoooo")
+                    val fragmentA = MenuRegistrando()
+                    preferencesManager.saveString("boton7","listo7")
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+                } else {
+                    Log.d("CobreDebug","No se pudoooo")
+                    (requireActivity() as? Registrando)?.toasting("ErrorCobre: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.d("CobreDebug","No se pudoooo X1000")
+                (requireActivity() as? Registrando)?.toasting("Fallo de red: ${t.message}")
+            }
+        })
     }
 
     // Mostrar mensaje y salir

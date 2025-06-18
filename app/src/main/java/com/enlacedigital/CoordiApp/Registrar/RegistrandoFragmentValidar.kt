@@ -22,6 +22,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.enlacedigital.CoordiApp.utils.showToast
 import java.util.Locale
 import com.enlacedigital.CoordiApp.LocationHelper
 import com.enlacedigital.CoordiApp.Menu
@@ -34,6 +35,9 @@ import retrofit2.Response
 import androidx.activity.result.IntentSenderRequest
 import com.enlacedigital.CoordiApp.MenuRegistrando
 import com.enlacedigital.CoordiApp.models.materiales
+import com.enlacedigital.CoordiApp.models.materialesdetalle
+import com.enlacedigital.CoordiApp.models.pasos
+import com.enlacedigital.CoordiApp.models.pasosdetalle
 import com.enlacedigital.CoordiApp.singleton.ApiServiceHelper
 import com.enlacedigital.CoordiApp.singleton.PreferencesHelper
 import com.enlacedigital.CoordiApp.utils.checkSession
@@ -358,7 +362,7 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                     Log.d("ValidarDebug","Aqui esta el error else2")
                     preferencesManager.saveString("folio", folio)
                     Log.d("ValidarDebug","Aqui esta el error else3: "+registro?.Step_Registro)
-                    existing(0)
+                    existe()
                     Log.d("ValidarDebug","Aqui esta el error else4")
                 }
             }
@@ -405,5 +409,79 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
             Log.d("stepDebug",""+stepRegistro)
             (requireActivity() as? Registrando)?.toasting("Ocurrió un error, revisa los datos nuevamente")
         }
+    }
+
+    private fun existe(){
+        val folio = preferencesManager.getString("folio-pisa")!!.toInt()
+        apiService.pasosRegistros(folio).enqueue(object : Callback<pasos> {
+            override fun onResponse(call: Call<pasos>, response: Response<pasos>) {
+                Log.d("ValidarDebugson1", "Código HTTP: ${response.code()}")
+                Log.d("ValidarDebugson1", "Es exitoso: ${response.isSuccessful}")
+                Log.d("ValidarDebugson1", "Raw body: ${
+                    response.errorBody()?.string()
+                }\")\nug1")
+                Log.d("ValidarDebugson1","Mensaje: ${response.message()}\"")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    Log.d("ValidarDebugson","body: "+body)
+                    Log.d("ValidarDebugson","response1: "+response)
+                    if(body!!.items == null)
+                    {
+                        Log.d("ValidarDebugson","Si era ese el error")
+                        (activity as? Registrando)?.goToNextStep(0)
+                    }
+                    else
+                    {
+                        response.body()?.items?.let { items ->
+                            Log.d("ValidarDebugson","response: "+response)
+                            if (items.isNotEmpty()) {
+                                val item = body!!.items!![0]
+                                if (item.paso_1 == 1)
+                                {
+                                    preferencesManager.saveString("boton1","listo1")
+                                    Log.d("ValidarDebugson","1: "+item.paso_1)
+                                }
+                                if(item.paso_2 == 1)
+                                {
+                                    preferencesManager.saveString("boton4","listo4")
+                                    Log.d("ValidarDebugson","2: "+item.paso_2)
+                                }
+                                if (item.paso_3 == 1)
+                                {
+                                    preferencesManager.saveString("boton3","listo3")
+                                    Log.d("ValidarDebugson","3: "+item.paso_3)
+                                }
+                                if(item.paso_4 == 1)
+                                {
+                                    preferencesManager.saveString("boton5","listo5")
+                                    Log.d("ValidarDebugson","4: "+item.paso_4)
+                                }
+                                if (item.paso_5 == 1)
+                                {
+                                    preferencesManager.saveString("boton7","listo7")
+                                    Log.d("ValidarDebugson","5: "+item.paso_5)
+                                }
+
+                                (activity as? Registrando)?.goToNextStep(0)
+                            } else {
+                                Log.d("ValidarDebugson","No se pudo")
+                            }
+                        } ?: run {
+                            Log.d("ValidarDebugson","No se pudo")
+                        }
+                    }
+                } else {
+                    Log.d("ValidarDebugson2", "Código HTTP: ${response.code()}")
+                    Log.d("ValidarDebugson2", "Es exitoso: ${response.isSuccessful}")
+                    Log.d("ValidarDebugson2", "Mensaje: ${response.message()}")
+                    Log.d("ValidarDebugson2", "Raw body: ${response.errorBody()?.string()}")
+                    Log.d("ValidarDebugson","No se pudo")
+                }
+            }
+
+            override fun onFailure(ignoredCall: Call<pasos>, t: Throwable) {
+                Log.d("ValidarDebugson","No se pudo")
+            }
+        })
     }
 }
