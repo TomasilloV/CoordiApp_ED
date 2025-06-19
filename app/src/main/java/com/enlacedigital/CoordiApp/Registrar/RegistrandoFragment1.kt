@@ -131,7 +131,7 @@ class RegistrandoFragment1 : Fragment() {
         setupViews(view)
         getOptions()
         getOptions1("5e")
-        getTac()
+        //getTac()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -660,16 +660,16 @@ class RegistrandoFragment1 : Fragment() {
 
                         val handler = Handler(Looper.getMainLooper())
                         val valor = item.nomDivision
+                        val valor1 = item.nomArea
+                        val valor2 = item.nomCt
                         val index = (spinnerDivision.adapter as ArrayAdapter<String>).getPosition(valor)
-                        val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor)
-                        val index3 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor)
+                        val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor2)
+                        val index3 = (spinnerArea.adapter as ArrayAdapter<String>).getPosition(valor1)
                         if (index < 0 || index2 < 0 || index3 < 0)
                         {
                             spinnerDivision.setSelection(0)
                             spinnerArea.setSelection(0)
                             spinnerCope.setSelection(0)
-                            spinnerTecnologia.setSelection(0)
-                            editDistrito.setText("")
                             (requireActivity() as? Registrando)?.toasting("No se pudieron cargar los datos")
                         }
                         else
@@ -691,18 +691,6 @@ class RegistrandoFragment1 : Fragment() {
                                 val index2 = (spinnerCope.adapter as ArrayAdapter<String>).getPosition(valor2)
                                 if (index2 >= 0) spinnerCope.setSelection(index2)
                             }, 400)
-
-                            handler.postDelayed({
-                                editDistrito.setText(item.distrito)
-                            }, 600)
-
-                            handler.postDelayed(
-                                {
-                                    val valor3 = item.tecnologia
-                                    val index3 = (spinnerTecnologia.adapter as ArrayAdapter<String>).getPosition(valor3)
-                                    if (index3 >= 0) spinnerTecnologia.setSelection(index3)
-                                },800
-                            )
                         }
                     } else {
                         (requireActivity() as? Registrando)?.toasting("Sin datos para este folio")
