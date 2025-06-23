@@ -308,15 +308,14 @@ class RegistrandoFragmentValidar : Fragment(R.layout.fragment_registrandovalidar
                 )
                 Log.d("Paso1Debug","updateRequest: "+updateRequest)
                 (activity as? ActualizadBDListener)?.updateTechnicianData(updateRequest)
-                if (selectedEstatus == "OBJETADA")
+                if (selectedEstatus != "OBJETADA")
                 {
-                    startNewActivity(Menu::class.java)
-                }
-                val fragmentA = MenuRegistrando()
+                    val fragmentA = MenuRegistrando()
 
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.main, fragmentA)
-                    .commit()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main, fragmentA)
+                        .commit()
+                }
             } ?: (requireActivity() as? Registrando)?.toasting("Inicia sesión para continuar")
     }
 
